@@ -1,0 +1,9 @@
+This is a RCP application I'm slowly developing in the context of my PhD research (see publications here: http://disi.unitn.it/~vitorsouza/academia/).
+
+The purpose of the tool is to guide a developer through our proposed approach for the design and development of adaptive systems. We have developed a monitoring framework using Eclipse-based technology, so I decided to create a RCP application that provides a better UI for this.
+
+This is an Eclipse project. If you want to contribute or just run it, I suggest you install Eclipse Indigo for RCP developers and use its Git support to clone the repository.
+
+By the way, if you use Ubuntu 11.04 like me, set environment variable UBUNTU_MENUPROXY=0 before running Eclipse, otherwise the application menu will now show (I believe it's some Unity bug, might also happen with other distros that use it, maybe).
+
+Questions, comments, contributions, please contact me.

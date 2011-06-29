@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Unagi GUI Module
+Bundle-SymbolicName: it.unitn.disi.unagi.gui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: it.unitn.disi.unagi.gui.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ it.unitn.disi.unagi.domain;bundle-version="1.0.0",
+ it.unitn.disi.unagi.application;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: it.unitn.disi.unagi.gui.commands,
+ it.unitn.disi.unagi.gui.views,
+ it.unitn.disi.unagi.gui.wizards

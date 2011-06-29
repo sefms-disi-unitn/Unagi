@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Unagi
+Bundle-SymbolicName: it.unitn.disi.unagi.rcpapp;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: it.unitn.disi.unagi.rcpapp.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ it.unitn.disi.unagi.domain;bundle-version="1.0.0",
+ it.unitn.disi.unagi.gui;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

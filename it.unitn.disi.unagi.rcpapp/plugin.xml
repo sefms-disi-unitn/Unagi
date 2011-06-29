@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="it.unitn.disi.unagi.rcpapp.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="perspective"
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="it.unitn.disi.unagi.rcpapp.Perspective"
+            icon="icons/unagi-icon-32.gif"
+            id="it.unitn.disi.unagi.rcpapp.perspective"
+            name="Unagi Perspective">
+      </perspective>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="it.unitn.disi.unagi.rcpapp.application"
+            name="Unagi">
+         <property
+               name="appName"
+               value="Unagi">
+         </property>
+         <property
+               name="aboutImage"
+               value="/it.unitn.disi.unagi/icons/unagi-about.gif">
+         </property>
+         <property
+               name="aboutText"
+               value="Unagi is a prototype developed by Vítor Estêvão Silva Souza during his PhD in the University of Trento, Italy. In the context of his research on Requirements Engineering for Adaptive Systems, this tool was developed to guide the systematic process of designing adaptive systems from requirements.&#x0A;&#x0A;The name of the tool is a reference to episode 17 of the 6th season (&quot;The One with Unagi&quot;) of popular american sitcom Friends. During this episode, the character Ross confuses the word&apos;s meaning with that of Zanshin, &quot;a state of total awareness&quot;.">
+         </property>
+         <property
+               name="windowImages"
+               value="/it.unitn.disi.unagi/icons/unagi-icon-16.gif,/it.unitn.disi.unagi/icons/unagi-icon-32.gif">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="perspectiveExtension"
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+         <view
+               id="it.unitn.disi.unagi.gui.views.projects"
+               minimized="false"
+               ratio="0.34f"
+               relationship="left"
+               relative="org.eclipse.ui.editorss">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         id="menu"
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               id="it.unitn.disi.unagi.rcpapp.menus.file"
+               label="File"
+               mnemonic="F">
+            <command
+                  commandId="it.unitn.disi.unagi.gui.commands.newProject"
+                  icon="icons/command-newproject-16.png"
+                  id="it.unitn.disi.unagi.rcpapp.menus.file.newProject"
+                  label="New Project..."
+                  mnemonic="N"
+                  style="push"
+                  tooltip="Creates a new Unagi project">
+            </command>
+            <command
+                  commandId="it.unitn.disi.unagi.gui.commands.openProject"
+                  icon="icons/command-openproject-16.png"
+                  id="it.unitn.disi.unagi.rcpapp.menus.file.openProject"
+                  label="Open Project..."
+                  mnemonic="O"
+                  style="push"
+                  tooltip="Opens an existing Unagi Project">
+            </command>
+            <command
+                  commandId="it.unitn.disi.unagi.gui.commands.quit"
+                  icon="icons/command-quit-16.png"
+                  id="it.unitn.disi.unagi.rcpapp.menus.file.quit"
+                  label="Quit"
+                  mnemonic="Q"
+                  style="push"
+                  tooltip="Exit the application">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="it.unitn.disi.unagi.rcpapp.toolbars.main">
+            <command
+                  commandId="it.unitn.disi.unagi.gui.commands.newProject"
+                  icon="icons/command-newproject-16.png"
+                  id="it.unitn.disi.unagi.rcpapp.toolbars.main.newProject"
+                  label="New Project..."
+                  mnemonic="N"
+                  style="push"
+                  tooltip="Creates a new Unagi project">
+            </command>
+            <command
+                  commandId="it.unitn.disi.unagi.gui.commands.openProject"
+                  icon="icons/command-openproject-16.png"
+                  id="it.unitn.disi.unagi.rcpapp.toolbars.main.openProject"
+                  label="Open Project..."
+                  mnemonic="O"
+                  style="push"
+                  tooltip="Opens an existing Unagi Project">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            class="it.unitn.disi.unagi.gui.wizards.CreateProjectWizard"
+            icon="icons/command-newproject-16.png"
+            id="it.unitn.disi.unagi.rcpapp.wizards.createProject"
+            name="Create new Unagi Project">
+      </wizard>
+   </extension>
+
+</plugin>
