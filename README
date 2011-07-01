@@ -4,6 +4,6 @@ The purpose of the tool is to guide a developer through our proposed approach fo
 
 This is an Eclipse project. If you want to contribute or just run it, I suggest you install Eclipse Indigo for RCP developers and use its Git support to clone the repository.
 
-By the way, if you use Ubuntu 11.04 like me, set environment variable UBUNTU_MENUPROXY=0 before running Eclipse, otherwise the application menu will now show (I believe it's some Unity bug, might also happen with other distros that use it, maybe).
+By the way, if you use Ubuntu 11.04 with Unity, set environment variable UBUNTU_MENUPROXY=0 before running Eclipse, otherwise the application menu will now show (might also happen with other distros that use Unity. If you changed to gnome-shell/Gnome 3 or classic/Gnome 2, you're probably safe).
 
 Questions, comments, contributions, please contact me.
