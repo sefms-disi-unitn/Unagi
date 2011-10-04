@@ -33,7 +33,7 @@
          </property>
          <property
                name="aboutImage"
-               value="/it.unitn.disi.unagi/icons/unagi-about.gif">
+               value="icons/unagi-about.gif">
          </property>
          <property
                name="aboutText"
@@ -41,7 +41,7 @@
          </property>
          <property
                name="windowImages"
-               value="/it.unitn.disi.unagi/icons/unagi-icon-16.gif,/it.unitn.disi.unagi/icons/unagi-icon-32.gif">
+               value="icons/unagi-icon-16.gif,icons/unagi-icon-32.gif">
          </property>
       </product>
    </extension>
