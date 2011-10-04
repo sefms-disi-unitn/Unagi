@@ -1,4 +1,4 @@
-package it.disi.unitn.util.domain;
+package it.unitn.disi.util.domain;
 
 import java.io.Serializable;
 
@@ -22,7 +22,7 @@ import java.io.Serializable;
  * 
  * This is just the interface. The implementation is provided in the abstract class DomainObjectSupport. 
  * 
- * @see it.disi.unitn.util.domain.DomainObjectSupport
+ * @see it.unitn.disi.util.domain.DomainObjectSupport
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.1
  */

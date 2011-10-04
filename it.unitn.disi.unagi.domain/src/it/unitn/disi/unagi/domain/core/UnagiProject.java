@@ -1,6 +1,6 @@
 package it.unitn.disi.unagi.domain.core;
 
-import it.disi.unitn.util.domain.DomainObjectSupport;
+import it.unitn.disi.util.domain.DomainObjectSupport;
 
 import java.io.File;
 import java.util.Date;

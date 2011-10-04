@@ -1,4 +1,4 @@
-package it.disi.unitn.util.domain;
+package it.unitn.disi.util.domain;
 
 import java.util.UUID;
 
@@ -6,7 +6,7 @@ import java.util.UUID;
  * Implementation of the equals() / hashCode() strategy proposed by the DomainObject interface. It also integrates with
  * the persistence framework, as it provides persistence mappings for EJB3.
  * 
- * @see it.disi.unitn.util.domain.DomainObject
+ * @see it.unitn.disi.util.domain.DomainObject
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.1
  */
