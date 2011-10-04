@@ -4,6 +4,8 @@ import it.unitn.disi.util.domain.DomainObjectSupport;
 
 import java.io.File;
 import java.util.Date;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Domain class that represents Unagi Projects, one of the core concepts of the system.
@@ -20,7 +22,7 @@ import java.util.Date;
  */
 public class UnagiProject extends DomainObjectSupport implements Comparable<UnagiProject> {
 	/** Version UID for serialization purposes. */
-	private static final long serialVersionUID = 7870244985681065676L;
+	private static final long serialVersionUID = -2051532540784796911L;
 
 	/** Folder in which the project is saved. */
 	private File folder;
@@ -30,10 +32,13 @@ public class UnagiProject extends DomainObjectSupport implements Comparable<Unag
 
 	/** Timestamp of the last time the project was saved to file. */
 	private Date saveTimestamp;
+	
+	/** Requirements models of this project. */
+	private SortedSet<RequirementsModel> requirementsModels = new TreeSet<RequirementsModel>();
 
 	/** Constructor. */
-	public UnagiProject(File file, String name) {
-		this.folder = file;
+	public UnagiProject(File folder, String name) {
+		this.folder = folder;
 		this.name = name;
 	}
 
@@ -74,6 +79,17 @@ public class UnagiProject extends DomainObjectSupport implements Comparable<Unag
 		saveTimestamp = new Date(System.currentTimeMillis());
 	}
 
+	/** Getter for requirementsModels. */
+	public SortedSet<RequirementsModel> getRequirementsModels() {
+		return requirementsModels;
+	}
+
+	/** Adds a requirements model to the project. */
+	public void addRequirementsModel(RequirementsModel requirementsModel) {
+		requirementsModel.setProject(this);
+		requirementsModels.add(requirementsModel);
+	}
+	
 	/** @see java.lang.Comparable#compareTo(java.lang.Object) */
 	@Override
 	public int compareTo(UnagiProject o) {
@@ -86,7 +102,7 @@ public class UnagiProject extends DomainObjectSupport implements Comparable<Unag
 			cmp = 1;
 		else cmp = name.compareTo(o.name);
 
-		// In case of ties, compare by the superclass' criteria.
+		// In case of tie, compare by the superclass' criteria.
 		if (cmp == 0)
 			cmp = super.compareTo(o);
 		return cmp;

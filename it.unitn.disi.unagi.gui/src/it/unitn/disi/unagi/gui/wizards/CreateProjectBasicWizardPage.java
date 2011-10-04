@@ -46,7 +46,7 @@ public class CreateProjectBasicWizardPage extends WizardPage {
 	/** @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite) */
 	@Override
 	public void createControl(Composite parent) {
-		// Creates a new container using a grid layout with 2 columns.
+		// Creates a new container using a grid layout with 3 columns.
 		container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);

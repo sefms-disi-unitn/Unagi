@@ -1,5 +1,6 @@
 package it.unitn.disi.unagi.application.services;
 
+import it.unitn.disi.unagi.application.internal.services.ManageModelsServiceBean;
 import it.unitn.disi.unagi.application.internal.services.ManageProjectServiceBean;
 
 import java.io.File;
@@ -20,6 +21,9 @@ import java.util.Properties;
 public class Unagi {
 	/** Key for the configuration "Last folder used in file dialogs". */
 	public static final String CFG_LAST_FOLDER_FILE_DIALOGS = "last-folder-file-dialogs";
+	
+	/** Key for the configuration "Project sub-directory where models are stored. */
+	public static final String CFG_PROJECT_SUBDIR_MODELS = "project-subdir-models";
 
 	/** Singleton instance of the class. */
 	private static final Unagi instance = new Unagi();
@@ -28,7 +32,10 @@ public class Unagi {
 	private Map<String, String> configurationMap = new HashMap<String, String>();
 
 	/** Default implementation for the "Manage Project" service. */
-	private ManageProjectsService manageProjectsService = new ManageProjectServiceBean();
+	private ManageProjectsService manageProjectsService;
+
+	/** Default implementation for the "Manage Models" service. */
+	private ManageModelsService manageModelsService;
 
 	/** Private constructor. */
 	private Unagi() {
@@ -49,12 +56,21 @@ public class Unagi {
 	 * system's configuration.
 	 */
 	private void init() {
+		// Initializes the default implementations for the services. 
+		// This initialization is done here because some of these services need to refer back to this instance.
+		// TODO: remove "hard-coded" selection of service implementation and use some kind of configuration or DI.
+		manageProjectsService = new ManageProjectServiceBean();
+		manageModelsService = new ManageModelsServiceBean(this);
+		
 		// Sets the default values for the "Last folder used in file dialogs" configuration.
 		Properties systemProps = System.getProperties();
 		String userHome = systemProps.getProperty("user.home");
 		if ((userHome == null) || userHome.isEmpty())
 			userHome = ".";
 		configurationMap.put(CFG_LAST_FOLDER_FILE_DIALOGS, new File(userHome).getAbsolutePath());
+		
+		// Sets the default values for the project sub-directories.
+		configurationMap.put(CFG_PROJECT_SUBDIR_MODELS, "models");
 	}
 
 	/**
@@ -85,5 +101,10 @@ public class Unagi {
 	/** Getter for property: manageProjectsService. */
 	public ManageProjectsService getManageProjectsService() {
 		return manageProjectsService;
+	}
+
+	/** Getter for manageModelsService. */
+	public ManageModelsService getManageModelsService() {
+		return manageModelsService;
 	}
 }

@@ -18,7 +18,7 @@ public class NewProjectHandler extends AbstractHandler {
 	/** @see org.eclipse.core.commands.AbstractHandler#execute(org.eclipse.core.commands.ExecutionEvent) */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-
+		// TODO: comment this code.
 		CreateProjectWizard wizard = new CreateProjectWizard();
 		WizardDialog dialog = new WizardDialog(HandlerUtil.getActiveShell(event), wizard);
 		dialog.open();
