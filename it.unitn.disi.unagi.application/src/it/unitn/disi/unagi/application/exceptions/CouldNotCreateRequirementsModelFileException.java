@@ -6,12 +6,12 @@ package it.unitn.disi.unagi.application.exceptions;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class CouldNotSaveUnagiProjectException extends UnagiException {
+public class CouldNotCreateRequirementsModelFileException extends UnagiException {
 	/** Version UID for serialization purposes. */
-	private static final long serialVersionUID = -448112751502339551L;
+	private static final long serialVersionUID = 4318373500005400992L;
 
 	/** Constructor. */
-	public CouldNotSaveUnagiProjectException(Throwable cause) {
+	public CouldNotCreateRequirementsModelFileException(Throwable cause) {
 		super(cause);
 	}
 }

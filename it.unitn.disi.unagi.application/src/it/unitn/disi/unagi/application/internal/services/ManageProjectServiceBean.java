@@ -73,6 +73,9 @@ public class ManageProjectServiceBean implements ManageProjectsService {
 		
 		// Updates the timestamp of the last save.
 		project.updateSaveTimestamp();
+
+		// Notifies listeners of a property change.
+		notifyListeners(openProjects);
 	}
 
 	/** @see it.unitn.disi.unagi.application.services.ManageProjectsService#isProjectFolder(java.io.File) */

@@ -1,6 +1,6 @@
 package it.unitn.disi.unagi.gui.wizards;
 
-import it.unitn.disi.unagi.application.exceptions.CouldNotCreateModelsSubdirectoryException;
+import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
@@ -52,8 +52,8 @@ public class CreateRequirementsModelWizard extends Wizard implements INewWizard 
 		try {
 			manageModelsService.createNewRequirementsModel(project, name);
 		}
-		catch (CouldNotCreateModelsSubdirectoryException e) {
-			// If the models sub-directory doesn't exist and could not be created, show an error message.
+		catch (UnagiException e) {
+			// In case of any application exception, show an error message.
 			Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", "The requirements model could not be created.");
 			ErrorDialog.openError(this.getShell(), "Error while creating a new requirements model", "Could not create a new requirements. Please try again or contact support.", status);
 		}

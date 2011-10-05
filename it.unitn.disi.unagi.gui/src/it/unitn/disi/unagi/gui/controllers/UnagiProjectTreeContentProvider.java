@@ -1,5 +1,6 @@
 package it.unitn.disi.unagi.gui.controllers;
 
+import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
 
 import java.util.ArrayList;
@@ -19,11 +20,11 @@ import org.eclipse.jface.viewers.Viewer;
  * @version 1.0
  */
 public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
-	/** Mapping between open projects and their children. */
-	private Map<UnagiProject, UnagiProjectChild[]> openProjectChildren = new HashMap<UnagiProject, UnagiProjectChild[]>();
-
 	/** The list of open projects. */
 	private List<UnagiProject> openProjects;
+
+	/** Mapping between open projects and their children. */
+	private Map<UnagiProject, UnagiProjectChild[]> openProjectChildren = new HashMap<UnagiProject, UnagiProjectChild[]>();
 
 	/** @see org.eclipse.jface.viewers.IContentProvider#dispose() */
 	@Override
@@ -84,6 +85,18 @@ public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
 			return children;
 		}
 
+		// Checks if the parent element is a child of a UnagiProject.
+		else if (parentElement instanceof UnagiProjectChild) {
+			UnagiProjectChild child = (UnagiProjectChild) parentElement;
+			UnagiProject project = child.getParent();
+
+			// "Models" child should display all models of the project.
+			switch (child.getCategory()) {
+			case MODELS:
+				return project.getRequirementsModels().toArray();
+			}
+		}
+
 		// If the class of the element hasn't been recognized above, this element has no children.
 		return null;
 	}
@@ -93,6 +106,13 @@ public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
 	public Object getParent(Object element) {
 		// Checks if the element is a direct Unagi Project child and return the project.
 		if (element instanceof UnagiProjectChild) { return ((UnagiProjectChild) element).getParent(); }
+		
+		// Checks if the element is a model of a Unagi Project and return the "Models" child.
+		if (element instanceof RequirementsModel) {
+			RequirementsModel model = (RequirementsModel) element;
+			UnagiProjectChild[] children = openProjectChildren.get(model.getProject());
+			return (children == null) ? null : children[UnagiProjectChildCategory.MODELS.ordinal()];
+		}
 
 		// If the class of the element hasn't been recognized above, this element has no parent.
 		return null;
@@ -102,6 +122,19 @@ public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(Object element) {
 		// Unagi project's have children.
-		return (element instanceof UnagiProject);
+		if (element instanceof UnagiProject)
+			return true;
+
+		// Unagi project's child "Models" have children.
+		if (element instanceof UnagiProjectChild) {
+			UnagiProjectChild child = (UnagiProjectChild) element;
+			switch (child.getCategory()) {
+			case MODELS:
+				return true;
+			}
+		}
+
+		// Any other element does not have children.
+		return false;
 	}
 }
