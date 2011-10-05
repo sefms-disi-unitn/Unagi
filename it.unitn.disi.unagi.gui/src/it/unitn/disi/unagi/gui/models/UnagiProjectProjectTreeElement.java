@@ -2,8 +2,8 @@ package it.unitn.disi.unagi.gui.models;
 
 import it.unitn.disi.unagi.domain.core.UnagiProject;
 import it.unitn.disi.unagi.gui.actions.CloseProjectsAction;
-import it.unitn.disi.unagi.gui.utils.CollectionsUtil;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
+import it.unitn.disi.unagi.util.CollectionsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
