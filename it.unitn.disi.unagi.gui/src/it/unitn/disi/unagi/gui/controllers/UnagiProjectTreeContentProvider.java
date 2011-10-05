@@ -1,13 +1,15 @@
 package it.unitn.disi.unagi.gui.controllers;
 
-import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
+import it.unitn.disi.unagi.gui.models.ProjectTreeElement;
+import it.unitn.disi.unagi.gui.models.UnagiProjectProjectTreeElement;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -20,11 +22,8 @@ import org.eclipse.jface.viewers.Viewer;
  * @version 1.0
  */
 public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
-	/** The list of open projects. */
-	private List<UnagiProject> openProjects;
-
-	/** Mapping between open projects and their children. */
-	private Map<UnagiProject, UnagiProjectChild[]> openProjectChildren = new HashMap<UnagiProject, UnagiProjectChild[]>();
+	/** Map of projects and their tree model representations. */
+	private SortedMap<UnagiProject, UnagiProjectProjectTreeElement> treeModel = new TreeMap<UnagiProject, UnagiProjectProjectTreeElement>();
 
 	/** @see org.eclipse.jface.viewers.IContentProvider#dispose() */
 	@Override
@@ -38,103 +37,69 @@ public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		// The input is supposed to be a collection of UnagiProject instances. If null, use an empty list.
-		Collection<? extends UnagiProject> newOpenProjects = (Collection<? extends UnagiProject>) newInput;
-		if (newOpenProjects == null)
-			newOpenProjects = new ArrayList<UnagiProject>();
+		SortedSet<UnagiProject> newOpenProjects = (newInput == null) ? new TreeSet<UnagiProject>() : new TreeSet<UnagiProject>((Collection<? extends UnagiProject>) newInput);
 
-		// Stores a list of projects as the model for the project tree.
-		openProjects = new ArrayList<UnagiProject>(newOpenProjects);
-
-		// Remove from the project-children mapping any project that has been closed.
-		List<UnagiProject> closedProjects = new ArrayList<UnagiProject>();
-		for (UnagiProject project : openProjectChildren.keySet())
-			if (!openProjects.contains(project))
-				closedProjects.add(project);
-		for (UnagiProject project : closedProjects)
-			openProjectChildren.remove(project);
+		// Determines which projects are new and which should be closed.
+		Set<UnagiProject> openProjects = treeModel.keySet();
+		Set<UnagiProject> projectsToClose = new TreeSet<UnagiProject>(openProjects);
+		for (UnagiProject project : newOpenProjects) {
+			// If the project is already open, remove from the set of projects to close.
+			if (openProjects.contains(project))
+				projectsToClose.remove(project);
+			
+			// If the project is not already open, then it's new. Open it, also adding it to the tree model.
+			else {
+				treeModel.put(project, new UnagiProjectProjectTreeElement(project));
+			}
+		}
+		
+		// Closes projects that were marked to be closed.
+		for (UnagiProject project : projectsToClose)
+			treeModel.remove(project);
 	}
 
 	/** @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object) */
 	@Override
 	public Object[] getElements(Object inputElement) {
-		return openProjects.toArray();
+		Collection<UnagiProjectProjectTreeElement> elems = treeModel.values();
+
+		// According to the superclass, the returned array should not contain the element supplied as a parameter. 
+		if (elems.contains(inputElement)) elems.remove(inputElement);
+		
+		// Returns the project tree elements in an array.
+		return elems.toArray();
 	}
 
 	/** @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object) */
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		// Checks if the parent element is a UnagiProject.
-		if (parentElement instanceof UnagiProject) {
-			UnagiProject project = (UnagiProject) parentElement;
-
-			// Checks if the children for this project have already been created.
-			UnagiProjectChild[] children = openProjectChildren.get(parentElement);
-			if (children == null) {
-				// If they haven't been created yet, do it. Create one child for each category.
-				UnagiProjectChildCategory[] categories = UnagiProjectChildCategory.values();
-				children = new UnagiProjectChild[categories.length];
-				int i = 0;
-				for (UnagiProjectChildCategory category : categories)
-					children[i++] = new UnagiProjectChild(project, category);
-
-				// Put the children at the children's map and return it.
-				openProjectChildren.put(project, children);
-			}
-
-			// Return the children (the one from the map or the newly created ones).
-			return children;
-		}
-
-		// Checks if the parent element is a child of a UnagiProject.
-		else if (parentElement instanceof UnagiProjectChild) {
-			UnagiProjectChild child = (UnagiProjectChild) parentElement;
-			UnagiProject project = child.getParent();
-
-			// "Models" child should display all models of the project.
-			switch (child.getCategory()) {
-			case MODELS:
-				return project.getRequirementsModels().toArray();
-			}
-		}
-
-		// If the class of the element hasn't been recognized above, this element has no children.
+		// If the element belongs to the Project Tree model, ask it for its children.
+		if (parentElement instanceof ProjectTreeElement)
+			return ((ProjectTreeElement) parentElement).getChildren();
+		
+		// Otherwise it's an unknown element. By default it has no children.
 		return null;
 	}
 
 	/** @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object) */
 	@Override
 	public Object getParent(Object element) {
-		// Checks if the element is a direct Unagi Project child and return the project.
-		if (element instanceof UnagiProjectChild) { return ((UnagiProjectChild) element).getParent(); }
+		// If the element belongs to the Project Tree model, ask it for its children.
+		if (element instanceof ProjectTreeElement)
+			return ((ProjectTreeElement) element).getParent();
 		
-		// Checks if the element is a model of a Unagi Project and return the "Models" child.
-		if (element instanceof RequirementsModel) {
-			RequirementsModel model = (RequirementsModel) element;
-			UnagiProjectChild[] children = openProjectChildren.get(model.getProject());
-			return (children == null) ? null : children[UnagiProjectChildCategory.MODELS.ordinal()];
-		}
-
-		// If the class of the element hasn't been recognized above, this element has no parent.
+		// Otherwise it's an unknown element. By default it has no parent.
 		return null;
 	}
 
 	/** @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object) */
 	@Override
 	public boolean hasChildren(Object element) {
-		// Unagi project's have children.
-		if (element instanceof UnagiProject)
-			return true;
-
-		// Unagi project's child "Models" have children.
-		if (element instanceof UnagiProjectChild) {
-			UnagiProjectChild child = (UnagiProjectChild) element;
-			switch (child.getCategory()) {
-			case MODELS:
-				return true;
-			}
-		}
-
-		// Any other element does not have children.
+		// If the element belongs to the Project Tree model, ask it for its children.
+		if (element instanceof ProjectTreeElement)
+			return ((ProjectTreeElement) element).hasChildren();
+		
+		// Otherwise it's an unknown element. By default it has no children.
 		return false;
 	}
 }

@@ -3,16 +3,14 @@ package it.unitn.disi.unagi.gui.views;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
-import it.unitn.disi.unagi.gui.actions.CloseProjectsAction;
-import it.unitn.disi.unagi.gui.actions.NewRequirementsModelAction;
-import it.unitn.disi.unagi.gui.controllers.UnagiProjectChild;
 import it.unitn.disi.unagi.gui.controllers.UnagiProjectLabelProvider;
 import it.unitn.disi.unagi.gui.controllers.UnagiProjectTreeContentProvider;
+import it.unitn.disi.unagi.gui.models.ProjectTreeElement;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -100,60 +98,16 @@ public class ProjectsView extends ViewPart implements IPropertyChangeListener {
 				// Obtains the selected elements from the project tree. Continues if at least one element was selected.
 				IStructuredSelection selection = (IStructuredSelection) openProjectsTree.getSelection();
 				if (!selection.isEmpty()) {
-					// Obtains info about tree selection: the first element, its class and if more than 1 element was selected.
+					// If the first element belongs to the Project Tree model, ask it for a list of applicable actions.
 					Object firstElement = selection.getFirstElement();
-					Class<? extends Object> clazz = firstElement.getClass();
-					boolean singleSelection = (selection.size() == 1);
-
-					/*
-					 * CONTEXT MENUS: the following (long) code checks for the type of the first selected element and dynamically
-					 * creates the context menu based on the type of this element. Some actions can be applied to all elements of
-					 * the same type, whereas other actions will only be included if only one element is selected.
-					 */
-
-					/* SELECTED: a Unagi Project. */
-					if (UnagiProject.class.equals(clazz)) {
-						// Builds a list of all selected projects for the actions that can be applied to multiple elements.
-						List<UnagiProject> selectedProjects = filterSelectionByClass(selection, UnagiProject.class);
-
-						// Adds the "Close projects" action to the menu.
-						menuManager.add(new CloseProjectsAction(selectedProjects));
-					}
-
-					/* SELECTED: a Unagi Project child. */
-					else if (UnagiProjectChild.class.equals(clazz)) {
-						UnagiProjectChild child = (UnagiProjectChild) firstElement;
-
-						/* SELECTED: the "Models" child of Unagi Project. */
-						switch (child.getCategory()) {
-						case MODELS:
-							// Single-element action: "New requirements model".
-							if (singleSelection) menuManager.add(new NewRequirementsModelAction(child.getParent()));
-						}
-					}
+					if (firstElement instanceof ProjectTreeElement)
+						for (IAction action : ((ProjectTreeElement) firstElement).getApplicableActions(selection))
+							menuManager.add(action);
 				}
 			}
 		});
 
 		// Finally, associates the menu manager with the open projects tree.
 		openProjectsTree.getControl().setMenu(menuManager.createContextMenu(openProjectsTree.getControl()));
-	}
-
-	/**
-	 * TODO: document this method.
-	 * 
-	 * @param selection
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private <T> List<T> filterSelectionByClass(IStructuredSelection selection, Class<T> clazz) {
-		List<T> filteredList = new ArrayList<T>();
-		for (Iterator<?> iter = selection.iterator(); iter.hasNext();) {
-			Object elem = iter.next();
-			if ((elem != null) && (elem.getClass().equals(clazz)))
-				filteredList.add((T) elem);
-		}
-		return filteredList;
 	}
 }

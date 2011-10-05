@@ -1,8 +1,6 @@
 package it.unitn.disi.unagi.gui.controllers;
 
-import it.unitn.disi.unagi.domain.core.RequirementsModel;
-import it.unitn.disi.unagi.domain.core.UnagiProject;
-import it.unitn.disi.unagi.gui.utils.ImageUtil;
+import it.unitn.disi.unagi.gui.models.ProjectTreeElement;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -20,17 +18,9 @@ public class UnagiProjectLabelProvider extends LabelProvider {
 	/** @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object) */
 	@Override
 	public String getText(Object element) {
-		// Checks if the element is a Unagi Project.
-		if (element instanceof UnagiProject)
-			return ((UnagiProject) element).getName();
-
-		// Check if it's one of the Project's direct children.
-		if (element instanceof UnagiProjectChild)
-			return ((UnagiProjectChild) element).getCategory().getLabel();
-
-		// Check if it's a requirements model.
-		if (element instanceof RequirementsModel)
-			return ((RequirementsModel) element).getName();
+		// If the element belongs to the Project Tree model, ask it for its label.
+		if (element instanceof ProjectTreeElement)
+			return ((ProjectTreeElement) element).getLabel();
 
 		// Otherwise it's an unknown element...
 		return "(Unknown element)";
@@ -39,24 +29,11 @@ public class UnagiProjectLabelProvider extends LabelProvider {
 	/** @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object) */
 	@Override
 	public Image getImage(Object element) {
-		// Determines the path from which the icon is loaded depending on the class of the element.
-		String iconPath = null;
-		if (element instanceof UnagiProject)
-			iconPath = "/icons/entity-unagiproject.png";
-		else if (element instanceof UnagiProjectChild)
-			iconPath = ((UnagiProjectChild) element).getCategory().getIconPath();
-		else if (element instanceof RequirementsModel)
-			iconPath = "/icons/entity-unagiproject-models-requirements.png";
+		// If the element belongs to the Project Tree model, ask it for its icon.
+		if (element instanceof ProjectTreeElement)
+			return ((ProjectTreeElement) element).getIcon();
 
-		// If there's an icon path, tries to load the image from the path.
-		Image icon = null;
-		if (iconPath != null)
-			icon = ImageUtil.loadImage(iconPath);
-
-		// If no icon was found, fall back to the shared object icon from Eclipse.
-		if (icon == null)
-			icon = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
-
-		return icon;
+		// Otherwise it's an unknown element. Fall back to the shared object icon from Eclipse.
+		return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
 	}
 }

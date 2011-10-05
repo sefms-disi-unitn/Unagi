@@ -7,4 +7,5 @@ Bundle-Activator: it.unitn.disi.unagi.domain.Activator
 Require-Bundle: org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: it.unitn.disi.unagi.domain.core
+Export-Package: it.unitn.disi.unagi.domain.core,
+ it.unitn.disi.util.domain

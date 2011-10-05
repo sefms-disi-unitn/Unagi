@@ -1,4 +1,4 @@
-package it.unitn.disi.unagi.gui.controllers;
+package it.unitn.disi.unagi.gui.models;
 
 /**
  * Enumeration of the different categories for the children of an Unagi Project, such as "Models", "Classes", etc. The

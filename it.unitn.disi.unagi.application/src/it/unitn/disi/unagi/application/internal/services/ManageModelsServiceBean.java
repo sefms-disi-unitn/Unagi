@@ -63,11 +63,11 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		// Generates the file name from the model name (in lowercase).
 		StringBuilder builder = new StringBuilder(name.toLowerCase());
 		for (int i = 0; i < builder.length(); i++) {
-			// Convert spaces to dashes and removes any non alphanumeric characters (including accented letters).
+			// Convert spaces/underscores/dots to dashes and removes any non alphanumeric characters (including accented letters).
 			char c = builder.charAt(i);
-			if (c == ' ')
+			if ((c == ' ') || (c == '_') || (c == '.'))
 				builder.setCharAt(i, '-');
-			else if (!(((c >= 'a') && (c <= 'z')) || ((c >= '0') && (c <= '9'))))
+			else if (! (((c >= 'a') && (c <= 'z')) || ((c >= '0') && (c <= '9')) || (c == '-')))
 				builder.deleteCharAt(i);
 		}
 
