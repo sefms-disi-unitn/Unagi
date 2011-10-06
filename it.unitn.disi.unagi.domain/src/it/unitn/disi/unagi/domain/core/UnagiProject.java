@@ -90,6 +90,17 @@ public class UnagiProject extends DomainObjectSupport implements Comparable<Unag
 		requirementsModels.add(requirementsModel);
 	}
 	
+	/** Removes a requirements model from the project. */
+	public void removeRequirementsModel(RequirementsModel requirementsModel) {
+		// Checks for illegal state: model to be removed does not exist in the project.
+		if (! requirementsModels.contains(requirementsModel))
+			throw new IllegalStateException();
+		
+		// Removes the model from the project.
+		requirementsModels.remove(requirementsModel);
+		requirementsModel.setProject(null);
+	}
+	
 	/** @see java.lang.Comparable#compareTo(java.lang.Object) */
 	@Override
 	public int compareTo(UnagiProject o) {

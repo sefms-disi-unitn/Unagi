@@ -2,6 +2,7 @@ package it.unitn.disi.unagi.application.services;
 
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateModelsSubdirectoryException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateRequirementsModelFileException;
+import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsModelFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotSaveUnagiProjectException;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
@@ -24,4 +25,13 @@ public interface ManageModelsService {
 	 * @throws CouldNotSaveUnagiProjectException
 	 */
 	RequirementsModel createNewRequirementsModel(UnagiProject project, String name) throws CouldNotCreateModelsSubdirectoryException, CouldNotCreateRequirementsModelFileException, CouldNotSaveUnagiProjectException;
+
+	/**
+	 * TODO: document this method.
+	 * 
+	 * @param model
+	 * @throws CouldNotDeleteRequirementsModelFileException
+	 * @throws CouldNotSaveUnagiProjectException
+	 */
+	void deleteRequirementsModel(RequirementsModel model) throws CouldNotDeleteRequirementsModelFileException, CouldNotSaveUnagiProjectException;
 }

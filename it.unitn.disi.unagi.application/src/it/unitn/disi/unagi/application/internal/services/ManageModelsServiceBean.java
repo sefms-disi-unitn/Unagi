@@ -2,6 +2,7 @@ package it.unitn.disi.unagi.application.internal.services;
 
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateModelsSubdirectoryException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateRequirementsModelFileException;
+import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsModelFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotSaveUnagiProjectException;
 import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
@@ -53,6 +54,21 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		return model;
 	}
 
+	/** @see it.unitn.disi.unagi.application.services.ManageModelsService#deleteRequirementsModel(it.unitn.disi.unagi.domain.core.RequirementsModel) */
+	@Override
+	public void deleteRequirementsModel(RequirementsModel model) throws CouldNotDeleteRequirementsModelFileException, CouldNotSaveUnagiProjectException {
+		// Deletes the file in the file system, if it exists. Reports any problems as an application exception.
+		File file = model.getFile();
+		if (file.exists() && file.isFile())
+			if (!file.delete())
+				throw new CouldNotDeleteRequirementsModelFileException();
+
+		// Remove the model from the project and save the latter.
+		UnagiProject project = model.getProject(); 
+		project.removeRequirementsModel(model);
+		unagi.getManageProjectsService().saveProject(project);
+	}
+
 	/**
 	 * TODO: document this method.
 	 * 
@@ -63,11 +79,12 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		// Generates the file name from the model name (in lowercase).
 		StringBuilder builder = new StringBuilder(name.toLowerCase());
 		for (int i = 0; i < builder.length(); i++) {
-			// Convert spaces/underscores/dots to dashes and removes any non alphanumeric characters (including accented letters).
+			// Convert spaces/underscores/dots to dashes and removes any non alphanumeric characters (including accented
+			// letters).
 			char c = builder.charAt(i);
 			if ((c == ' ') || (c == '_') || (c == '.'))
 				builder.setCharAt(i, '-');
-			else if (! (((c >= 'a') && (c <= 'z')) || ((c >= '0') && (c <= '9')) || (c == '-')))
+			else if (!(((c >= 'a') && (c <= 'z')) || ((c >= '0') && (c <= '9')) || (c == '-')))
 				builder.deleteCharAt(i);
 		}
 

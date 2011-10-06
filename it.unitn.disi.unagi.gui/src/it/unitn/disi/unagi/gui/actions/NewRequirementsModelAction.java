@@ -24,17 +24,9 @@ public class NewRequirementsModelAction extends Action {
 	public NewRequirementsModelAction(UnagiProject project) {
 		this.project = project;
 		
-		// Sets the default values for this action's attributes.
-		init();
-	}
-
-	/**
-	 * Initializes the action, analyzing the selected projects and 
-	 */
-	private void init() {
 		// Sets the text to show in the context menu.
 		setText("New requirements model");
-		setToolTipText("Creates a new requirements model in project " + project.getName());
+		setToolTipText("Creates a new requirements model in project \"" + project.getName() + "\"");
 		
 		// Sets the icon to show in the context menu.
 		Image icon = ImageUtil.loadImage("/icons/action-newrequirementsmodel.png");

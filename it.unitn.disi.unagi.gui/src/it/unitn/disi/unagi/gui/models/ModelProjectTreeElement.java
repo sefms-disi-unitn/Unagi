@@ -1,8 +1,15 @@
 package it.unitn.disi.unagi.gui.models;
 
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
+import it.unitn.disi.unagi.gui.actions.DeleteRequirementsModelsAction;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
+import it.unitn.disi.unagi.util.CollectionsUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -51,6 +58,23 @@ public class ModelProjectTreeElement extends ProjectTreeElement {
 	public Image getIcon() {
 		// Use the same image for all models.
 		return ImageUtil.loadImage("/icons/entity-unagiproject-models-requirements.png");
+	}
+
+	/** @see it.unitn.disi.unagi.gui.models.ProjectTreeElement#getApplicableActions(org.eclipse.jface.viewers.IStructuredSelection) */
+	@Override
+	public List<IAction> getApplicableActions(IStructuredSelection selection) {
+		List<IAction> actionList = new ArrayList<IAction>();
+		
+		// Builds a list of all selected models for the actions that can be applied to multiple elements.
+		List<ModelProjectTreeElement> selectedElements = CollectionsUtil.filterSelectionByClass(selection.iterator(), ModelProjectTreeElement.class);
+		List<RequirementsModel> selectedModels = new ArrayList<RequirementsModel>();
+		for (ModelProjectTreeElement elem : selectedElements)
+			selectedModels.add(elem.getModel());
+
+		// Adds the "Delete requirements models" action to the list of applicable actions.
+		actionList.add(new DeleteRequirementsModelsAction(selectedModels));
+		
+		return actionList;
 	}
 
 	/** @see java.lang.Comparable#compareTo(java.lang.Object) */

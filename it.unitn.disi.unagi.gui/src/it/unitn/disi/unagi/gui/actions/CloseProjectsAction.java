@@ -31,14 +31,6 @@ public class CloseProjectsAction extends Action {
 	public CloseProjectsAction(List<UnagiProject> projects) {
 		this.projects = projects;
 		
-		// Sets the default values for this action's attributes.
-		init();
-	}
-
-	/**
-	 * Initializes the action, analyzing the selected projects and 
-	 */
-	private void init() {
 		// Sets the text to show in the context menu.
 		String s = (projects.size() > 1) ? "s" : ""; 
 		setText("Close project" + s);
