@@ -12,7 +12,7 @@ import java.io.File;
  */
 public class RequirementsModel extends DomainObjectSupport implements Comparable<RequirementsModel> {
 	/** Version UID for serialization purposes. */
-	private static final long serialVersionUID = 6370763491798868386L;
+	private static final long serialVersionUID = 5995208944728935582L;
 
 	/** Project to which the requirements model belongs. */
 	private UnagiProject project;
@@ -22,6 +22,9 @@ public class RequirementsModel extends DomainObjectSupport implements Comparable
 
 	/** Name of the model. */
 	private String name;
+	
+	/** Base package for classes generated from this model. */
+	private String basePackage;
 
 	/** Constructor. */
 	public RequirementsModel(File file, String name) {
@@ -57,6 +60,16 @@ public class RequirementsModel extends DomainObjectSupport implements Comparable
 	/** Setter for property: name. */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/** Getter for basePackage. */
+	public String getBasePackage() {
+		return basePackage;
+	}
+
+	/** Setter for basePackage. */
+	public void setBasePackage(String basePackage) {
+		this.basePackage = basePackage;
 	}
 
 	/** @see java.lang.Comparable#compareTo(java.lang.Object) */

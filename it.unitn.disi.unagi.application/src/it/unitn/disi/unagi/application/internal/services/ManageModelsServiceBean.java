@@ -1,5 +1,6 @@
 package it.unitn.disi.unagi.application.internal.services;
 
+import it.unitn.disi.unagi.application.Activator;
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateModelsSubdirectoryException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateRequirementsModelFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsModelFileException;
@@ -10,7 +11,14 @@ import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.Scanner;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.osgi.framework.Bundle;
 
 /**
  * Implementation of the "Manage Project" service.
@@ -23,6 +31,27 @@ public class ManageModelsServiceBean implements ManageModelsService {
 	/** Extension for requirements model files. */
 	private static final String REQUIREMENTS_MODEL_FILE_EXTENSION = ".ecore";
 
+	/** Requirements model template. Statically loaded from /resources/template.${REQUIREMENTS_MODEL_FILE_EXTENSION}. */
+	private static final String REQUIREMENTS_MODEL_TEMPLATE;
+	static {
+		Bundle bundle = Activator.getContext().getBundle();
+		StringBuilder builder = new StringBuilder();
+		try {
+			URL url = FileLocator.resolve(bundle.getEntry("/resources/template" + REQUIREMENTS_MODEL_FILE_EXTENSION));
+			File templateFile = new File(url.toURI());
+			Scanner scanner = new Scanner(templateFile);
+			while (scanner.hasNextLine())
+				builder.append(scanner.nextLine()).append('\n');
+		}
+		catch (Exception e) {
+			// TODO: exception handling.
+			e.printStackTrace();
+		}
+		finally {
+			REQUIREMENTS_MODEL_TEMPLATE = builder.toString();
+		}
+	}
+
 	/** The Unagi application. */
 	private Unagi unagi;
 
@@ -33,10 +62,10 @@ public class ManageModelsServiceBean implements ManageModelsService {
 
 	/**
 	 * @see it.unitn.disi.unagi.application.services.ManageModelsService#createNewRequirementsModel(it.unitn.disi.unagi.domain.core.UnagiProject,
-	 *      java.lang.String)
+	 *      java.lang.String, java.lang.String)
 	 */
 	@Override
-	public RequirementsModel createNewRequirementsModel(UnagiProject project, String name) throws CouldNotCreateModelsSubdirectoryException, CouldNotCreateRequirementsModelFileException, CouldNotSaveUnagiProjectException {
+	public RequirementsModel createNewRequirementsModel(UnagiProject project, String name, String basePackage) throws CouldNotCreateModelsSubdirectoryException, CouldNotCreateRequirementsModelFileException, CouldNotSaveUnagiProjectException {
 		// Determine the name of the file that will store the requirements model and creates it.
 		File modelsDir = checkModelsSubdirectory(project);
 		String fileName = generateFileName(name);
@@ -46,9 +75,21 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		// Creates the new model and associates it with the project.
 		RequirementsModel model = new RequirementsModel(file, name);
 		project.addRequirementsModel(model);
+		model.setBasePackage(basePackage);
 
 		// Saves the project.
 		unagi.getManageProjectsService().saveProject(project);
+
+		// Fill in the new model file with the template, replacing the values for name, filename and base package.
+		try {
+			String template = REQUIREMENTS_MODEL_TEMPLATE.replace("${name}", model.getName()).replace("${filename}", file.getName()).replace("${base-package}", model.getBasePackage());
+			PrintWriter out = new PrintWriter(file);
+			out.println(template);
+			out.close();
+		}
+		catch (FileNotFoundException e) {
+			throw new CouldNotCreateRequirementsModelFileException(e);
+		}
 
 		// Returns the newly created model.
 		return model;
@@ -64,7 +105,7 @@ public class ManageModelsServiceBean implements ManageModelsService {
 				throw new CouldNotDeleteRequirementsModelFileException();
 
 		// Remove the model from the project and save the latter.
-		UnagiProject project = model.getProject(); 
+		UnagiProject project = model.getProject();
 		project.removeRequirementsModel(model);
 		unagi.getManageProjectsService().saveProject(project);
 	}
@@ -76,7 +117,7 @@ public class ManageModelsServiceBean implements ManageModelsService {
 	 * @return
 	 */
 	private String generateFileName(String name) {
-		// Generates the file name from the model name (in lowercase).
+		// Generates the file name from the model name (in lower case).
 		StringBuilder builder = new StringBuilder(name.toLowerCase());
 		for (int i = 0; i < builder.length(); i++) {
 			// Convert spaces/underscores/dots to dashes and removes any non alphanumeric characters (including accented

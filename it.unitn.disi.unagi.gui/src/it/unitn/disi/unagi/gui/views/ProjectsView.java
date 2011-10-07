@@ -90,7 +90,8 @@ public class ProjectsView extends ViewPart implements IPropertyChangeListener {
 						IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(modelElem.getModel().getFile().getAbsolutePath()));
 						IEditorInput input = new FileStoreEditorInput(fileStore);
 						try {
-							page.openEditor(input, "org.eclipse.ui.DefaultTextEditor");
+							
+							page.openEditor(input, "org.eclipse.emf.ecore.presentation.EcoreEditorID");
 						}
 						catch (PartInitException e) {
 							// TODO Auto-generated catch block

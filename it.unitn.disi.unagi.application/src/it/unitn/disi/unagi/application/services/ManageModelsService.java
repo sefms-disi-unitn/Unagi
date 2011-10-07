@@ -19,12 +19,13 @@ public interface ManageModelsService {
 	 * 
 	 * @param project
 	 * @param name
+	 * @param basePackage
 	 * @return
 	 * @throws CouldNotCreateModelsSubdirectoryException
 	 * @throws CouldNotCreateRequirementsModelFileException
 	 * @throws CouldNotSaveUnagiProjectException
 	 */
-	RequirementsModel createNewRequirementsModel(UnagiProject project, String name) throws CouldNotCreateModelsSubdirectoryException, CouldNotCreateRequirementsModelFileException, CouldNotSaveUnagiProjectException;
+	RequirementsModel createNewRequirementsModel(UnagiProject project, String name, String basePackage) throws CouldNotCreateModelsSubdirectoryException, CouldNotCreateRequirementsModelFileException, CouldNotSaveUnagiProjectException;
 
 	/**
 	 * TODO: document this method.

@@ -49,8 +49,9 @@ public class CreateRequirementsModelWizard extends Wizard implements INewWizard 
 		
 		// Creates a new requirements model with the name that was specified in the wizard.
 		String name = basicPage.getModelName();
+		String basePackage = basicPage.getBasePackage();
 		try {
-			manageModelsService.createNewRequirementsModel(project, name);
+			manageModelsService.createNewRequirementsModel(project, name, basePackage);
 		}
 		catch (UnagiException e) {
 			// In case of any application exception, show an error message.

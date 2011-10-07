@@ -23,7 +23,7 @@ public class CreateRequirementsModelBasicWizardPage extends WizardPage {
 	/** Container associated to this wizard page. */
 	private Composite container;
 	
-	/** Project in which the requriements model will be created. */
+	/** Project in which the requirements model will be created. */
 	private UnagiProject project;
 
 	/** Text field for the name of the project. */
@@ -31,6 +31,9 @@ public class CreateRequirementsModelBasicWizardPage extends WizardPage {
 
 	/** Text field for the name of the model. */
 	private Text nameField;
+	
+	/** Text field for the base package for this project. */
+	private Text basePackageField;
 
 	/** Constructor. */
 	protected CreateRequirementsModelBasicWizardPage(UnagiProject project) {
@@ -79,6 +82,15 @@ public class CreateRequirementsModelBasicWizardPage extends WizardPage {
 				setPageComplete(! nameField.getText().isEmpty());
 			}
 		});
+		
+		// Creates the label for the base package field.
+		Label basePackageLabel = new Label(container, SWT.NULL);
+		basePackageLabel.setText("Base package:");
+		
+		// Creates the base package field.
+		basePackageField = new Text(container, SWT.BORDER | SWT.SINGLE);
+		basePackageField.setText("");
+		basePackageField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		// Sets the created container as the control for this page so Eclipse is able to integrate this page to the wizard.
 		setControl(container);
@@ -94,5 +106,14 @@ public class CreateRequirementsModelBasicWizardPage extends WizardPage {
 	 */
 	protected String getModelName() {
 		return nameField.getText();
+	}
+	
+	/**
+	 * Returns the base package of the model, which was filled in by the user in the base package field.
+	 * 
+	 * @return A string containing whatever the user filled in the base package field.
+	 */
+	protected String getBasePackage() {
+		return basePackageField.getText();
 	}
 }
