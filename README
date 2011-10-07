@@ -4,6 +4,9 @@ The purpose of the tool is to guide a developer through our proposed approach fo
 
 This is an Eclipse project. If you want to contribute or just run it, I suggest you install Eclipse Indigo for RCP developers and use its Git support to clone the repository.
 
+Other than the base Eclipse RCP intall, you will also need the following plug-ins:
+- EMF - Eclipse Modeling Framework SDK
+
 By the way, if you use Ubuntu 11.04 with Unity, set environment variable UBUNTU_MENUPROXY=0 before running Eclipse, otherwise the application menu will now show (might also happen with other distros that use Unity. If you changed to gnome-shell/Gnome 3 or classic/Gnome 2, you're probably safe).
 
 Questions, comments, contributions, please contact me.
