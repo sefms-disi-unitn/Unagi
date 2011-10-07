@@ -1,4 +1,4 @@
-package it.unitn.disi.unagi.util;
+package it.unitn.disi.unagi.application.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;

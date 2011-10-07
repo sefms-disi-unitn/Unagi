@@ -10,8 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors;bundle-version="3.7.0",
  org.eclipse.ui.ide;bundle-version="3.7.0",
  it.unitn.disi.unagi.application;bundle-version="1.0.0",
- it.unitn.disi.unagi.domain;bundle-version="1.0.0",
- it.unitn.disi.unagi.util;bundle-version="1.0.0"
+ it.unitn.disi.unagi.domain;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: it.unitn.disi.unagi.gui.commands,

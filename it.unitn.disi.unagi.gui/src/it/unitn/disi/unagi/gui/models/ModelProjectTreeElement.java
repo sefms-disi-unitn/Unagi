@@ -1,9 +1,9 @@
 package it.unitn.disi.unagi.gui.models;
 
+import it.unitn.disi.unagi.application.util.CollectionsUtil;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.gui.actions.DeleteRequirementsModelsAction;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
-import it.unitn.disi.unagi.util.CollectionsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
