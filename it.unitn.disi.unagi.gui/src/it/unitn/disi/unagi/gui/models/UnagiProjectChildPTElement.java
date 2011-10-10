@@ -13,13 +13,13 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * In the GUI model for the projects tree, represents the direct children of a Unagi Project, which just separates the
+ * Project Tree element that represents the direct children of an open Unagi Project. These elements just separate the
  * project's real contents in categories, such as "Models", "Classes", "Constraints", etc.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class UnagiProjectChildProjectTreeElement extends ProjectTreeElement {
+public class UnagiProjectChildPTElement extends ProjectTreeElement {
 	/** Project that this child refers to. */
 	private UnagiProject parent;
 
@@ -27,16 +27,12 @@ public class UnagiProjectChildProjectTreeElement extends ProjectTreeElement {
 	private UnagiProjectChildCategory category;
 
 	/** Constructor. */
-	public UnagiProjectChildProjectTreeElement(UnagiProject project, UnagiProjectChildCategory category) {
+	public UnagiProjectChildPTElement(UnagiProject project, UnagiProjectChildCategory category) {
 		this.parent = project;
 		this.category = category;
 	}
 
-	/**
-	 * Getter for parent.
-	 * 
-	 * @see it.unitn.disi.unagi.gui.models.ProjectTreeElement#getParent()
-	 */
+	/** @see it.unitn.disi.unagi.gui.models.ProjectTreeElement#getParent() */
 	@Override
 	public UnagiProject getParent() {
 		return parent;
@@ -75,11 +71,12 @@ public class UnagiProjectChildProjectTreeElement extends ProjectTreeElement {
 		switch (category) {
 		case MODELS:
 			List<RequirementsModel> models = new ArrayList<RequirementsModel>(parent.getRequirementsModels());
-			ModelProjectTreeElement[] children = new ModelProjectTreeElement[models.size()];
-			for (int i = 0; i < children.length; i++) children[i] = new ModelProjectTreeElement(this, models.get(i));
+			ModelPTElement[] children = new ModelPTElement[models.size()];
+			for (int i = 0; i < children.length; i++)
+				children[i] = new ModelPTElement(this, models.get(i));
 			return children;
 		}
-		
+
 		// If it's a different category from the ones above, use the default behavior.
 		return super.getChildren();
 	}
@@ -94,9 +91,10 @@ public class UnagiProjectChildProjectTreeElement extends ProjectTreeElement {
 		switch (category) {
 		case MODELS:
 			// Single-element action: "New requirements model".
-			if (singleSelection) actionList.add(new NewRequirementsModelAction(parent));
+			if (singleSelection)
+				actionList.add(new NewRequirementsModelAction(parent));
 		}
-		
+
 		return actionList;
 	}
 
@@ -104,11 +102,11 @@ public class UnagiProjectChildProjectTreeElement extends ProjectTreeElement {
 	@Override
 	public int compareTo(ProjectTreeElement o) {
 		// Check for nulls and different classes.
-		if ((o == null) || (! (o instanceof UnagiProjectChildProjectTreeElement))) 
+		if ((o == null) || (!(o instanceof UnagiProjectChildPTElement)))
 			return -1;
-		
+
 		// Compare by project.
-		UnagiProjectChildProjectTreeElement e = (UnagiProjectChildProjectTreeElement) o;
+		UnagiProjectChildPTElement e = (UnagiProjectChildPTElement) o;
 		return (category == null) ? 1 : category.compareTo(e.category);
 	}
 
@@ -116,11 +114,11 @@ public class UnagiProjectChildProjectTreeElement extends ProjectTreeElement {
 	@Override
 	public boolean equals(Object o) {
 		// Check for nulls and different classes.
-		if ((o == null) || (! (o instanceof UnagiProjectChildProjectTreeElement))) 
+		if ((o == null) || (!(o instanceof UnagiProjectChildPTElement)))
 			return false;
 
 		// If the elements refer to the same project and child category, they're equal.
-		UnagiProjectChildProjectTreeElement e = (UnagiProjectChildProjectTreeElement) o;
+		UnagiProjectChildPTElement e = (UnagiProjectChildPTElement) o;
 		return ((parent == null) || (category == null)) ? false : (parent.equals(e.parent) && category.equals(e.category));
 	}
 

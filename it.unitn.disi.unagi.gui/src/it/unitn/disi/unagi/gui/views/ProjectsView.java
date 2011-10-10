@@ -3,9 +3,9 @@ package it.unitn.disi.unagi.gui.views;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
-import it.unitn.disi.unagi.gui.controllers.UnagiProjectLabelProvider;
+import it.unitn.disi.unagi.gui.controllers.UnagiProjectTreeLabelProvider;
 import it.unitn.disi.unagi.gui.controllers.UnagiProjectTreeContentProvider;
-import it.unitn.disi.unagi.gui.models.ModelProjectTreeElement;
+import it.unitn.disi.unagi.gui.models.ModelPTElement;
 import it.unitn.disi.unagi.gui.models.ProjectTreeElement;
 
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.FileStoreEditorInput;
@@ -63,7 +64,7 @@ public class ProjectsView extends ViewPart implements IPropertyChangeListener {
 		// Creates a tree viewer to show the list of open projects.
 		openProjectsTree = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		openProjectsTree.setContentProvider(new UnagiProjectTreeContentProvider());
-		openProjectsTree.setLabelProvider(new UnagiProjectLabelProvider());
+		openProjectsTree.setLabelProvider(new UnagiProjectTreeLabelProvider());
 
 		// Expands the tree and sets the list of open projects as the input for the tree.
 		openProjectsTree.setAutoExpandLevel(2);
@@ -85,13 +86,15 @@ public class ProjectsView extends ViewPart implements IPropertyChangeListener {
 					Object firstElement = selection.getFirstElement();
 					
 					// If it's a model, open it in the text editor.
-					if (firstElement instanceof ModelProjectTreeElement) {
-						ModelProjectTreeElement modelElem = (ModelProjectTreeElement) firstElement;
+					if (firstElement instanceof ModelPTElement) {
+						// TODO: shouldn't we make this into an Action or something? 
+						// TODO: It could be activated from right-clicking the model in the tree also!
+						ModelPTElement modelElem = (ModelPTElement) firstElement;
 						IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(modelElem.getModel().getFile().getAbsolutePath()));
 						IEditorInput input = new FileStoreEditorInput(fileStore);
 						try {
-							
-							page.openEditor(input, "org.eclipse.emf.ecore.presentation.EcoreEditorID");
+							// TODO: programmatically load the LTL.ecore and goalmodel.ecore files!
+							IEditorPart editor = page.openEditor(input, "org.eclipse.emf.ecore.presentation.EcoreEditorID");
 						}
 						catch (PartInitException e) {
 							// TODO Auto-generated catch block

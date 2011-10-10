@@ -13,31 +13,27 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * TODO: document this type.
+ * Project Tree element that represents a model of a Unagi Project.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class ModelProjectTreeElement extends ProjectTreeElement {
-	/** Project child that this element refers to. */
-	private UnagiProjectChildProjectTreeElement parent;
+public class ModelPTElement extends ProjectTreeElement {
+	/** The parent of a model is one of the Unagi Project's children (of the "Models" category). */
+	private UnagiProjectChildPTElement parent;
 
-	/** The model itself. */
+	/** The model domain entity this PT element refers to. */
 	private RequirementsModel model;
 
 	/** Constructor. */
-	public ModelProjectTreeElement(UnagiProjectChildProjectTreeElement parent, RequirementsModel model) {
+	public ModelPTElement(UnagiProjectChildPTElement parent, RequirementsModel model) {
 		this.parent = parent;
 		this.model = model;
 	}
 
-	/**
-	 * Getter for parent.
-	 * 
-	 * @see it.unitn.disi.unagi.gui.models.ProjectTreeElement#getParent()
-	 */
+	/** @see it.unitn.disi.unagi.gui.models.ProjectTreeElement#getParent() */
 	@Override
-	public UnagiProjectChildProjectTreeElement getParent() {
+	public UnagiProjectChildPTElement getParent() {
 		return parent;
 	}
 
@@ -66,9 +62,9 @@ public class ModelProjectTreeElement extends ProjectTreeElement {
 		List<IAction> actionList = new ArrayList<IAction>();
 		
 		// Builds a list of all selected models for the actions that can be applied to multiple elements.
-		List<ModelProjectTreeElement> selectedElements = CollectionsUtil.filterSelectionByClass(selection.iterator(), ModelProjectTreeElement.class);
+		List<ModelPTElement> selectedElements = CollectionsUtil.filterSelectionByClass(selection.iterator(), ModelPTElement.class);
 		List<RequirementsModel> selectedModels = new ArrayList<RequirementsModel>();
-		for (ModelProjectTreeElement elem : selectedElements)
+		for (ModelPTElement elem : selectedElements)
 			selectedModels.add(elem.getModel());
 
 		// Adds the "Delete requirements models" action to the list of applicable actions.
@@ -81,11 +77,11 @@ public class ModelProjectTreeElement extends ProjectTreeElement {
 	@Override
 	public int compareTo(ProjectTreeElement o) {
 		// Check for nulls and different classes.
-		if ((o == null) || (! (o instanceof ModelProjectTreeElement))) 
+		if ((o == null) || (! (o instanceof ModelPTElement))) 
 			return -1;
 		
 		// Compare by project.
-		ModelProjectTreeElement e = (ModelProjectTreeElement) o;
+		ModelPTElement e = (ModelPTElement) o;
 		return (model == null) ? 1 : model.compareTo(e.model);
 	}
 
@@ -93,11 +89,11 @@ public class ModelProjectTreeElement extends ProjectTreeElement {
 	@Override
 	public boolean equals(Object o) {
 		// Check for nulls and different classes.
-		if ((o == null) || (! (o instanceof ModelProjectTreeElement))) 
+		if ((o == null) || (! (o instanceof ModelPTElement))) 
 			return false;
 
 		// If the elements refer to the same model, they're equal.
-		ModelProjectTreeElement e = (ModelProjectTreeElement) o;
+		ModelPTElement e = (ModelPTElement) o;
 		return (model == null) ? false : model.equals(e.model);
 	}
 

@@ -5,18 +5,21 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * TODO: document this type.
+ * Utility class that operates on collections of objects.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
 public final class CollectionsUtil {
 	/**
-	 * TODO: document this method.
+	 * Filters a collection (given its iterator) and produces a list of the elements of the collection that belong to a
+	 * particular class (including any of its subclasses).
 	 * 
 	 * @param iter
+	 *          The iterator of the collection.
 	 * @param clazz
-	 * @return
+	 *          The interested class, used to filtering the collection.
+	 * @return A List of objects of the specified class which were in the given collection's iterator.
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> filterSelectionByClass(Iterator<?> iter, Class<T> clazz) {
@@ -29,7 +32,7 @@ public final class CollectionsUtil {
 				filteredList.add((T) elem);
 			}
 		}
-		
+
 		return filteredList;
 	}
 }

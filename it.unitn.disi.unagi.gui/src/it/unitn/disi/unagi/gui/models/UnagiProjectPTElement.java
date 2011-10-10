@@ -13,27 +13,28 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * TODO: document this type.
+ * Project Tree Element that represents a Unagi Project that is open.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class UnagiProjectProjectTreeElement extends ProjectTreeElement {
-	/** TODO: document this field. */
+public class UnagiProjectPTElement extends ProjectTreeElement {
+	/** The project domain entity this PT element refers to. */
 	private UnagiProject project;
 
-	private UnagiProjectChildProjectTreeElement[] children;
+	/** The PT elements that represent the children of a project, i.e., the categories like Models, Rules, Classes, etc. */
+	private UnagiProjectChildPTElement[] children;
 
 	/** Constructor. */
-	public UnagiProjectProjectTreeElement(UnagiProject project) {
+	public UnagiProjectPTElement(UnagiProject project) {
 		this.project = project;
 
 		// Create a child of each category for the project to better organize the project's contents.
 		UnagiProjectChildCategory[] categories = UnagiProjectChildCategory.values();
-		children = new UnagiProjectChildProjectTreeElement[categories.length];
+		children = new UnagiProjectChildPTElement[categories.length];
 		int i = 0;
 		for (UnagiProjectChildCategory category : categories)
-			children[i++] = new UnagiProjectChildProjectTreeElement(project, category);
+			children[i++] = new UnagiProjectChildPTElement(project, category);
 	}
 
 	/** Getter for project. */
@@ -74,9 +75,9 @@ public class UnagiProjectProjectTreeElement extends ProjectTreeElement {
 		List<IAction> actionList = new ArrayList<IAction>();
 		
 		// Builds a list of all selected projects for the actions that can be applied to multiple elements.
-		List<UnagiProjectProjectTreeElement> selectedElements = CollectionsUtil.filterSelectionByClass(selection.iterator(), UnagiProjectProjectTreeElement.class);
+		List<UnagiProjectPTElement> selectedElements = CollectionsUtil.filterSelectionByClass(selection.iterator(), UnagiProjectPTElement.class);
 		List<UnagiProject> selectedProjects = new ArrayList<UnagiProject>();
-		for (UnagiProjectProjectTreeElement elem : selectedElements)
+		for (UnagiProjectPTElement elem : selectedElements)
 			selectedProjects.add(elem.getProject());
 
 		// Adds the "Close projects" action to the list of applicable actions.
@@ -89,11 +90,11 @@ public class UnagiProjectProjectTreeElement extends ProjectTreeElement {
 	@Override
 	public int compareTo(ProjectTreeElement o) {
 		// Check for nulls and different classes.
-		if ((o == null) || (! (o instanceof UnagiProjectProjectTreeElement))) 
+		if ((o == null) || (! (o instanceof UnagiProjectPTElement))) 
 			return -1;
 		
 		// Compare by project.
-		UnagiProjectProjectTreeElement e = (UnagiProjectProjectTreeElement) o;
+		UnagiProjectPTElement e = (UnagiProjectPTElement) o;
 		return (project == null) ? 1 : project.compareTo(e.project);
 	}
 
@@ -101,11 +102,11 @@ public class UnagiProjectProjectTreeElement extends ProjectTreeElement {
 	@Override
 	public boolean equals(Object o) {
 		// Check for nulls and different classes.
-		if ((o == null) || (! (o instanceof UnagiProjectProjectTreeElement))) 
+		if ((o == null) || (! (o instanceof UnagiProjectPTElement))) 
 			return false;
 
 		// If the elements refer to the same project, they're equal.
-		UnagiProjectProjectTreeElement e = (UnagiProjectProjectTreeElement) o;
+		UnagiProjectPTElement e = (UnagiProjectPTElement) o;
 		return (project == null) ? false : project.equals(e.project);
 	}
 

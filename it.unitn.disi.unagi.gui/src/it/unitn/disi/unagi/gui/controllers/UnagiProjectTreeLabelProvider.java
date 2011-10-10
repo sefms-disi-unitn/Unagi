@@ -14,7 +14,7 @@ import org.eclipse.ui.PlatformUI;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class UnagiProjectLabelProvider extends LabelProvider {
+public class UnagiProjectTreeLabelProvider extends LabelProvider {
 	/** @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object) */
 	@Override
 	public String getText(Object element) {

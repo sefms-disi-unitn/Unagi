@@ -111,10 +111,13 @@ public class ManageModelsServiceBean implements ManageModelsService {
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Generates the name of the file that will hold the model in disk automatically from the name of the model. This
+	 * method basically converts spaces, underscores and dots to dashes and removes any non-alphanumeric characters
+	 * (including accebnted letters).
 	 * 
 	 * @param name
-	 * @return
+	 *          The name of the model.
+	 * @return A string with the name of the file that should represent the model in disk.
 	 */
 	private String generateFileName(String name) {
 		// Generates the file name from the model name (in lower case).
@@ -133,11 +136,14 @@ public class ManageModelsServiceBean implements ManageModelsService {
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Checks if the "models" sub-directory exists in the given project, creating it if it doesn't yet exist.
 	 * 
 	 * @param project
-	 * @return
+	 *          A Unagi project.
+	 * @return A File object representing the "models" sub-directory of the Unagi project.
 	 * @throws CouldNotCreateModelsSubdirectoryException
+	 *           If for some reason the "models" sub-directory did not exist and could not be created in the Unagi
+	 *           project's directory.
 	 */
 	private File checkModelsSubdirectory(UnagiProject project) throws CouldNotCreateModelsSubdirectoryException {
 		// Check if the models sub-directory already exists.
@@ -151,11 +157,16 @@ public class ManageModelsServiceBean implements ManageModelsService {
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Given a File object that represents where the requirements model's file should be created, checks if no file with
+	 * the same name exists at the specified location (automatically renaming the new file's name if another file already
+	 * exists) and creates a new file to represent the requirements model on disk.
 	 * 
 	 * @param file
-	 * @return
+	 *          The file descriptor that indicate where we want the requirements model file to be created.
+	 * @return A File object that contains the file descriptor for the file that was actually created.
 	 * @throws CouldNotCreateRequirementsModelFileException
+	 *           If for some reason the file that represents the requirements model could not be created in the "models"
+	 *           sub-directory of the Unagi project's directory.
 	 */
 	private File createRequirementsModelFile(File file) throws CouldNotCreateRequirementsModelFileException {
 		// Prepare variables to generate new file names if the file already exists.

@@ -57,6 +57,13 @@
                relationship="left"
                relative="org.eclipse.ui.editorss">
          </view>
+         <view
+               id="org.eclipse.ui.views.PropertySheet"
+               minimized="false"
+               ratio="0.15f"
+               relationship="bottom"
+               relative="org.eclipse.ui.editorss">
+         </view>
       </perspectiveExtension>
    </extension>
    <extension

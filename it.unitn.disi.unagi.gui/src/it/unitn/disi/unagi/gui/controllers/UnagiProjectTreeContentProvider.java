@@ -2,7 +2,7 @@ package it.unitn.disi.unagi.gui.controllers;
 
 import it.unitn.disi.unagi.domain.core.UnagiProject;
 import it.unitn.disi.unagi.gui.models.ProjectTreeElement;
-import it.unitn.disi.unagi.gui.models.UnagiProjectProjectTreeElement;
+import it.unitn.disi.unagi.gui.models.UnagiProjectPTElement;
 
 import java.util.Collection;
 import java.util.Set;
@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.Viewer;
  */
 public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
 	/** Map of projects and their tree model representations. */
-	private SortedMap<UnagiProject, UnagiProjectProjectTreeElement> treeModel = new TreeMap<UnagiProject, UnagiProjectProjectTreeElement>();
+	private SortedMap<UnagiProject, UnagiProjectPTElement> treeModel = new TreeMap<UnagiProject, UnagiProjectPTElement>();
 
 	/** @see org.eclipse.jface.viewers.IContentProvider#dispose() */
 	@Override
@@ -49,7 +49,7 @@ public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
 			
 			// If the project is not already open, then it's new. Open it, also adding it to the tree model.
 			else {
-				treeModel.put(project, new UnagiProjectProjectTreeElement(project));
+				treeModel.put(project, new UnagiProjectPTElement(project));
 			}
 		}
 		
@@ -61,7 +61,7 @@ public class UnagiProjectTreeContentProvider implements ITreeContentProvider {
 	/** @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object) */
 	@Override
 	public Object[] getElements(Object inputElement) {
-		Collection<UnagiProjectProjectTreeElement> elems = treeModel.values();
+		Collection<UnagiProjectPTElement> elems = treeModel.values();
 
 		// According to the superclass, the returned array should not contain the element supplied as a parameter. 
 		if (elems.contains(inputElement)) elems.remove(inputElement);

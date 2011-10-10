@@ -5,7 +5,11 @@ import it.unitn.disi.util.domain.DomainObjectSupport;
 import java.io.File;
 
 /**
- * TODO: document this type.
+ * Domain class that represents requirements models that belong to Unagi projects.
+ * 
+ * The requirements model is an EMF ecore file, based on other EMF ecore files provided by the tool. In practice this
+ * allows the developer to describe a goal model as the requirements of the adaptive system. Awareness Requirements and
+ * other adaptivity requirements can then be provided on top of this goal model.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
@@ -22,7 +26,7 @@ public class RequirementsModel extends DomainObjectSupport implements Comparable
 
 	/** Name of the model. */
 	private String name;
-	
+
 	/** Base package for classes generated from this model. */
 	private String basePackage;
 
