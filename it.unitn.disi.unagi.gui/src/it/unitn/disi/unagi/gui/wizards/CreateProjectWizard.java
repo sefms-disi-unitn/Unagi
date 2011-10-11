@@ -3,6 +3,7 @@ package it.unitn.disi.unagi.gui.wizards;
 import it.unitn.disi.unagi.application.exceptions.CouldNotSaveUnagiProjectException;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
+import it.unitn.disi.unagi.gui.nls.Messages;
 
 import java.io.File;
 
@@ -28,7 +29,7 @@ public class CreateProjectWizard extends Wizard implements INewWizard {
 	/** Constructor. */
 	public CreateProjectWizard() {
 		setNeedsProgressMonitor(true);
-		setWindowTitle("Create new Unagi Project");
+		setWindowTitle(Messages.getString("gui.wizard.createProject.title")); //$NON-NLS-1$
 	}
 
 	/** @see org.eclipse.jface.wizard.Wizard#addPages() */
@@ -52,8 +53,11 @@ public class CreateProjectWizard extends Wizard implements INewWizard {
 		}
 		catch (CouldNotSaveUnagiProjectException e) {
 			// If the project could not be saved to the specified folder, show an error message.
-			Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", "The Unagi Project could not be saved.");
-			ErrorDialog.openError(this.getShell(), "Error while creating a new Unagi Project", "Could not create a new Unagi Project. Please try again or contact support.", status);
+			String statusMsg = Messages.getString("gui.wizard.createProject.error.status"); //$NON-NLS-1$
+			String errorTitle = Messages.getString("gui.wizard.createProject.error.title"); //$NON-NLS-1$
+			String errorMessage = Messages.getString("gui.wizard.createProject.error.message"); //$NON-NLS-1$
+			Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", statusMsg); //$NON-NLS-1$
+			ErrorDialog.openError(this.getShell(), errorTitle, errorMessage, status);
 		}
 		
 		return true;

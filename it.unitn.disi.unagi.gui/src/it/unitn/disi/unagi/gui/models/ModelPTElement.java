@@ -53,7 +53,7 @@ public class ModelPTElement extends ProjectTreeElement {
 	@Override
 	public Image getIcon() {
 		// Use the same image for all models.
-		return ImageUtil.loadImage("/icons/entity-unagiproject-models-requirements.png");
+		return ImageUtil.loadImage("/icons/entity-unagiproject-models-requirements.png"); //$NON-NLS-1$
 	}
 
 	/** @see it.unitn.disi.unagi.gui.models.ProjectTreeElement#getApplicableActions(org.eclipse.jface.viewers.IStructuredSelection) */

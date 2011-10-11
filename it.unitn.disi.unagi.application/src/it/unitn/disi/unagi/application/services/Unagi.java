@@ -11,7 +11,6 @@ import java.util.Properties;
 /**
  * Singleton class that represents the whole application and centralizes access to the application's services.
  * 
- * FIXME: all the classes need externalization of Strings.
  * FIXME: all the classes need logging.
  * FIXME: exception handling could also be improved throughout the system.
  * 
@@ -20,10 +19,10 @@ import java.util.Properties;
  */
 public class Unagi {
 	/** Key for the configuration "Last folder used in file dialogs". */
-	public static final String CFG_LAST_FOLDER_FILE_DIALOGS = "last-folder-file-dialogs";
+	public static final String CFG_LAST_FOLDER_FILE_DIALOGS = "last-folder-file-dialogs"; //$NON-NLS-1$
 	
 	/** Key for the configuration "Project sub-directory where models are stored. */
-	public static final String CFG_PROJECT_SUBDIR_MODELS = "project-subdir-models";
+	public static final String CFG_PROJECT_SUBDIR_MODELS = "project-subdir-models"; //$NON-NLS-1$
 
 	/** Singleton instance of the class. */
 	private static final Unagi instance = new Unagi();
@@ -64,13 +63,13 @@ public class Unagi {
 		
 		// Sets the default values for the "Last folder used in file dialogs" configuration.
 		Properties systemProps = System.getProperties();
-		String userHome = systemProps.getProperty("user.home");
+		String userHome = systemProps.getProperty("user.home"); //$NON-NLS-1$
 		if ((userHome == null) || userHome.isEmpty())
-			userHome = ".";
+			userHome = "."; //$NON-NLS-1$
 		configurationMap.put(CFG_LAST_FOLDER_FILE_DIALOGS, new File(userHome).getAbsolutePath());
 		
 		// Sets the default values for the project sub-directories.
-		configurationMap.put(CFG_PROJECT_SUBDIR_MODELS, "models");
+		configurationMap.put(CFG_PROJECT_SUBDIR_MODELS, "models"); //$NON-NLS-1$
 	}
 
 	/**

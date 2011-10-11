@@ -18,7 +18,7 @@
             class="it.unitn.disi.unagi.rcpapp.Perspective"
             icon="icons/unagi-icon-32.gif"
             id="it.unitn.disi.unagi.rcpapp.perspective"
-            name="Unagi Perspective">
+            name="%perspective.name">
       </perspective>
    </extension>
    <extension
@@ -74,34 +74,34 @@
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
                id="it.unitn.disi.unagi.rcpapp.menus.file"
-               label="File"
-               mnemonic="F">
+               label="%menu.file.label"
+               mnemonic="%menu.file.mnemonic">
             <command
                   commandId="it.unitn.disi.unagi.gui.commands.newProject"
                   icon="icons/command-newproject-16.png"
                   id="it.unitn.disi.unagi.rcpapp.menus.file.newProject"
-                  label="New Project..."
-                  mnemonic="N"
+                  label="%command.newProject.label"
+                  mnemonic="%command.newProject.mnemonic"
                   style="push"
-                  tooltip="Creates a new Unagi project">
+                  tooltip="%command.newProject.tooltip">
             </command>
             <command
                   commandId="it.unitn.disi.unagi.gui.commands.openProject"
                   icon="icons/command-openproject-16.png"
                   id="it.unitn.disi.unagi.rcpapp.menus.file.openProject"
-                  label="Open Project..."
-                  mnemonic="O"
+                  label="%command.openProject.label"
+                  mnemonic="%command.openProject.mnemonic"
                   style="push"
-                  tooltip="Opens an existing Unagi Project">
+                  tooltip="%command.openProject.tooltip">
             </command>
             <command
                   commandId="it.unitn.disi.unagi.gui.commands.quit"
                   icon="icons/command-quit-16.png"
                   id="it.unitn.disi.unagi.rcpapp.menus.file.quit"
-                  label="Quit"
-                  mnemonic="Q"
+                  label="%command.quit.label"
+                  mnemonic="%command.quit.mnemonic"
                   style="push"
-                  tooltip="Exit the application">
+                  tooltip="%command.quit.tooltip">
             </command>
          </menu>
       </menuContribution>
@@ -114,19 +114,19 @@
                   commandId="it.unitn.disi.unagi.gui.commands.newProject"
                   icon="icons/command-newproject-16.png"
                   id="it.unitn.disi.unagi.rcpapp.toolbars.main.newProject"
-                  label="New Project..."
-                  mnemonic="N"
+                  label="%command.newProject.label"
+                  mnemonic="%command.newProject.mnemonic"
                   style="push"
-                  tooltip="Creates a new Unagi project">
+                  tooltip="%command.newProject.tooltip">
             </command>
             <command
                   commandId="it.unitn.disi.unagi.gui.commands.openProject"
                   icon="icons/command-openproject-16.png"
                   id="it.unitn.disi.unagi.rcpapp.toolbars.main.openProject"
-                  label="Open Project..."
-                  mnemonic="O"
+                  label="%command.openProject.label"
+                  mnemonic="%command.openProject.mnemonic"
                   style="push"
-                  tooltip="Opens an existing Unagi Project">
+                  tooltip="%command.openProject.tooltip">
             </command>
          </toolbar>
       </menuContribution>
@@ -137,7 +137,7 @@
             class="it.unitn.disi.unagi.gui.wizards.CreateProjectWizard"
             icon="icons/command-newproject-16.png"
             id="it.unitn.disi.unagi.rcpapp.wizards.createProject"
-            name="Create new Unagi Project">
+            name="%wizard.newProject.name">
       </wizard>
    </extension>
 

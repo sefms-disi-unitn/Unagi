@@ -8,7 +8,7 @@
             class="it.unitn.disi.unagi.gui.views.ProjectsView"
             icon="icons/view-projects.png"
             id="it.unitn.disi.unagi.gui.views.projects"
-            name="Projects"
+            name="%view.name"
             restorable="true">
       </view>
    </extension>

@@ -1,6 +1,7 @@
 package it.unitn.disi.unagi.gui.wizards;
 
 import it.unitn.disi.unagi.domain.core.UnagiProject;
+import it.unitn.disi.unagi.gui.nls.Messages;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -37,9 +38,9 @@ public class CreateRequirementsModelBasicWizardPage extends WizardPage {
 
 	/** Constructor. */
 	protected CreateRequirementsModelBasicWizardPage(UnagiProject project) {
-		super("New Requirements Model");
+		super(Messages.getString("gui.wizard.createRequirementsModel.basicPage.title")); //$NON-NLS-1$
+		setTitle(Messages.getString("gui.wizard.createRequirementsModel.basicPage.title")); //$NON-NLS-1$
 		this.project = project;
-		setTitle("Basic model information");
 	}
 
 	/** @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite) */
@@ -53,7 +54,7 @@ public class CreateRequirementsModelBasicWizardPage extends WizardPage {
 
 		// Creates the label for the project field.
 		Label projectLabel = new Label(container, SWT.NULL);
-		projectLabel.setText("Create in project:");
+		projectLabel.setText(Messages.getString("gui.wizard.createRequirementsModel.basicPage.label.project")); //$NON-NLS-1$
 
 		// Creates the project field, which is not editable (can't change project here).
 		projectField = new Text(container, SWT.BORDER | SWT.SINGLE);
@@ -63,11 +64,11 @@ public class CreateRequirementsModelBasicWizardPage extends WizardPage {
 		
 		// Creates the label for the name field.
 		Label nameLabel = new Label(container, SWT.NULL);
-		nameLabel.setText("Model name:");
+		nameLabel.setText(Messages.getString("gui.wizard.createRequirementsModel.basicPage.label.name")); //$NON-NLS-1$
 
 		// Creates the name field and focuses on it.
 		nameField = new Text(container, SWT.BORDER | SWT.SINGLE);
-		nameField.setText("");
+		nameField.setText(""); //$NON-NLS-1$
 		nameField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		nameField.forceFocus();
 
@@ -85,11 +86,11 @@ public class CreateRequirementsModelBasicWizardPage extends WizardPage {
 		
 		// Creates the label for the base package field.
 		Label basePackageLabel = new Label(container, SWT.NULL);
-		basePackageLabel.setText("Base package:");
+		basePackageLabel.setText(Messages.getString("gui.wizard.createRequirementsModel.basicPage.label.basePackage")); //$NON-NLS-1$
 		
 		// Creates the base package field.
 		basePackageField = new Text(container, SWT.BORDER | SWT.SINGLE);
-		basePackageField.setText("");
+		basePackageField.setText(""); //$NON-NLS-1$
 		basePackageField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		// Sets the created container as the control for this page so Eclipse is able to integrate this page to the wizard.

@@ -94,7 +94,7 @@ public class ProjectsView extends ViewPart implements IPropertyChangeListener {
 						IEditorInput input = new FileStoreEditorInput(fileStore);
 						try {
 							// TODO: programmatically load the LTL.ecore and goalmodel.ecore files!
-							IEditorPart editor = page.openEditor(input, "org.eclipse.emf.ecore.presentation.EcoreEditorID");
+							IEditorPart editor = page.openEditor(input, "org.eclipse.emf.ecore.presentation.EcoreEditorID"); //$NON-NLS-1$
 						}
 						catch (PartInitException e) {
 							// TODO Auto-generated catch block

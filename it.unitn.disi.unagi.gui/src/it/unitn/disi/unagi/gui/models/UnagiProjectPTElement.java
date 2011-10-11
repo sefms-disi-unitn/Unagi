@@ -53,7 +53,7 @@ public class UnagiProjectPTElement extends ProjectTreeElement {
 	@Override
 	public Image getIcon() {
 		// All projects use the same icon.
-		return ImageUtil.loadImage("/icons/entity-unagiproject.png");
+		return ImageUtil.loadImage("/icons/entity-unagiproject.png"); //$NON-NLS-1$
 	}
 
 	/** @see it.unitn.disi.unagi.gui.models.ProjectTreeElement#hasChildren() */

@@ -3,8 +3,10 @@ package it.unitn.disi.unagi.gui.actions;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
+import it.unitn.disi.unagi.gui.nls.Messages;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -32,12 +34,14 @@ public class CloseProjectsAction extends Action {
 		this.projects = projects;
 		
 		// Sets the text to show in the context menu.
-		String s = (projects.size() > 1) ? "s" : ""; 
-		setText("Close project" + s);
-		setToolTipText("Closes the selected project" + s);
+		MessageFormat textMsg = new MessageFormat(Messages.getString("gui.action.closeProject.text")); //$NON-NLS-1$
+		MessageFormat tooltipMsg = new MessageFormat(Messages.getString("gui.action.closeProject.tooltip")); //$NON-NLS-1$
+		Object[] args = new Object[] { projects.size() };
+		setText(textMsg.format(args));
+		setToolTipText(tooltipMsg.format(args));
 		
 		// Sets the icon to show in the context menu.
-		Image icon = ImageUtil.loadImage("/icons/action-closeproject.png");
+		Image icon = ImageUtil.loadImage("/icons/action-closeproject.png"); //$NON-NLS-1$
 		setImageDescriptor(ImageDescriptor.createFromImage(icon));
 	}
 

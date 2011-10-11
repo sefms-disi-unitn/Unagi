@@ -19,7 +19,7 @@ import java.io.ObjectOutputStream;
  */
 public class SerializationUnagiProjectPersistenceManager implements UnagiProjectPersistenceManager {
 	/** Name of the file where the project is serialized. */
-	private static final String PROJECT_FILE = "project.unagi";
+	private static final String PROJECT_FILE = "project.unagi"; //$NON-NLS-1$
 	
 	/** @see it.unitn.disi.unagi.application.persistence.UnagiProjectPersistenceManager#save(it.unitn.disi.unagi.domain.core.UnagiProject, java.io.File) */
 	@Override
@@ -28,7 +28,7 @@ public class SerializationUnagiProjectPersistenceManager implements UnagiProject
 		
 		// Checks if the specified folder already exists and is a folder.
 		if (folder.exists() && (! folder.isDirectory()))
-			throw new IOException("Specified folder \"" + folder.getAbsolutePath() + "\" is not a directory.");
+			throw new IOException("Specified folder \"" + folder.getAbsolutePath() + "\" is not a directory."); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		// If it doesn't yet exist, create it.
 		else if (! folder.exists()) folder.mkdir();

@@ -1,6 +1,7 @@
 package it.unitn.disi.unagi.gui.controllers;
 
 import it.unitn.disi.unagi.gui.models.ProjectTreeElement;
+import it.unitn.disi.unagi.gui.nls.Messages;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -23,7 +24,7 @@ public class UnagiProjectTreeLabelProvider extends LabelProvider {
 			return ((ProjectTreeElement) element).getLabel();
 
 		// Otherwise it's an unknown element...
-		return "(Unknown element)";
+		return Messages.getString("gui.controller.unagiProjectTreeLabelProvider.unknownElement"); //$NON-NLS-1$
 	}
 
 	/** @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object) */

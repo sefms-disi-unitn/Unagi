@@ -29,7 +29,7 @@ import org.osgi.framework.Bundle;
  */
 public class ManageModelsServiceBean implements ManageModelsService {
 	/** Extension for requirements model files. */
-	private static final String REQUIREMENTS_MODEL_FILE_EXTENSION = ".ecore";
+	private static final String REQUIREMENTS_MODEL_FILE_EXTENSION = ".ecore"; //$NON-NLS-1$
 
 	/** Requirements model template. Statically loaded from /resources/template.${REQUIREMENTS_MODEL_FILE_EXTENSION}. */
 	private static final String REQUIREMENTS_MODEL_TEMPLATE;
@@ -37,7 +37,7 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		Bundle bundle = Activator.getContext().getBundle();
 		StringBuilder builder = new StringBuilder();
 		try {
-			URL url = FileLocator.resolve(bundle.getEntry("/resources/template" + REQUIREMENTS_MODEL_FILE_EXTENSION));
+			URL url = FileLocator.resolve(bundle.getEntry("/resources/template" + REQUIREMENTS_MODEL_FILE_EXTENSION)); //$NON-NLS-1$
 			File templateFile = new File(url.toURI());
 			Scanner scanner = new Scanner(templateFile);
 			while (scanner.hasNextLine())
@@ -82,7 +82,7 @@ public class ManageModelsServiceBean implements ManageModelsService {
 
 		// Fill in the new model file with the template, replacing the values for name, filename and base package.
 		try {
-			String template = REQUIREMENTS_MODEL_TEMPLATE.replace("${name}", model.getName()).replace("${filename}", file.getName()).replace("${base-package}", model.getBasePackage());
+			String template = REQUIREMENTS_MODEL_TEMPLATE.replace("${name}", model.getName()).replace("${filename}", file.getName()).replace("${base-package}", model.getBasePackage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			PrintWriter out = new PrintWriter(file);
 			out.println(template);
 			out.close();
@@ -176,7 +176,7 @@ public class ManageModelsServiceBean implements ManageModelsService {
 
 		// Checks that the file does not yet exist. If it does, rename it.
 		while (file.exists() && file.isFile()) {
-			file = new File(file.getParentFile(), originalName + "-" + (count++) + REQUIREMENTS_MODEL_FILE_EXTENSION);
+			file = new File(file.getParentFile(), originalName + '-' + (count++) + REQUIREMENTS_MODEL_FILE_EXTENSION);
 		}
 
 		// Sure that the file doesn't exist, create the file.

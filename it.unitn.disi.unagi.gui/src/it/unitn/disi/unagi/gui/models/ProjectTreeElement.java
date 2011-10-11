@@ -1,5 +1,7 @@
 package it.unitn.disi.unagi.gui.models;
 
+import it.unitn.disi.unagi.gui.nls.Messages;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public abstract class ProjectTreeElement implements Comparable<ProjectTreeElemen
 	 */
 	public String getLabel() {
 		// Returns a default label. Subclasses should override this method.
-		return "(Unknown element)";
+		return Messages.getString("gui.controller.unagiProjectTreeLabelProvider.unknownElement"); //$NON-NLS-1$
 	}
 
 	/**

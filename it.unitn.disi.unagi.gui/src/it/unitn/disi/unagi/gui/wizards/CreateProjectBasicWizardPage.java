@@ -1,6 +1,7 @@
 package it.unitn.disi.unagi.gui.wizards;
 
 import it.unitn.disi.unagi.application.services.Unagi;
+import it.unitn.disi.unagi.gui.nls.Messages;
 
 import java.io.File;
 
@@ -39,8 +40,8 @@ public class CreateProjectBasicWizardPage extends WizardPage {
 
 	/** Constructor. */
 	protected CreateProjectBasicWizardPage() {
-		super("New Unagi Project");
-		setTitle("Basic project information");
+		super(Messages.getString("gui.wizard.createProject.basicPage.title")); //$NON-NLS-1$
+		setTitle(Messages.getString("gui.wizard.createProject.basicPage.title")); //$NON-NLS-1$
 	}
 
 	/** @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite) */
@@ -54,11 +55,11 @@ public class CreateProjectBasicWizardPage extends WizardPage {
 
 		// Creates the label for the name field.
 		Label nameLabel = new Label(container, SWT.NULL);
-		nameLabel.setText("Project name:");
+		nameLabel.setText(Messages.getString("gui.wizard.createProject.basicPage.label.name")); //$NON-NLS-1$
 
 		// Creates the name field.
 		nameField = new Text(container, SWT.BORDER | SWT.SINGLE);
-		nameField.setText("");
+		nameField.setText(""); //$NON-NLS-1$
 
 		// Configures the name field to use two columns of the grid.
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -78,7 +79,7 @@ public class CreateProjectBasicWizardPage extends WizardPage {
 
 		// Creates the file field, which is composed of three parts and so automatically fills three columns.
 		File lastFolderUsed = new File(unagi.getProperty(Unagi.CFG_LAST_FOLDER_FILE_DIALOGS));
-		folderField = new DirectoryFieldEditor("file", "Save to folder:", container);
+		folderField = new DirectoryFieldEditor("file", Messages.getString("gui.wizard.createProject.basicPage.label.file"), container); //$NON-NLS-1$ //$NON-NLS-2$
 		folderField.setFilterPath(lastFolderUsed);
 
 		// Listen to modified values of this field to check if the user is finished with the page.

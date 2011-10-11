@@ -4,8 +4,10 @@ import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
+import it.unitn.disi.unagi.gui.nls.Messages;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -33,12 +35,14 @@ public class DeleteRequirementsModelsAction extends Action {
 		this.models = models;
 		
 		// Sets the text to show in the context menu.
-		String s = (models.size() > 1) ? "s" : ""; 
-		setText("Delete requirements model" + s);
-		setToolTipText("Deletes the selected requirements model " + s);
+		MessageFormat textMsg = new MessageFormat(Messages.getString("gui.action.deleteRequirementsModels.text")); //$NON-NLS-1$
+		MessageFormat tooltipMsg = new MessageFormat(Messages.getString("gui.action.deleteRequirementsModels.tooltip")); //$NON-NLS-1$
+		Object[] args = new Object[] { models.size() };
+		setText(textMsg.format(args));
+		setToolTipText(tooltipMsg.format(args));
 		
 		// Sets the icon to show in the context menu.
-		Image icon = ImageUtil.loadImage("/icons/action-deleterequirementsmodels.png");
+		Image icon = ImageUtil.loadImage("/icons/action-deleterequirementsmodels.png"); //$NON-NLS-1$
 		setImageDescriptor(ImageDescriptor.createFromImage(icon));
 	}
 
@@ -46,16 +50,16 @@ public class DeleteRequirementsModelsAction extends Action {
 	@Override
 	public void run() {
 		// When this action is run, ask for confirmation on deleting the models and delete them.
+		MessageFormat confirmationMsg = new MessageFormat(Messages.getString("gui.action.deleteRequirementsModels.misc.confirmationText")); //$NON-NLS-1$
 		StringBuilder builder = new StringBuilder();
-		builder.append("Are you sure you want to delete the selected requirement model").append((models.size() > 1) ? "s" : "").append("?\n\n");
 		for (RequirementsModel model : models)
-			builder.append("- ").append(model.getName()).append(";\n");
-		builder.append("\nWarning: the model's file will be deleted from the file system. This action cannot be undone.");
+			builder.append("- ").append(model.getName()).append(";\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		Object[] args = new Object[] { models.size(), builder.toString() };
 		
 		// Show the confirmation message.
 		MessageBox msgBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		msgBox.setMessage(builder.toString());
-		msgBox.setText("Confirm deletion?");
+		msgBox.setMessage(confirmationMsg.format(args));
+		msgBox.setText(Messages.getString("gui.action.deleteRequirementsModels.misc.confirmationTitle")); //$NON-NLS-1$
 		int answer = msgBox.open();
 		
 		// If the answer is yes, delete the models.
@@ -68,8 +72,12 @@ public class DeleteRequirementsModelsAction extends Action {
 				}
 			catch (UnagiException e) {
 				// In case of any application exception, show an error message.
-				Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", "The requirements model could not be deleted: " + model.getName());
-				ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error while deleting a requirements model", "Could not delete requirements model \"" + model.getName() + "\". Please try again or contact support.", status);
+				MessageFormat statusMsg = new MessageFormat(Messages.getString("gui.action.deleteRequirementsModels.error.status")); //$NON-NLS-1$
+				MessageFormat errorMsg = new MessageFormat(Messages.getString("gui.action.deleteRequirementsModels.error.message")); //$NON-NLS-1$
+				String dialogTitle = Messages.getString("gui.action.deleteRequirementsModels.error.title"); //$NON-NLS-1$
+				args = new Object[] { model.getName() };
+				Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", statusMsg.format(args)); //$NON-NLS-1$
+				ErrorDialog.openError(Display.getCurrent().getActiveShell(), dialogTitle, errorMsg.format(args), status);
 			}
 		}
 	}

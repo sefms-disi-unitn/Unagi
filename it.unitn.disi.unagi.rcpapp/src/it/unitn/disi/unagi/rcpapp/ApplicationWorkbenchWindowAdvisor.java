@@ -31,7 +31,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 
 		// Sets the window's title and size and configures it to show both the toolbar and the status bar.
-		configurer.setTitle("Unagi");
+		configurer.setTitle("Unagi"); //$NON-NLS-1$
 		configurer.setInitialSize(new Point(896, 768));
 		configurer.setShowCoolBar(true);
 		configurer.setShowStatusLine(true);

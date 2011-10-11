@@ -4,6 +4,7 @@ import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
+import it.unitn.disi.unagi.gui.nls.Messages;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -31,7 +32,7 @@ public class CreateRequirementsModelWizard extends Wizard implements INewWizard 
 	public CreateRequirementsModelWizard(UnagiProject project) {
 		this.project = project;
 		setNeedsProgressMonitor(true);
-		setWindowTitle("Create new Requirements Model");
+		setWindowTitle(Messages.getString("gui.wizard.createRequirementsModel.title")); //$NON-NLS-1$
 	}
 
 	/** @see org.eclipse.jface.wizard.Wizard#addPages() */
@@ -55,8 +56,11 @@ public class CreateRequirementsModelWizard extends Wizard implements INewWizard 
 		}
 		catch (UnagiException e) {
 			// In case of any application exception, show an error message.
-			Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", "The requirements model could not be created.");
-			ErrorDialog.openError(this.getShell(), "Error while creating a new requirements model", "Could not create a new requirements. Please try again or contact support.", status);
+			String statusMsg = Messages.getString("gui.wizard.createRequirementsModel.error.status"); //$NON-NLS-1$
+			String errorTitle = Messages.getString("gui.wizard.createRequirementsModel.error.title"); //$NON-NLS-1$
+			String errorMessage = Messages.getString("gui.wizard.createRequirementsModel.error.message"); //$NON-NLS-1$
+			Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", statusMsg); //$NON-NLS-1$
+			ErrorDialog.openError(this.getShell(), errorTitle, errorMessage, status);
 		}
 		
 		return true;

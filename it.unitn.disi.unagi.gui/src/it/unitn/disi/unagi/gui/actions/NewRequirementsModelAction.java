@@ -1,6 +1,9 @@
 package it.unitn.disi.unagi.gui.actions;
 
+import java.text.MessageFormat;
+
 import it.unitn.disi.unagi.domain.core.UnagiProject;
+import it.unitn.disi.unagi.gui.nls.Messages;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
 import it.unitn.disi.unagi.gui.wizards.CreateRequirementsModelWizard;
 
@@ -25,11 +28,13 @@ public class NewRequirementsModelAction extends Action {
 		this.project = project;
 		
 		// Sets the text to show in the context menu.
-		setText("New requirements model");
-		setToolTipText("Creates a new requirements model in project \"" + project.getName() + "\"");
+		MessageFormat tooltipMsg = new MessageFormat(Messages.getString("gui.action.newRequirementsModel.tooltip")); //$NON-NLS-1$
+		Object[] args = new Object[] { project.getName() };
+		setText(Messages.getString("gui.action.newRequirementsModel.text")); //$NON-NLS-1$
+		setToolTipText(tooltipMsg.format(args));
 		
 		// Sets the icon to show in the context menu.
-		Image icon = ImageUtil.loadImage("/icons/action-newrequirementsmodel.png");
+		Image icon = ImageUtil.loadImage("/icons/action-newrequirementsmodel.png"); //$NON-NLS-1$
 		setImageDescriptor(ImageDescriptor.createFromImage(icon));
 	}
 

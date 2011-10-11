@@ -152,7 +152,7 @@ public class ManageProjectServiceBean implements ManageProjectsService {
 	 */
 	private void notifyListeners(SortedSet<UnagiProject> previousOpenProjects) {
 		for (IPropertyChangeListener listener : listeners) {
-			listener.propertyChange(new PropertyChangeEvent(this, "openProjects", previousOpenProjects, openProjects));
+			listener.propertyChange(new PropertyChangeEvent(this, "openProjects", previousOpenProjects, openProjects)); //$NON-NLS-1$
 		}
 	}
 }

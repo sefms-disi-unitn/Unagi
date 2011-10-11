@@ -3,8 +3,10 @@ package it.unitn.disi.unagi.gui.commands;
 import it.unitn.disi.unagi.application.exceptions.CouldNotLoadUnagiProjectException;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
+import it.unitn.disi.unagi.gui.nls.Messages;
 
 import java.io.File;
+import java.text.MessageFormat;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -36,8 +38,8 @@ public class OpenProjectHandler extends AbstractHandler {
 		Shell shell = HandlerUtil.getActiveShell(event);
 		DirectoryDialog dialog = new DirectoryDialog(shell);
 		dialog.setFilterPath(unagi.getProperty(Unagi.CFG_LAST_FOLDER_FILE_DIALOGS));
-		dialog.setText("Open an existing Unagi Project");
-		dialog.setMessage("Select a project's folder:");
+		dialog.setText(Messages.getString("gui.command.newProject.misc.dialogTitle")); //$NON-NLS-1$
+		dialog.setMessage(Messages.getString("gui.command.newProject.misc.dialogMessage")); //$NON-NLS-1$
 		String selectedDirPath = dialog.open();
 		
 		// Checks if the user has selected a directory.
@@ -51,8 +53,12 @@ public class OpenProjectHandler extends AbstractHandler {
 				}
 				catch (CouldNotLoadUnagiProjectException e) {
 					// If the project could not be loaded from the specified folder, show an error message.
-					Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", "The Unagi Project could not be opened.");
-					ErrorDialog.openError(shell, "Error while opening an existing Unagi Project", "Could not open a Unagi Project from folder \"" + selectedDirPath + "\". Please try again or contact support.", status);
+					String statusMsg = Messages.getString("gui.command.newProject.error.status"); //$NON-NLS-1$
+					String errorTitle = Messages.getString("gui.command.newProject.error.title"); //$NON-NLS-1$
+					MessageFormat errorMsg = new MessageFormat(Messages.getString("gui.command.newProject.error.message")); //$NON-NLS-1$
+					Object[] args = new Object[] { selectedDirPath };
+					Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", statusMsg); //$NON-NLS-1$
+					ErrorDialog.openError(shell, errorTitle, errorMsg.format(args), status);
 				}
 		}
 		
