@@ -1,5 +1,7 @@
 package it.unitn.disi.unagi.rcpapp;
 
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -14,6 +16,9 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
  * @version 1.0
  */
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
+	/** The plug-in logger. */
+	private static final ILog log = Activator.getInstance().getLog();
+
 	/** Default constructor. */
 	public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
@@ -28,9 +33,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	/** @see org.eclipse.ui.application.WorkbenchWindowAdvisor#preWindowOpen() */
 	@Override
 	public void preWindowOpen() {
-		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
+		log.log(new Status(Status.INFO, Activator.PLUGIN_ID, "Configuring the workbench (title, window size, etc.)...")); //$NON-NLS-1$
 
 		// Sets the window's title and size and configures it to show both the toolbar and the status bar.
+		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		configurer.setTitle("Unagi"); //$NON-NLS-1$
 		configurer.setInitialSize(new Point(896, 768));
 		configurer.setShowCoolBar(true);

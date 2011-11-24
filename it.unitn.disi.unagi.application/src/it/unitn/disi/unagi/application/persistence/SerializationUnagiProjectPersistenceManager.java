@@ -1,5 +1,7 @@
 package it.unitn.disi.unagi.application.persistence;
 
+import it.unitn.disi.unagi.application.Activator;
+import it.unitn.disi.unagi.application.util.PluginLogger;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
 
 import java.io.File;
@@ -18,6 +20,9 @@ import java.io.ObjectOutputStream;
  * @version 1.0
  */
 public class SerializationUnagiProjectPersistenceManager implements UnagiProjectPersistenceManager {
+	/** The plug-in logger. */
+	private static final PluginLogger logger = new PluginLogger(Activator.getInstance().getLog(), Activator.PLUGIN_ID);
+
 	/** Name of the file where the project is serialized. */
 	private static final String PROJECT_FILE = "project.unagi"; //$NON-NLS-1$
 	
@@ -31,11 +36,16 @@ public class SerializationUnagiProjectPersistenceManager implements UnagiProject
 			throw new IOException("Specified folder \"" + folder.getAbsolutePath() + "\" is not a directory."); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		// If it doesn't yet exist, create it.
-		else if (! folder.exists()) folder.mkdir();
+		else if (! folder.exists()) {
+			logger.info("Project folder \"{0}\" doesn't exist. Creating it...", folder); //$NON-NLS-1$
+			folder.mkdir();
+		}
 		
 		// Serializes the project to a file in the given folder.
 		try {
-			out = new ObjectOutputStream(new FileOutputStream(new File(folder, PROJECT_FILE)));
+			File file = new File(folder, PROJECT_FILE);
+			logger.info("Serializing contents of project \"{0}\" to file \"{1}\"...", project.getName(), file.getAbsolutePath()); //$NON-NLS-1$
+			out = new ObjectOutputStream(new FileOutputStream(file));
 			out.writeObject(project);
 		}
 		finally {
@@ -62,7 +72,9 @@ public class SerializationUnagiProjectPersistenceManager implements UnagiProject
 		
 		// Loads the project from its serialized version contained in the file.
 		try {
-			in = new ObjectInputStream(new FileInputStream(new File(folder, PROJECT_FILE)));
+			File file = new File(folder, PROJECT_FILE);
+			logger.info("Reading a Unagi Project from file \"{0}\" ...", file.getAbsolutePath()); //$NON-NLS-1$
+			in = new ObjectInputStream(new FileInputStream(file));
 			project = (UnagiProject)in.readObject();
 		}
 		finally {

@@ -1,7 +1,9 @@
 package it.unitn.disi.unagi.application.services;
 
+import it.unitn.disi.unagi.application.Activator;
 import it.unitn.disi.unagi.application.internal.services.ManageModelsServiceBean;
 import it.unitn.disi.unagi.application.internal.services.ManageProjectServiceBean;
+import it.unitn.disi.unagi.application.util.PluginLogger;
 
 import java.io.File;
 import java.util.HashMap;
@@ -11,13 +13,15 @@ import java.util.Properties;
 /**
  * Singleton class that represents the whole application and centralizes access to the application's services.
  * 
- * FIXME: all the classes need logging.
  * FIXME: exception handling could also be improved throughout the system.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
 public class Unagi {
+	/** The plug-in logger. */
+	private static final PluginLogger logger = new PluginLogger(Activator.getInstance().getLog(), Activator.PLUGIN_ID);
+
 	/** Key for the configuration "Last folder used in file dialogs". */
 	public static final String CFG_LAST_FOLDER_FILE_DIALOGS = "last-folder-file-dialogs"; //$NON-NLS-1$
 	
@@ -55,6 +59,8 @@ public class Unagi {
 	 * system's configuration.
 	 */
 	private void init() {
+		logger.info("Initializing the Unagi application..."); //$NON-NLS-1$
+		
 		// Initializes the default implementations for the services. 
 		// This initialization is done here because some of these services need to refer back to this instance.
 		// TODO: remove "hard-coded" selection of service implementation and use some kind of configuration or DI.

@@ -1,29 +1,31 @@
 package it.unitn.disi.unagi.application;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+import org.eclipse.core.runtime.Plugin;
 
-public class Activator implements BundleActivator {
+/**
+ * The activator class controls the plug-in life cycle.
+ * 
+ * @author Vítor E. Silva Souza (vitorsouza@gmail.com)
+ * @version 1.0
+ */
+public class Activator extends Plugin {
+	/** The plug-in ID. */
+	public static final String PLUGIN_ID = "it.unitn.disi.unagi.application"; //$NON-NLS-1$
 
-	private static BundleContext context;
+	/** The shared instance of the plug-in, used to access plug-in features such as logging. */
+	private static Plugin plugin;
 
-	public static BundleContext getContext() {
-		return context;
+	/** Default constructor. */
+	public Activator() {
+		plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	/**
+	 * Provides the shared instance of the plug-in for other classes within the bundle.
+	 * 
+	 * @return The shared instance of the plug-in.
 	 */
-	public void start(BundleContext bundleContext) throws Exception {
-		Activator.context = bundleContext;
+	public static Plugin getInstance() {
+		return plugin;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext bundleContext) throws Exception {
-		Activator.context = null;
-	}	
 }

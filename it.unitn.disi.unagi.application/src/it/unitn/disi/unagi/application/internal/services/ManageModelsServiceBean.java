@@ -7,6 +7,7 @@ import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsMode
 import it.unitn.disi.unagi.application.exceptions.CouldNotSaveUnagiProjectException;
 import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
+import it.unitn.disi.unagi.application.util.PluginLogger;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
 
@@ -28,26 +29,40 @@ import org.osgi.framework.Bundle;
  * @version 1.0
  */
 public class ManageModelsServiceBean implements ManageModelsService {
+	/** The plug-in logger. */
+	private static final PluginLogger logger = new PluginLogger(Activator.getInstance().getLog(), Activator.PLUGIN_ID);
+
 	/** Extension for requirements model files. */
 	private static final String REQUIREMENTS_MODEL_FILE_EXTENSION = ".ecore"; //$NON-NLS-1$
 
-	/** Requirements model template. Statically loaded from /resources/template.${REQUIREMENTS_MODEL_FILE_EXTENSION}. */
+	/** Path to the template for model files. */
+	private static final String REQUIREMENTS_MODEL_TEMPLATE_PATH = "/resources/template" + REQUIREMENTS_MODEL_FILE_EXTENSION; //$NON-NLS-1$ 
+
+	/** Requirements model template. Statically loaded from inside the plug-in. */
 	private static final String REQUIREMENTS_MODEL_TEMPLATE;
 	static {
-		Bundle bundle = Activator.getContext().getBundle();
+		if (logger != null)
+			logger.info("Loading contents from requirements model template: {0} ...", REQUIREMENTS_MODEL_TEMPLATE_PATH); //$NON-NLS-1$
+
+		// Uses the plug-in's execution bundle to locate a file from within the plug-in.
+		Bundle bundle = Activator.getInstance().getBundle();
 		StringBuilder builder = new StringBuilder();
 		try {
-			URL url = FileLocator.resolve(bundle.getEntry("/resources/template" + REQUIREMENTS_MODEL_FILE_EXTENSION)); //$NON-NLS-1$
+			URL url = FileLocator.resolve(bundle.getEntry(REQUIREMENTS_MODEL_TEMPLATE_PATH));
 			File templateFile = new File(url.toURI());
+
+			// Reads the file line by line, adding them to the string builder.
 			Scanner scanner = new Scanner(templateFile);
 			while (scanner.hasNextLine())
 				builder.append(scanner.nextLine()).append('\n');
+			scanner.close();
 		}
 		catch (Exception e) {
 			// TODO: exception handling.
-			e.printStackTrace();
+			logger.error(e, "Could not load contents from requirements model template"); //$NON-NLS-1$
 		}
 		finally {
+			// Stores the contents of the template in the static property for later use.
 			REQUIREMENTS_MODEL_TEMPLATE = builder.toString();
 		}
 	}
@@ -66,6 +81,8 @@ public class ManageModelsServiceBean implements ManageModelsService {
 	 */
 	@Override
 	public RequirementsModel createNewRequirementsModel(UnagiProject project, String name, String basePackage) throws CouldNotCreateModelsSubdirectoryException, CouldNotCreateRequirementsModelFileException, CouldNotSaveUnagiProjectException {
+		logger.info("Creating new requirements model for project \"{0}\", with name \"{1}\" and base package \"{2}\"...", project.getName(), name, basePackage); //$NON-NLS-1$
+
 		// Determine the name of the file that will store the requirements model and creates it.
 		File modelsDir = checkModelsSubdirectory(project);
 		String fileName = generateFileName(name);
@@ -81,14 +98,19 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		unagi.getManageProjectsService().saveProject(project);
 
 		// Fill in the new model file with the template, replacing the values for name, filename and base package.
+		PrintWriter out = null;
 		try {
 			String template = REQUIREMENTS_MODEL_TEMPLATE.replace("${name}", model.getName()).replace("${filename}", file.getName()).replace("${base-package}", model.getBasePackage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			PrintWriter out = new PrintWriter(file);
+			out = new PrintWriter(file);
 			out.println(template);
-			out.close();
 		}
 		catch (FileNotFoundException e) {
+			logger.error(e, "Could not create requirements model file"); //$NON-NLS-1$
 			throw new CouldNotCreateRequirementsModelFileException(e);
+		}
+		finally {
+			if (out != null)
+				out.close();
 		}
 
 		// Returns the newly created model.
@@ -98,11 +120,15 @@ public class ManageModelsServiceBean implements ManageModelsService {
 	/** @see it.unitn.disi.unagi.application.services.ManageModelsService#deleteRequirementsModel(it.unitn.disi.unagi.domain.core.RequirementsModel) */
 	@Override
 	public void deleteRequirementsModel(RequirementsModel model) throws CouldNotDeleteRequirementsModelFileException, CouldNotSaveUnagiProjectException {
+		logger.info("Deleting requirements model \"{0}\" from project \"{1}\"", model.getName(), model.getProject().getName()); //$NON-NLS-1$
+
 		// Deletes the file in the file system, if it exists. Reports any problems as an application exception.
 		File file = model.getFile();
 		if (file.exists() && file.isFile())
-			if (!file.delete())
+			if (!file.delete()) {
+				logger.error("Could not delete requirements model file: {0}", file.getAbsolutePath()); //$NON-NLS-1$
 				throw new CouldNotDeleteRequirementsModelFileException();
+			}
 
 		// Remove the model from the project and save the latter.
 		UnagiProject project = model.getProject();
@@ -132,6 +158,7 @@ public class ManageModelsServiceBean implements ManageModelsService {
 				builder.deleteCharAt(i);
 		}
 
+		logger.info("Generated file name for model \"{0}\": {1}", name, builder.toString()); //$NON-NLS-1$
 		return builder.toString() + REQUIREMENTS_MODEL_FILE_EXTENSION;
 	}
 
@@ -149,9 +176,13 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		// Check if the models sub-directory already exists.
 		File modelsDir = new File(project.getFolder(), unagi.getProperty(Unagi.CFG_PROJECT_SUBDIR_MODELS));
 		if (!modelsDir.isDirectory()) {
+			logger.info("Models sub-directory \"{0}\" for project \"{1}\" doesn't exist. Creating now...", modelsDir, project.getName()); //$NON-NLS-1$
+
 			// Doesn't exist. Create it, checking for problems.
-			if (!modelsDir.mkdir())
+			if (!modelsDir.mkdir()) {
+				logger.error("Could not create models sub-directory: {0}", modelsDir.getAbsolutePath()); //$NON-NLS-1$
 				throw new CouldNotCreateModelsSubdirectoryException();
+			}
 		}
 		return modelsDir;
 	}
@@ -181,12 +212,15 @@ public class ManageModelsServiceBean implements ManageModelsService {
 
 		// Sure that the file doesn't exist, create the file.
 		try {
+			logger.info("Creating requirements model file \"{0}\"...", file); //$NON-NLS-1$
 			file.createNewFile();
 		}
 		catch (IOException e) {
+			logger.error(e, "Could not create requirements model file: {0}", file.getAbsolutePath()); //$NON-NLS-1$
 			throw new CouldNotCreateRequirementsModelFileException(e);
 		}
 		catch (SecurityException e) {
+			logger.error(e, "Could not create requirements model file: {0}", file.getAbsolutePath()); //$NON-NLS-1$
 			throw new CouldNotCreateRequirementsModelFileException(e);
 		}
 
