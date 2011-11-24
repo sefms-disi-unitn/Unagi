@@ -3,17 +3,15 @@ package it.unitn.disi.unagi.gui.views;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
-import it.unitn.disi.unagi.gui.controllers.UnagiProjectTreeLabelProvider;
+import it.unitn.disi.unagi.gui.actions.OpenRequirementsModelAction;
 import it.unitn.disi.unagi.gui.controllers.UnagiProjectTreeContentProvider;
+import it.unitn.disi.unagi.gui.controllers.UnagiProjectTreeLabelProvider;
 import it.unitn.disi.unagi.gui.models.ModelPTElement;
 import it.unitn.disi.unagi.gui.models.ProjectTreeElement;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -26,11 +24,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -76,7 +69,7 @@ public class ProjectsView extends ViewPart implements IPropertyChangeListener {
 		// Registers the view as a listener for property changes regarding the open projects list.
 		manageProjectsService.addPropertyChangeListener(this);
 		
-		final IWorkbenchPage page = getSite().getPage();
+		//final IWorkbenchPage page = getSite().getPage();
 		openProjectsTree.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
@@ -87,21 +80,10 @@ public class ProjectsView extends ViewPart implements IPropertyChangeListener {
 					
 					// If it's a model, open it in the text editor.
 					if (firstElement instanceof ModelPTElement) {
-						// TODO: shouldn't we make this into an Action or something? 
-						// TODO: It could be activated from right-clicking the model in the tree also!
 						ModelPTElement modelElem = (ModelPTElement) firstElement;
-						IFileStore fileStore = EFS.getLocalFileSystem().getStore(new Path(modelElem.getModel().getFile().getAbsolutePath()));
-						IEditorInput input = new FileStoreEditorInput(fileStore);
-						try {
-							// TODO: programmatically load the LTL.ecore and goalmodel.ecore files!
-							IEditorPart editor = page.openEditor(input, "org.eclipse.emf.ecore.presentation.EcoreEditorID"); //$NON-NLS-1$
-						}
-						catch (PartInitException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						OpenRequirementsModelAction action = new OpenRequirementsModelAction(modelElem.getModel());
+						action.run();
 					}
-					
 				}
 			}
 		});

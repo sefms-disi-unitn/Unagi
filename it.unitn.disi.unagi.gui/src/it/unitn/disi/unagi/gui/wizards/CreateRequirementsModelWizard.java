@@ -3,7 +3,9 @@ package it.unitn.disi.unagi.gui.wizards;
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
+import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
+import it.unitn.disi.unagi.gui.actions.OpenRequirementsModelAction;
 import it.unitn.disi.unagi.gui.nls.Messages;
 
 import org.eclipse.core.runtime.IStatus;
@@ -52,7 +54,11 @@ public class CreateRequirementsModelWizard extends Wizard implements INewWizard 
 		String name = basicPage.getModelName();
 		String basePackage = basicPage.getBasePackage();
 		try {
-			manageModelsService.createNewRequirementsModel(project, name, basePackage);
+			RequirementsModel model = manageModelsService.createNewRequirementsModel(project, name, basePackage);
+			
+			// Automatically opens the requirements model that has just been created.
+			OpenRequirementsModelAction action = new OpenRequirementsModelAction(model);
+			action.run();
 		}
 		catch (UnagiException e) {
 			// In case of any application exception, show an error message.

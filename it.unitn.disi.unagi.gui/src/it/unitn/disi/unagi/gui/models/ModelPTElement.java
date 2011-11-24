@@ -3,6 +3,7 @@ package it.unitn.disi.unagi.gui.models;
 import it.unitn.disi.unagi.application.util.CollectionsUtil;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.gui.actions.DeleteRequirementsModelsAction;
+import it.unitn.disi.unagi.gui.actions.OpenRequirementsModelAction;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
 
 import java.util.ArrayList;
@@ -67,7 +68,8 @@ public class ModelPTElement extends ProjectTreeElement {
 		for (ModelPTElement elem : selectedElements)
 			selectedModels.add(elem.getModel());
 
-		// Adds the "Delete requirements models" action to the list of applicable actions.
+		// Adds applicable actions to the list.
+		actionList.add(new OpenRequirementsModelAction(selectedModels));
 		actionList.add(new DeleteRequirementsModelsAction(selectedModels));
 		
 		return actionList;
