@@ -43,12 +43,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(true);
 	}
 
-	/** @see org.eclipse.ui.application.WorkbenchWindowAdvisor#preWindowShellClose() */
+	/** @see org.eclipse.ui.application.WorkbenchWindowAdvisor#postWindowOpen() */
 	@Override
-	public boolean preWindowShellClose() {
-		// Closes all editors before closing the program so they will not be opened the next time the program starts.
+	public void postWindowOpen() {
+		// Closes all editors when the application is just started.
 		IWorkbenchPage page = getWindowConfigurer().getWindow().getActivePage();
 		page.closeAllEditors(true);
-		return true;
 	}
 }
