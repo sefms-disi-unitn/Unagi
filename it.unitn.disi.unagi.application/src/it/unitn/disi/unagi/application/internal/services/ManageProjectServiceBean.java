@@ -1,8 +1,8 @@
 package it.unitn.disi.unagi.application.internal.services;
 
 import it.unitn.disi.unagi.application.Activator;
-import it.unitn.disi.unagi.application.exceptions.CouldNotLoadUnagiProjectException;
-import it.unitn.disi.unagi.application.exceptions.CouldNotSaveUnagiProjectException;
+import it.unitn.disi.unagi.application.exceptions.UnagiException;
+import it.unitn.disi.unagi.application.exceptions.UnagiExceptionType;
 import it.unitn.disi.unagi.application.persistence.SerializationUnagiProjectPersistenceManager;
 import it.unitn.disi.unagi.application.persistence.UnagiProjectPersistenceManager;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
@@ -41,7 +41,7 @@ public class ManageProjectServiceBean implements ManageProjectsService {
 
 	/** @see it.unitn.disi.unagi.application.services.ManageProjectsService#createNewProject(java.lang.String, java.io.File) */
 	@Override
-	public UnagiProject createNewProject(String name, File folder) throws CouldNotSaveUnagiProjectException {
+	public UnagiProject createNewProject(String name, File folder) throws UnagiException {
 		logger.info("Creating a new project called \"{0}\" using folder \"{1}\"...", name, folder); //$NON-NLS-1$
 		
 		// Creates the new project.
@@ -56,7 +56,7 @@ public class ManageProjectServiceBean implements ManageProjectsService {
 		}
 		catch (IOException e) {
 			logger.error(e, "Could not save the new project"); //$NON-NLS-1$
-			throw new CouldNotSaveUnagiProjectException(e);
+			throw new UnagiException(UnagiExceptionType.COULD_NOT_SAVE_UNAGI_PROJECT, e);
 		}
 		
 		// Adds the project to the list of open projects.
@@ -70,7 +70,7 @@ public class ManageProjectServiceBean implements ManageProjectsService {
 
 	/** @see it.unitn.disi.unagi.application.services.ManageProjectsService#saveProject(it.unitn.disi.unagi.domain.core.UnagiProject) */
 	@Override
-	public void saveProject(UnagiProject project) throws CouldNotSaveUnagiProjectException {
+	public void saveProject(UnagiProject project) throws UnagiException {
 		logger.info("Saving project \"{0}\" ...", project.getName()); //$NON-NLS-1$
 		
 		// Updates the timestamp of the last save.
@@ -82,7 +82,7 @@ public class ManageProjectServiceBean implements ManageProjectsService {
 		}
 		catch (IOException e) {
 			logger.error(e, "Could not save the project"); //$NON-NLS-1$
-			throw new CouldNotSaveUnagiProjectException(e);
+			throw new UnagiException(UnagiExceptionType.COULD_NOT_SAVE_UNAGI_PROJECT, e);
 		}
 
 		// Notifies listeners of a property change.
@@ -99,7 +99,7 @@ public class ManageProjectServiceBean implements ManageProjectsService {
 
 	/** @see it.unitn.disi.unagi.application.services.ManageProjectsService#loadProject(java.io.File) */
 	@Override
-	public UnagiProject loadProject(File folder) throws CouldNotLoadUnagiProjectException {
+	public UnagiProject loadProject(File folder) throws UnagiException {
 		logger.info("Loading a project from folder \"{0}\" ...", folder); //$NON-NLS-1$
 
 		// Loads the project from the file.
@@ -109,7 +109,7 @@ public class ManageProjectServiceBean implements ManageProjectsService {
 		}
 		catch (Exception e) {
 			logger.error(e, "Could not load project from folder"); //$NON-NLS-1$
-			throw new CouldNotLoadUnagiProjectException(e);
+			throw new UnagiException(UnagiExceptionType.COULD_NOT_LOAD_UNAGI_PROJECT);
 		}
 		
 		// In case the user has changed the name/location of the folder, update the UnagiProject object.

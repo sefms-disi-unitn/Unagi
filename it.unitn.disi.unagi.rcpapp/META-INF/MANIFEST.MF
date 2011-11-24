@@ -7,6 +7,7 @@ Bundle-Activator: it.unitn.disi.unagi.rcpapp.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  it.unitn.disi.unagi.domain;bundle-version="1.0.0",
- it.unitn.disi.unagi.gui;bundle-version="1.0.0"
+ it.unitn.disi.unagi.gui;bundle-version="1.0.0",
+ it.unitn.disi.unagi.application;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

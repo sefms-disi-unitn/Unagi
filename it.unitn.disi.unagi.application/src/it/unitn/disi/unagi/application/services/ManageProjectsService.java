@@ -1,7 +1,6 @@
 package it.unitn.disi.unagi.application.services;
 
-import it.unitn.disi.unagi.application.exceptions.CouldNotLoadUnagiProjectException;
-import it.unitn.disi.unagi.application.exceptions.CouldNotSaveUnagiProjectException;
+import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
 
 import java.io.File;
@@ -26,10 +25,10 @@ public interface ManageProjectsService {
 	 * 
 	 * @return The newly created project.
 	 * 
-	 * @throws CouldNotSaveUnagiProjectException
+	 * @throws UnagiException
 	 *           If for some reason the new project could not be saved (e.g., I/O error on the specified folder).
 	 */
-	UnagiProject createNewProject(String name, File folder) throws CouldNotSaveUnagiProjectException;
+	UnagiProject createNewProject(String name, File folder) throws UnagiException;
 
 	/**
 	 * Saves an existing Unagi Project.
@@ -37,10 +36,10 @@ public interface ManageProjectsService {
 	 * @param project
 	 *          The project to be saved.
 	 * 
-	 * @throws CouldNotSaveUnagiProjectException
+	 * @throws UnagiException
 	 *           If for some reason the existing project could not be saved (e.g., I/O error on the project's folder).
 	 */
-	void saveProject(UnagiProject project) throws CouldNotSaveUnagiProjectException;
+	void saveProject(UnagiProject project) throws UnagiException;
 
 	/**
 	 * Determines if an existing folder contains a Unagi Project.
@@ -60,11 +59,11 @@ public interface ManageProjectsService {
 	 * 
 	 * @return The UnagiProject object representing the project that is stored in the specified folder.
 	 * 
-	 * @throws CouldNotLoadUnagiProjectException
+	 * @throws UnagiException
 	 *           If for some reason the project could not be loaded from the folder (e.g., I/O error on the specified
 	 *           folder).
 	 */
-	UnagiProject loadProject(File folder) throws CouldNotLoadUnagiProjectException;
+	UnagiProject loadProject(File folder) throws UnagiException;
 
 	/**
 	 * Closes a Unagi Project.

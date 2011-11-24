@@ -1,6 +1,6 @@
 package it.unitn.disi.unagi.gui.commands;
 
-import it.unitn.disi.unagi.application.exceptions.CouldNotLoadUnagiProjectException;
+import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.gui.nls.Messages;
@@ -51,7 +51,7 @@ public class OpenProjectHandler extends AbstractHandler {
 				try {
 					manageProjectsService.loadProject(selectedDir);
 				}
-				catch (CouldNotLoadUnagiProjectException e) {
+				catch (UnagiException e) {
 					// If the project could not be loaded from the specified folder, show an error message.
 					String statusMsg = Messages.getString("gui.command.newProject.error.status"); //$NON-NLS-1$
 					String errorTitle = Messages.getString("gui.command.newProject.error.title"); //$NON-NLS-1$

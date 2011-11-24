@@ -1,6 +1,6 @@
 package it.unitn.disi.unagi.gui.wizards;
 
-import it.unitn.disi.unagi.application.exceptions.CouldNotSaveUnagiProjectException;
+import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.gui.nls.Messages;
@@ -51,7 +51,7 @@ public class CreateProjectWizard extends Wizard implements INewWizard {
 		try {
 			manageProjectsService.createNewProject(name, folder);
 		}
-		catch (CouldNotSaveUnagiProjectException e) {
+		catch (UnagiException e) {
 			// If the project could not be saved to the specified folder, show an error message.
 			String statusMsg = Messages.getString("gui.wizard.createProject.error.status"); //$NON-NLS-1$
 			String errorTitle = Messages.getString("gui.wizard.createProject.error.title"); //$NON-NLS-1$
