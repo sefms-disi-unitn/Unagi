@@ -3,6 +3,7 @@ package it.unitn.disi.unagi.gui.wizards;
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
+import it.unitn.disi.unagi.gui.Activator;
 import it.unitn.disi.unagi.gui.nls.Messages;
 
 import java.io.File;
@@ -56,7 +57,7 @@ public class CreateProjectWizard extends Wizard implements INewWizard {
 			String statusMsg = Messages.getString("gui.wizard.createProject.error.status"); //$NON-NLS-1$
 			String errorTitle = Messages.getString("gui.wizard.createProject.error.title"); //$NON-NLS-1$
 			String errorMessage = Messages.getString("gui.wizard.createProject.error.message"); //$NON-NLS-1$
-			Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", statusMsg); //$NON-NLS-1$
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, statusMsg);
 			ErrorDialog.openError(this.getShell(), errorTitle, errorMessage, status);
 		}
 		

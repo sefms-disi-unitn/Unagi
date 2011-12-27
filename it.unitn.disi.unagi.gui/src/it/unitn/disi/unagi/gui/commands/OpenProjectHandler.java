@@ -3,6 +3,7 @@ package it.unitn.disi.unagi.gui.commands;
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageProjectsService;
 import it.unitn.disi.unagi.application.services.Unagi;
+import it.unitn.disi.unagi.gui.Activator;
 import it.unitn.disi.unagi.gui.nls.Messages;
 
 import java.io.File;
@@ -57,7 +58,7 @@ public class OpenProjectHandler extends AbstractHandler {
 					String errorTitle = Messages.getString("gui.command.newProject.error.title"); //$NON-NLS-1$
 					MessageFormat errorMsg = new MessageFormat(Messages.getString("gui.command.newProject.error.message")); //$NON-NLS-1$
 					Object[] args = new Object[] { selectedDirPath };
-					Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", statusMsg); //$NON-NLS-1$
+					Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, statusMsg);
 					ErrorDialog.openError(shell, errorTitle, errorMsg.format(args), status);
 				}
 		}

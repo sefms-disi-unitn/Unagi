@@ -3,20 +3,27 @@ package it.unitn.disi.unagi.application.internal.services;
 import it.unitn.disi.unagi.application.Activator;
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.exceptions.UnagiExceptionType;
+import it.unitn.disi.unagi.application.nls.Messages;
 import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.application.util.PluginLogger;
+import it.unitn.disi.unagi.application.util.ResourceUtil;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.util.Scanner;
+import java.util.Collections;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.osgi.framework.Bundle;
 
 /**
@@ -31,54 +38,23 @@ public class ManageModelsServiceBean implements ManageModelsService {
 	private static final PluginLogger logger = new PluginLogger(Activator.getInstance().getLog(), Activator.PLUGIN_ID);
 
 	/** Extension for requirements model files. */
-	private static final String REQUIREMENTS_MODEL_FILE_EXTENSION = ".ecore"; //$NON-NLS-1$
+	private static final String MODEL_FILE_EXTENSION = "ecore"; //$NON-NLS-1$
 
-	/** Path to the template for model files. */
-	private static final String REQUIREMENTS_MODEL_TEMPLATE_PATH = "/resources/template" + REQUIREMENTS_MODEL_FILE_EXTENSION; //$NON-NLS-1$ 
+	/** Path to the resources folder. */
+	private static final String RESOURCES_FOLDER_PATH = "/resources/"; //$NON-NLS-1$ 
 
-	/** Requirements model template. */
-	private static String REQUIREMENTS_MODEL_TEMPLATE;
+	/** Name of the goal model EMF file. */
+	private static final String GOAL_MODEL_EMF_FILE_NAME = "goalmodel." + MODEL_FILE_EXTENSION; //$NON-NLS-1$ 
+
+	/** Name of the LTL EMF file. */
+	private static final String LTL_EMF_FILE_NAME = "LTL." + MODEL_FILE_EXTENSION; //$NON-NLS-1$ 
 
 	/** The Unagi application. */
 	private Unagi unagi;
 
 	/** Constructor. */
-	public ManageModelsServiceBean(Unagi unagi) throws UnagiException {
+	public ManageModelsServiceBean(Unagi unagi) {
 		this.unagi = unagi;
-		init();
-	}
-
-	/**
-	 * Initializes the singleton instance of this application class.
-	 * 
-	 * @throws UnagiException
-	 *           If, for some reason, the requirements model template could not be loaded from within the plug-in.
-	 */
-	private void init() throws UnagiException {
-		logger.info("Initializing the \"Manage Models\" service..."); //$NON-NLS-1$
-		logger.info("Loading contents from requirements model template: {0} ...", REQUIREMENTS_MODEL_TEMPLATE_PATH); //$NON-NLS-1$
-
-		// Uses the plug-in's execution bundle to locate a file from within the plug-in.
-		Bundle bundle = Activator.getInstance().getBundle();
-		StringBuilder builder = new StringBuilder();
-		try {
-			URL url = FileLocator.resolve(bundle.getEntry(REQUIREMENTS_MODEL_TEMPLATE_PATH));
-			File templateFile = new File(url.toURI());
-
-			// Reads the file line by line, adding them to the string builder.
-			Scanner scanner = new Scanner(templateFile);
-			while (scanner.hasNextLine())
-				builder.append(scanner.nextLine()).append('\n');
-			scanner.close();
-		}
-		catch (Exception e) {
-			logger.error(e, "Could not load contents from requirements model template"); //$NON-NLS-1$
-			throw new UnagiException(UnagiExceptionType.COULD_NOT_LOAD_REQUIREMENTS_MODEL_TEMPLATE_FILE, e);
-		}
-		finally {
-			// Stores the contents of the template in the static property for later use.
-			REQUIREMENTS_MODEL_TEMPLATE = builder.toString();
-		}
 	}
 
 	/**
@@ -100,24 +76,11 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		project.addRequirementsModel(model);
 		model.setBasePackage(basePackage);
 
+		// Creates the EMF model, linking with the Goal Model and LTL EMF files.
+		createRequirementsEMFContents(model);
+
 		// Saves the project.
 		unagi.getManageProjectsService().saveProject(project);
-
-		// Fill in the new model file with the template, replacing the values for name, filename and base package.
-		PrintWriter out = null;
-		try {
-			String template = REQUIREMENTS_MODEL_TEMPLATE.replace("${name}", model.getName()).replace("${filename}", file.getName()).replace("${base-package}", model.getBasePackage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			out = new PrintWriter(file);
-			out.println(template);
-		}
-		catch (FileNotFoundException e) {
-			logger.error(e, "Could not create requirements model file"); //$NON-NLS-1$
-			throw new UnagiException(UnagiExceptionType.COULD_NOT_CREATE_REQUIREMENTS_MODEL_FILE, e);
-		}
-		finally {
-			if (out != null)
-				out.close();
-		}
 
 		// Returns the newly created model.
 		return model;
@@ -165,7 +128,7 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		}
 
 		logger.info("Generated file name for model \"{0}\": {1}", name, builder.toString()); //$NON-NLS-1$
-		return builder.toString() + REQUIREMENTS_MODEL_FILE_EXTENSION;
+		return builder.append('.').append(MODEL_FILE_EXTENSION).toString();
 	}
 
 	/**
@@ -189,6 +152,19 @@ public class ManageModelsServiceBean implements ManageModelsService {
 				logger.error("Could not create models sub-directory: {0}", modelsDir.getAbsolutePath()); //$NON-NLS-1$
 				throw new UnagiException(UnagiExceptionType.COULD_NOT_CREATE_MODELS_SUBDIRECTORY);
 			}
+
+			// Copies the Goal Model and LTL EMF files to the models subdirectory.
+			Bundle bundle = Activator.getInstance().getBundle();
+			try {
+				File gmFile = new File(FileLocator.resolve(bundle.getEntry(RESOURCES_FOLDER_PATH + GOAL_MODEL_EMF_FILE_NAME)).toURI());
+				File ltlFile = new File(FileLocator.resolve(bundle.getEntry(RESOURCES_FOLDER_PATH + LTL_EMF_FILE_NAME)).toURI());
+				ResourceUtil.fileCopy(gmFile, new File(modelsDir, GOAL_MODEL_EMF_FILE_NAME));
+				ResourceUtil.fileCopy(ltlFile, new File(modelsDir, LTL_EMF_FILE_NAME));
+			}
+			catch (Exception e) {
+				logger.error(e, "Could not copy Goal Model and LTL EMF files to the models sub-directory: {0}", modelsDir.getAbsolutePath()); //$NON-NLS-1$
+				throw new UnagiException(UnagiExceptionType.COULD_NOT_CREATE_MODELS_SUBDIRECTORY, e);
+			}
 		}
 		return modelsDir;
 	}
@@ -209,11 +185,12 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		// Prepare variables to generate new file names if the file already exists.
 		int count = 2;
 		String originalName = file.getName();
-		originalName = originalName.substring(0, originalName.indexOf(REQUIREMENTS_MODEL_FILE_EXTENSION));
+		String ext = "." + MODEL_FILE_EXTENSION; //$NON-NLS-1$
+		originalName = originalName.substring(0, originalName.indexOf(ext));
 
 		// Checks that the file does not yet exist. If it does, rename it.
 		while (file.exists() && file.isFile()) {
-			file = new File(file.getParentFile(), originalName + '-' + (count++) + REQUIREMENTS_MODEL_FILE_EXTENSION);
+			file = new File(file.getParentFile(), originalName + '-' + (count++) + ext);
 		}
 
 		// Sure that the file doesn't exist, create the file.
@@ -231,5 +208,56 @@ public class ManageModelsServiceBean implements ManageModelsService {
 		}
 
 		return file;
+	}
+
+	/**
+	 * Given the requirements model object, fills its actual file (in the file system) with EMF contents to kickstart the
+	 * creation of a requirements file. This method basically adds a main goal to the model, referring to the Goal class
+	 * of the Goal Model EMF file, which should have been copied to the same folder as the requirements file when the
+	 * project's models sub-directory was created.
+	 * 
+	 * @param model
+	 *          The object that represents the requirements model.
+	 */
+	private void createRequirementsEMFContents(RequirementsModel model) throws UnagiException {
+		logger.info("Creating EMF contents for model \"{0}\" (project \"{1}\") into file \"{2}\"...", model.getName(), model.getProject().getName(), model.getFile().getAbsolutePath()); //$NON-NLS-1$
+
+		try {
+			// Initializes the standalone factory implementation for ecore files and a new resource set.
+			Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(MODEL_FILE_EXTENSION, new EcoreResourceFactoryImpl());
+			ResourceSet resourceSet = new ResourceSetImpl();
+
+			// Loads the goal model EMF file.
+			File modelsSubDir = model.getFile().getParentFile();
+			File gmFile = new File(modelsSubDir, GOAL_MODEL_EMF_FILE_NAME);
+			final URI uri = URI.createFileURI(gmFile.getAbsolutePath());
+			Resource ddlResource = resourceSet.createResource(uri);
+			ddlResource.load(Collections.emptyMap());
+
+			// Load the package from the goal model EMF file and create a new package for the requirements file.
+			final EPackage ddlPackage = (EPackage) ddlResource.getContents().get(0);
+			final EPackage newPackage = EcoreFactory.eINSTANCE.createEPackage();
+			newPackage.setName(model.getName());
+			newPackage.setNsPrefix(model.getBasePackage());
+			newPackage.setNsURI(model.getFile().getName());
+
+			// Create the main goal for the requirements file and adds it to its package.
+			final EClass mainGoal = EcoreFactory.eINSTANCE.createEClass();
+			mainGoal.setName(Messages.getString("application.services.manageModelsServiceBean.requirementsModelTemplate.mainGoal")); //$NON-NLS-1$
+			newPackage.getEClassifiers().add(mainGoal);
+
+			// Add the class Goal from the Goal Model EMF file as superclass of the main goal in the requirements model.
+			final EClass superClass = (EClass) ddlPackage.getEClassifier("Goal"); //$NON-NLS-1$
+			mainGoal.getESuperTypes().add(superClass);
+
+			// Finally, create a new resource to save the requirements package into a new model file.
+			Resource outputRes = resourceSet.createResource(URI.createFileURI(model.getFile().getAbsolutePath()));
+			outputRes.getContents().add(newPackage);
+			outputRes.save(Collections.emptyMap());
+		}
+		catch (Exception e) {
+			logger.error(e, "Could not create EMF contents for requirements model file: {0}", model.getFile().getAbsolutePath()); //$NON-NLS-1$
+			throw new UnagiException(UnagiExceptionType.COULD_NOT_CREATE_REQUIREMENTS_MODEL_FILE, e);
+		}
 	}
 }

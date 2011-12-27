@@ -49,7 +49,7 @@ public class Unagi {
 	 * @throws UnagiException
 	 *           If there are any initialization errors.
 	 */
-	public static void initialize() throws UnagiException {
+	public static void initialize() {
 		// Checks if it has been initialized before.
 		if (instance != null)
 			throw new IllegalStateException("Unagi application has already been initialized. Should not initialize twice."); //$NON-NLS-1$
@@ -77,7 +77,7 @@ public class Unagi {
 	 * @throws UnagiException
 	 *           If, for some reason, the "Manage Models" service cannot be initialized.
 	 */
-	public void init() throws UnagiException {
+	public void init() {
 		logger.info("Initializing the Unagi application..."); //$NON-NLS-1$
 
 		// Initializes the default implementations for the services.

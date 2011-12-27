@@ -5,6 +5,7 @@ import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
 import it.unitn.disi.unagi.domain.core.UnagiProject;
+import it.unitn.disi.unagi.gui.Activator;
 import it.unitn.disi.unagi.gui.actions.OpenRequirementsModelAction;
 import it.unitn.disi.unagi.gui.nls.Messages;
 
@@ -65,7 +66,7 @@ public class CreateRequirementsModelWizard extends Wizard implements INewWizard 
 			String statusMsg = Messages.getString("gui.wizard.createRequirementsModel.error.status"); //$NON-NLS-1$
 			String errorTitle = Messages.getString("gui.wizard.createRequirementsModel.error.title"); //$NON-NLS-1$
 			String errorMessage = Messages.getString("gui.wizard.createRequirementsModel.error.message"); //$NON-NLS-1$
-			Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", statusMsg); //$NON-NLS-1$
+			Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, statusMsg);
 			ErrorDialog.openError(this.getShell(), errorTitle, errorMessage, status);
 		}
 		

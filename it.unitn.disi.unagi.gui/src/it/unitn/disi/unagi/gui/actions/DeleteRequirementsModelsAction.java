@@ -4,6 +4,7 @@ import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.ManageModelsService;
 import it.unitn.disi.unagi.application.services.Unagi;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
+import it.unitn.disi.unagi.gui.Activator;
 import it.unitn.disi.unagi.gui.nls.Messages;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
 
@@ -76,7 +77,7 @@ public class DeleteRequirementsModelsAction extends Action {
 				MessageFormat errorMsg = new MessageFormat(Messages.getString("gui.action.deleteRequirementsModels.error.message")); //$NON-NLS-1$
 				String dialogTitle = Messages.getString("gui.action.deleteRequirementsModels.error.title"); //$NON-NLS-1$
 				args = new Object[] { model.getName() };
-				Status status = new Status(IStatus.ERROR, "it.unitn.disi.unagi.gui", statusMsg.format(args)); //$NON-NLS-1$
+				Status status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, statusMsg.format(args));
 				ErrorDialog.openError(Display.getCurrent().getActiveShell(), dialogTitle, errorMsg.format(args), status);
 			}
 		}

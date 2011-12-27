@@ -1,6 +1,9 @@
 package it.unitn.disi.unagi.application.util;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -64,5 +67,29 @@ public class ResourceUtil {
 	 */
 	private static ClassLoader getContextClassLoader() {
 		return Thread.currentThread().getContextClassLoader();
+	}
+
+	/**
+	 * Copies the contents of a source file to a destination file. Implementation based on an example found at Based on
+	 * http://www.java2s.com/Code/Java/File-Input-Output/FileCopyinJava.htm
+	 * 
+	 * @param src
+	 *          The source file.
+	 * @param dst
+	 *          The destination file.
+	 * @throws IOException
+	 *           In case of any I/O exceptions, such as file not found or access denied.
+	 */
+	public static void fileCopy(File src, File dst) throws IOException {
+		// Based on http://www.java2s.com/Code/Java/File-Input-Output/FileCopyinJava.htm
+		FileReader in = new FileReader(src);
+		FileWriter out = new FileWriter(dst);
+		int c;
+
+		while ((c = in.read()) != -1)
+			out.write(c);
+
+		in.close();
+		out.close();
 	}
 }
