@@ -9,11 +9,17 @@ package it.unitn.disi.unagi.application.exceptions;
  * @see it.unitn.disi.unagi.application.exceptions.UnagiException
  */
 public enum UnagiExceptionType {
+	/** A requirements model could not be compiled. */
+	COULD_NOT_COMPILE_REQUIREMENTS_MODEL,
+	
 	/** The sub-directory that holds the models of a project could not be created. */
 	COULD_NOT_CREATE_MODELS_SUBDIRECTORY,
 
 	/** A requirements model file could not be created in a project. */
 	COULD_NOT_CREATE_REQUIREMENTS_MODEL_FILE,
+
+	/** The sub-directory that holds the Java sources of a project could not be created. */
+	COULD_NOT_CREATE_SOURCES_SUBDIRECTORY,
 
 	/** A requirements model file in a project could not be deleted. */
 	COULD_NOT_DELETE_REQUIREMENTS_MODEL_FILE,

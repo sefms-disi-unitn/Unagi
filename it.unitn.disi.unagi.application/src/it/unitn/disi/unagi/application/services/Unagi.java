@@ -27,6 +27,12 @@ public class Unagi {
 	/** Key for the configuration "Project sub-directory where models are stored. */
 	public static final String CFG_PROJECT_SUBDIR_MODELS = "project-subdir-models"; //$NON-NLS-1$
 
+	/** Key for the configuration "Project sub-directory where Java sources are stored. */
+	public static final String CFG_PROJECT_SUBDIR_SOURCES = "project-subdir-sources"; //$NON-NLS-1$
+
+	/** Key for the configuration "Project sub-directory where Java classes are stored. */
+	public static final String CFG_PROJECT_SUBDIR_CLASSES = "project-subdir-classes"; //$NON-NLS-1$
+
 	/** Singleton instance of the class. */
 	private static Unagi instance;
 
@@ -95,6 +101,8 @@ public class Unagi {
 
 		// Sets the default values for the project sub-directories.
 		configurationMap.put(CFG_PROJECT_SUBDIR_MODELS, "models"); //$NON-NLS-1$
+		configurationMap.put(CFG_PROJECT_SUBDIR_SOURCES, "src"); //$NON-NLS-1$
+		configurationMap.put(CFG_PROJECT_SUBDIR_CLASSES, "bin"); //$NON-NLS-1$
 	}
 
 	/**

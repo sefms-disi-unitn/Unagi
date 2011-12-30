@@ -2,6 +2,7 @@ package it.unitn.disi.unagi.gui.models;
 
 import it.unitn.disi.unagi.application.util.CollectionsUtil;
 import it.unitn.disi.unagi.domain.core.RequirementsModel;
+import it.unitn.disi.unagi.gui.actions.CompileRequirementsModelsAction;
 import it.unitn.disi.unagi.gui.actions.DeleteRequirementsModelsAction;
 import it.unitn.disi.unagi.gui.actions.OpenRequirementsModelAction;
 import it.unitn.disi.unagi.gui.utils.ImageUtil;
@@ -70,6 +71,7 @@ public class ModelPTElement extends ProjectTreeElement {
 
 		// Adds applicable actions to the list.
 		actionList.add(new OpenRequirementsModelAction(selectedModels));
+		actionList.add(new CompileRequirementsModelsAction(selectedModels));
 		actionList.add(new DeleteRequirementsModelsAction(selectedModels));
 		
 		return actionList;

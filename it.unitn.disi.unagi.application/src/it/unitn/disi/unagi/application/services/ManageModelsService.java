@@ -34,8 +34,16 @@ public interface ManageModelsService {
 	 * 
 	 * @param model
 	 * @throws UnagiException
-	 *           If, for some reason: (a) the file that represents the requirements model in the "models" sub-directory of the
-	 *           Unagi project's directory cannot be deleted; or (b) the new project could not be saved.
+	 *           If, for some reason: (a) the file that represents the requirements model in the "models" sub-directory of
+	 *           the Unagi project's directory cannot be deleted; or (b) the new project could not be saved.
 	 */
 	void deleteRequirementsModel(RequirementsModel model) throws UnagiException;
+
+	/**
+	 * TODO: document this method.
+	 * 
+	 * @param model
+	 * @throws UnagiException
+	 */
+	void compileRequirementsModel(RequirementsModel model) throws UnagiException;
 }
