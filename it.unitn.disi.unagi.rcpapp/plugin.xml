@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="it.unitn.disi.unagi.natures.project"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="it.unitn.disi.unagi.natures.UnagiProjectNature">
+         </run>
+      </runtime>
+   </extension>
+
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            name="Unagi - Zanshin CASE Tool">
+         <property
+               name="appName"
+               value="Unagi - Zanshin CASE Tool">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            class="it.unitn.disi.unagi.rcpapp.wizards.CreateNewProjectWizard"
+            id="it.unitn.disi.unagi.rcpapp.wizards.createProject"
+            name="Create new Unagi Project">
+      </wizard>
+   </extension>
+
+</plugin>

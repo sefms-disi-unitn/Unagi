@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="it.unitn.disi.unagi.application.services.manageProjects">
+	<implementation class="it.unitn.disi.unagi.application.internal.services.ManageProjectsService" />
+	<service>
+		<provide interface="it.unitn.disi.unagi.application.services.IManageProjectsService" />
+	</service>
+</scr:component>
