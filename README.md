@@ -12,7 +12,7 @@ Pre-requisites for running Unagi
 
 This is an Eclipse RCP application. Each folder in the root of the repository is a different Eclipse project. If you want to contribute or just run it, you should install Eclipse Juno for RCP developers and use its Git support (EGit) to clone the repository.
 
-Unagi is being developed using E4 (the new set of technologies for plug-in development introduced in Eclipse 4). After you install Eclipse Juno you should, therefore, follow the instructions for Eclipse E4 development from (Lars Vogel's tutorial)[http://www.vogella.com/articles/EclipseRCP/article.html]:
+Unagi is being developed using E4 (the new set of technologies for plug-in development introduced in Eclipse 4). After you install Eclipse Juno you should, therefore, follow the instructions for Eclipse E4 development from [Lars Vogel's tutorial](http://www.vogella.com/articles/EclipseRCP/article.html):
 
 1. Add the following Update Site to the list of Eclipse repositories: `http://download.eclipse.org/e4/updates/0.12`;
 
