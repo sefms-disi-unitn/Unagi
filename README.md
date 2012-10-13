@@ -1,7 +1,7 @@
 Unagi CASE Tool for Zanshin
 ===========================
 
-This is an RCP application I'm slowly developing in the context of my research on the design of adaptive systems, which started when I was a PhD Student at the [University of Trento, Italy](http://ict.unitn.it/). It's supposed to be a CASE (Computer-aided Software Engineering) Tool for the _Zanshin_ approach. I've also developed the _Zanshin_ Framework to experiment with the approach ([see its repository here on github](https://github.com/sefms-disi-unitn/Zanshin))).
+This is an RCP application I'm slowly developing in the context of my research on the design of adaptive systems, which started when I was a PhD Student at the [University of Trento, Italy](http://ict.unitn.it/). It's supposed to be a CASE (Computer-aided Software Engineering) Tool for the _Zanshin_ approach. I've also developed the _Zanshin_ Framework to experiment with the approach ([see its repository here on github](https://github.com/sefms-disi-unitn/Zanshin)).
 
 _Zanshin_ refers to a "term used in the Japanese martial arts. It refers to a state of awareness" ([Wikipedia](http://en.wikipedia.org/wiki/Zanshin)), which relates to the first part of the _Zanshin_ approach (the elicitation of _Awareness Requirements_, for more information on the _Zanshin_ approach, see some of my [publications](http://disi.unitn.it/~vitorsouza/academia/)). In episode 17 of the 6th season of the American television series [Friends](http://en.wikipedia.org/wiki/Friends), Ross uses "Unagi" instead of "Zanshin" to refer to this concept, hence the name of the CASE Tool.
 
