@@ -21,6 +21,9 @@ public class RequirementsModelProjectTreeElement extends AbstractProjectTreeElem
 
 	/** ID of the pop-up menu that should appear if an element of this type is right-clicked. */
 	private static final String REQUIREMENTS_MODEL_POPUP_MENU_ID = POPUP_MENU_PREFIX + "requirementsModel"; //$NON-NLS-1$
+	
+	/** ID of the default command for double-clicks on requirements models. */
+	private static final String REQUIREMENTS_MODEL_DEFAULT_COMMAND_ID = "it.unitn.disi.unagi.rcpapp.command.openRequirementsModels"; //$NON-NLS-1$
 
 	/** Project under which this element appears. */
 	private IProject project;
@@ -75,5 +78,11 @@ public class RequirementsModelProjectTreeElement extends AbstractProjectTreeElem
 	@Override
 	public String getPopupMenuId() {
 		return REQUIREMENTS_MODEL_POPUP_MENU_ID;
+	}
+
+	/** @see it.unitn.disi.unagi.rcpapp.views.models.AbstractProjectTreeElement#getDefaultCommandId() */
+	@Override
+	public String getDefaultCommandId() {
+		return REQUIREMENTS_MODEL_DEFAULT_COMMAND_ID;
 	}
 }

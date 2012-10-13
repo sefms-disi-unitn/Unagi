@@ -106,4 +106,16 @@ public abstract class AbstractProjectTreeElement {
 	public String getPopupMenuId() {
 		return DEFAULT_POPUP_MENU_ID;
 	}
+
+	/**
+	 * Returns the ID of the default command for this class of elements. This command is executed when an element of this
+	 * kind is double-clicked.
+	 * 
+	 * By default, returns null. Whoever calls this method has to check for nulls and cancel execution.
+	 * 
+	 * @return The ID of this element's default command.
+	 */
+	public String getDefaultCommandId() {
+		return null;
+	}
 }

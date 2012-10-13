@@ -9,10 +9,14 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.e4.core.commands.ECommandService;
+import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.e4.ui.workbench.swt.modeling.EMenuService;
@@ -54,6 +58,14 @@ public class UnagiProjectExplorerView implements IResourceChangeListener, ISelec
 	/** The workbench's menu service. */
 	@Inject
 	private EMenuService menuService;
+
+	/** Eclipse's command service. */
+	@Inject
+	private ECommandService commandService;
+
+	/** Eclipse's handler service */
+	@Inject
+	private EHandlerService handlerService;
 
 	/** The project tree GUI component. */
 	private TreeViewer projectsTree;
@@ -167,10 +179,42 @@ public class UnagiProjectExplorerView implements IResourceChangeListener, ISelec
 		// Obtains the selected elements from the project tree. Continues if at least one element was selected.
 		IStructuredSelection selection = (IStructuredSelection) projectsTree.getSelection();
 		if (!selection.isEmpty()) {
+			Object firstElement = selection.getFirstElement();
+			String modelClassName = firstElement.getClass().getSimpleName();
+			LogUtil.log.debug("Received double-click in an element of the project tree: {0}", modelClassName); //$NON-NLS-1$
 
-			// FIXME: implement response to double-click.
-			System.out.println("###### Double clicked a: " + selection.getFirstElement()); //$NON-NLS-1$
+			// Checks that this element is a member of the project tree model.
+			if (firstElement instanceof AbstractProjectTreeElement) {
+				AbstractProjectTreeElement treeElem = ((AbstractProjectTreeElement) firstElement);
 
+				// Obtains the element's default command ID (if one was set) in order to execute it.
+				String commandId = treeElem.getDefaultCommandId();
+				if (commandId != null) {
+					LogUtil.log.debug("Element type {0} has a default command ID defined: {1}", modelClassName, commandId); //$NON-NLS-1$
+
+					// Retrieves the command from its ID.
+					Command command = commandService.getCommand(commandId);
+
+					// Checks that the specified command has indeed been defined.
+					if (command.isDefined()) {
+						// Checks that the command can be executed.
+						ParameterizedCommand pCmd = commandService.createCommand(commandId, null);
+						if (handlerService.canExecute(pCmd)) {
+							// Finally, executes the command.
+							handlerService.executeHandler(pCmd);
+						}
+						else LogUtil.log.warn("Trying to execute command \"{0}\" after double-click on an {1} element, but the handler service says the command cannot be executed.", commandId, modelClassName); //$NON-NLS-1$
+					}
+					else LogUtil.log.warn("Trying to execute command \"{0}\" after double-click on an {1} element, but the command retrieved from the command service is not defined.", commandId, modelClassName); //$NON-NLS-1$
+				}
+
+				// If there is no default command defined but the element has children, changes its expand state (contracted ->
+				// expanded or vice-versa) as default behavior for the double-click.
+				else if (treeElem.hasChildren()) {
+					LogUtil.log.debug("Element type {0} has no default command ID defined, but has children. Expanding it as default behavior for double-click...", modelClassName); //$NON-NLS-1$
+					projectsTree.setExpandedState(treeElem, !projectsTree.getExpandedState(treeElem));
+				}
+			}
 		}
 	}
 
