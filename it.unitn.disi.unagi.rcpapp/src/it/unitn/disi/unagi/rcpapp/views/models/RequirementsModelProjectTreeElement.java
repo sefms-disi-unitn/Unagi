@@ -35,12 +35,12 @@ public class RequirementsModelProjectTreeElement extends AbstractProjectTreeElem
 	private RequirementsFolderProjectTreeElement parent;
 
 	/** Constructor. */
-	public RequirementsModelProjectTreeElement(Bundle bundle, IProject project, IFile requirementsFile, RequirementsFolderProjectTreeElement parent) {
+	public RequirementsModelProjectTreeElement(Bundle bundle, IProject project, RequirementsFolderProjectTreeElement parent, IFile requirementsFile) {
 		super(bundle);
 		LogUtil.log.debug("Creating a tree element for a requirements file of project: {0}.", project.getName()); //$NON-NLS-1$
 		this.project = project;
-		this.requirementsFile = requirementsFile;
 		this.parent = parent;
+		this.requirementsFile = requirementsFile;
 	}
 
 	/** @see it.unitn.disi.unagi.rcpapp.views.models.AbstractProjectTreeElement#getProject() */

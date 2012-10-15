@@ -34,8 +34,9 @@ public class ProjectProjectTreeElement extends AbstractProjectTreeElement {
 		LogUtil.log.debug("Creating a tree element for project: {0}.", project.getName()); //$NON-NLS-1$
 
 		// Build the project's children.
-		children = new AbstractProjectTreeElement[1];
+		children = new AbstractProjectTreeElement[2];
 		children[0] = new RequirementsFolderProjectTreeElement(bundle, project, this);
+		children[1] = new SourcesFolderProjectTreeElement(bundle, project, this);
 	}
 
 	/** @see it.unitn.disi.unagi.rcpapp.views.models.AbstractProjectTreeElement#getProject() */

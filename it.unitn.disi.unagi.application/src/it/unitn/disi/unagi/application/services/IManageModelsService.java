@@ -25,6 +25,9 @@ import org.eclipse.core.runtime.Path;
 public interface IManageModelsService {
 	/** File extension for requirements models. */
 	String REQUIREMENTS_MODEL_EXTENSION = "ecore"; //$NON-NLS-1$
+	
+	/** File extension for Java source files. */
+	String JAVA_SOURCE_EXTENSION = "java"; //$NON-NLS-1$
 
 	/** Path for the ECore file that defines base classes for goal model elements. */
 	IPath GORE_EMF_FILE_PATH = new Path("META-INF/gore.ecore"); //$NON-NLS-1$
