@@ -3,22 +3,22 @@ package it.unitn.disi.unagi.application.exceptions;
 import org.eclipse.core.resources.IFile;
 
 /**
- * Exception class that represents an error occurred while a requirements model was being deleted.
- *
+ * Exception class that represents an error occurred while classes were being generated for a requirement model.
+ * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class CouldNotDeleteRequirementsModelException extends UnagiException {
-	/** Requirements model whose deletion triggered the error. */
+public class CouldNotGenerateRequirementsClassesException extends UnagiException {
+	/** Requirements model whose class generation produced the error. */
 	private IFile requirementsModel;
-	
+
 	/** Constructor. */
-	public CouldNotDeleteRequirementsModelException(IFile requirementsModel) {
+	public CouldNotGenerateRequirementsClassesException(IFile requirementsModel) {
 		this.requirementsModel = requirementsModel;
 	}
-	
+
 	/** Constructor. */
-	public CouldNotDeleteRequirementsModelException(IFile requirementsModel, Throwable t) {
+	public CouldNotGenerateRequirementsClassesException(IFile requirementsModel, Throwable t) {
 		super(t);
 		this.requirementsModel = requirementsModel;
 	}

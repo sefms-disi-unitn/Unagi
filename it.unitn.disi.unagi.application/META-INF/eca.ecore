@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="eca"
+    nsURI="http://zanshin.disi.unitn.it/1.0/eca" nsPrefix="it.unitn.disi.zanshin.model">
+  <eClassifiers xsi:type="ecore:EClass" name="EcaAwReq" eSuperTypes="gore.ecore#//AwReq">
+    <eOperations name="replaceWith">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Performs the replacement as a normal AwReq first.&#xA;super.replaceWith(newRequirement);&#xA;&#xA;// Then, instructs each adaptation strategy to update their own references after the change.&#xA;for (AdaptationStrategy strategy : ((EcaAwReq) newRequirement).getStrategies())&#xA;&#x9;strategy.updateReferences();"/>
+      </eAnnotations>
+      <eParameters name="newRequirement" eType="ecore:EClass gore.ecore#//Requirement"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//ResolutionCondition"
+        containment="true" eOpposite="#//ResolutionCondition/awReq"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="strategies" upperBound="-1"
+        eType="#//AdaptationStrategy" containment="true" eOpposite="#//AdaptationStrategy/awReq"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectedStrategy" eType="#//AdaptationStrategy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResolutionCondition" abstract="true">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// This method is not supposed to be called.&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Method ResolutionConditionImpl.evaluate() has been called, but this method is not meant to be called!&quot;); //$NON-NLS-1$&#xA;throw new UnsupportedOperationException();"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="awReq" eType="#//EcaAwReq"
+        eOpposite="#//EcaAwReq/condition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdaptationStrategy" abstract="true">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// This method is not supposed to be called.&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Method AdaptationStrategyImpl.execute() has been called, but this method is not meant to be called!&quot;); //$NON-NLS-1$&#xA;throw new UnsupportedOperationException();"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eOperations name="updateReferences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// This method is not supposed to be called.&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.debug(&quot;Method AdaptationStrategyImpl.updateReferences() has been called, indicating it has not been overridden by the subclass {0}. Make sure this is on purpose...&quot;, eClass().getName()); //$NON-NLS-1$"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="awReq" eType="#//EcaAwReq"
+        eOpposite="#//EcaAwReq/strategies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//ApplicabilityCondition"
+        containment="true" eOpposite="#//ApplicabilityCondition/strategy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicabilityCondition" abstract="true">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// This method is not supposed to be called.&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Method ApplicabilityConditionImpl.evaluate() has been called, but this method is not meant to be called!&quot;); //$NON-NLS-1$&#xA;throw new UnsupportedOperationException();"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="strategy" eType="#//AdaptationStrategy"
+        eOpposite="#//AdaptationStrategy/condition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="session" eType="#//AdaptationSession"
+        eOpposite="#//AdaptationSession/events"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="awReq" eType="#//EcaAwReq"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdaptationSession">
+    <eOperations name="addEvent">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Creates a new event with the current date/time, associated with the given AwReq, and adds it to the timeline.&#xA;it.unitn.disi.zanshin.model.eca.Event event = it.unitn.disi.zanshin.model.eca.EcaFactory.eINSTANCE.createEvent();&#xA;event.setTime(new java.util.Date(System.currentTimeMillis()));&#xA;event.setAwReq(awreq);&#xA;getEvents().add(event);&#xA;&#xA;// If this is the first event of the session, produce its id.&#xA;if (getEvents().size() == 1) {&#xA;&#x9;StringBuilder builder = new StringBuilder();&#xA;&#x9;java.text.DateFormat dateFormat = new java.text.SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;); //$NON-NLS-1$&#xA;&#x9;builder.append(&quot;(Session: &quot;).append(awreq.eClass().getName()); //$NON-NLS-1$&#xA;&#x9;builder.append(&quot; / &quot;).append(dateFormat.format(event.getTime())).append(&quot;)&quot;); //$NON-NLS-1$ //$NON-NLS-2$&#xA;&#x9;setId(builder.toString());&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="awreq" eType="#//EcaAwReq"/>
+    </eOperations>
+    <eOperations name="terminate">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="setActive(false);"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//Event" containment="true" eOpposite="#//Event/session"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleResolutionCondition" eSuperTypes="#//ResolutionCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Retrieves the last AwReq that was evaluated. If not directly related, get from the event list. &#xA;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = getAwReq();&#xA;org.eclipse.emf.common.util.EList&lt;it.unitn.disi.zanshin.model.eca.Event> events = session.getEvents();&#xA;if ((awreq == null) &amp;&amp; (events.size() > 0))&#xA;&#x9;awreq = events.get(events.size() - 1).getAwReq();&#xA;&#xA;// If the current evaluation is Success, the problem is solved.&#xA;if ((awreq != null) &amp;&amp; (awreq.getState() == it.unitn.disi.zanshin.model.gore.DefinableRequirementState.SUCCEEDED))&#xA;&#x9;return true;&#xA;&#xA;// Otherwise, if the last applied strategy was &quot;abort&quot;, the problem is also solved.&#xA;else if (events.size() > 0) {&#xA;&#x9;it.unitn.disi.zanshin.model.eca.Event lastEvent = events.get(events.size() - 1);&#xA;&#x9;it.unitn.disi.zanshin.model.eca.EcaAwReq lastAwReq = (lastEvent == null) ? null : lastEvent.getAwReq();&#xA;&#x9;it.unitn.disi.zanshin.model.eca.AdaptationStrategy lastStrategy = (lastAwReq == null) ? null : lastAwReq.getSelectedStrategy();&#xA;&#x9;if ((lastStrategy != null) &amp;&amp; (it.unitn.disi.zanshin.model.eca.EcaPackage.eINSTANCE.getAbortStrategy().isInstance(lastStrategy)))&#xA;&#x9;&#x9;return true;&#xA;}&#xA;&#xA;// If none of the above, the problem is not yet solved.&#xA;return false;"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AndRefinedResolutionCondition" eSuperTypes="#//ResolutionCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// The problem is solved if all children evaluate to true, i.e., if any of them is false, it is not solved.&#xA;for (it.unitn.disi.zanshin.model.eca.ResolutionCondition condition : getChildren())&#xA;&#x9;if (! condition.evaluate(session)) return false;&#xA;&#xA;// If none of them were false, then the problem is solved.&#xA;return true;"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//ResolutionCondition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrRefinedResolutionCondition" eSuperTypes="#//ResolutionCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// The problem is solved if any child evaluates to true.&#xA;for (it.unitn.disi.zanshin.model.eca.ResolutionCondition condition : getChildren())&#xA;&#x9;if (condition.evaluate(session)) return true;&#xA;&#xA;// If none of them were true, then the problem is not solved.&#xA;return false;"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//ResolutionCondition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleApplicabilityCondition" eSuperTypes="#//ApplicabilityCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return true;"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaxExecutionsPerSessionApplicabilityCondition"
+      eSuperTypes="#//ApplicabilityCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String conditionName = eClass().getName();&#xA;EClass strategyClass = getStrategy().eClass();&#xA;&#xA;// Attribute maxExecutions is mandatory.&#xA;if (maxExecutions == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Applicability Condition {0} is missing mandatory attribute \&quot;maxExecutions\&quot; and, thus, will be evaluated to false.&quot;, conditionName); //$NON-NLS-1$&#xA;&#x9;return false;&#xA;}&#xA;&#xA;// Count the number of times this strategy has already been applied in this adaptation session.&#xA;int count = 0;&#xA;for (it.unitn.disi.zanshin.model.eca.Event event : session.getEvents()) {&#xA;&#x9;it.unitn.disi.zanshin.model.eca.AdaptationStrategy strategy = event.getAwReq().getSelectedStrategy();&#xA;&#x9;if ((strategy != null) &amp;&amp; (strategy.eClass().equals(strategyClass))) count++;&#xA;}&#xA;&#xA;// If this number is equal or greater than the limit, do not apply it again.&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Strategy {1} {2,choice,0#is not applicable because it has been applied at least {3} time(s) this session|0&lt;is applicable}.&quot;, session.getId(), strategyClass.getName(), maxExecutions - count, maxExecutions); //$NON-NLS-1$&#xA;return (count &lt; maxExecutions);"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxExecutions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AndRefinedApplicabilityCondition" eSuperTypes="#//ApplicabilityCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// The problem is solved if all children evaluate to true, i.e., if any of them is false, it is not solved.&#xA;for (it.unitn.disi.zanshin.model.eca.ApplicabilityCondition condition : getChildren())&#xA;&#x9;if (! condition.evaluate(session)) return false;&#xA;&#xA;// If none of them were false, then the problem is solved.&#xA;return true;"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//ApplicabilityCondition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrRefinedApplicabilityCondition" eSuperTypes="#//ApplicabilityCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// The problem is solved if any child evaluates to true.&#xA;for (it.unitn.disi.zanshin.model.eca.ApplicabilityCondition condition : getChildren())&#xA;&#x9;if (condition.evaluate(session)) return true;&#xA;&#xA;// If none of them were true, then the problem is not solved.&#xA;return false;"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//ApplicabilityCondition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbortStrategy" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the Abort strategy.&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;controller.abort(getAwReq());"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DelegateStrategy" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Retrieve the strategy's attributes.&#xA;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = getAwReq();&#xA;&#xA;// Attribute actor is mandatory.&#xA;if (actor == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;actor\&quot; and cannot be executed.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the Delegate strategy.&#xA;strategyName += &quot;(&quot; + actor.eClass().getName() + &quot;)&quot;; //$NON-NLS-1$ //$NON-NLS-2$&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;controller.sendWarning(actor, awreq);&#xA;controller.waitForFix(awreq);"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" eType="ecore:EClass gore.ecore#//Actor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelaxDisableChildStrategy" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Retrieve the strategy's attributes.&#xA;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = getAwReq();&#xA;&#xA;// Attribute requirement defaults to the AwReq's target.&#xA;if (requirement == null) {&#xA;&#x9;setRequirement(awreq.getTarget());&#xA;&#x9;if (requirement == null) {&#xA;&#x9;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;requirement\&quot; and cannot be executed. Cannot use the default value because the referred AwReq doesn't have a target set.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;&#x9;return;&#xA;&#x9;}&#xA;}&#xA;&#xA;// Attribute level defaults to INSTANCE.&#xA;if (level == null) level = it.unitn.disi.zanshin.model.gore.AggregationLevel.INSTANCE;&#xA;&#xA;// Attribute child is mandatory.&#xA;if (child == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;child\&quot; and cannot be executed.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the Relax by Disabling Child strategy.&#xA;strategyName += &quot;(&quot; + requirement.eClass().getName() + &quot;; &quot; + level + &quot;; &quot; + child.eClass().getName() + &quot;)&quot;; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;if ((level == it.unitn.disi.zanshin.model.gore.AggregationLevel.CLASS) || (level == it.unitn.disi.zanshin.model.gore.AggregationLevel.BOTH))&#xA;&#x9;controller.disable(child.eClass());&#xA;if ((level == it.unitn.disi.zanshin.model.gore.AggregationLevel.INSTANCE) || (level == it.unitn.disi.zanshin.model.gore.AggregationLevel.BOTH)) {&#xA;&#x9;Requirement parent = requirement.getParent();&#xA;&#x9;controller.suspend(requirement);&#xA;&#x9;controller.terminate(child);&#xA;&#x9;if (child instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement)&#xA;&#x9;&#x9;controller.rollback((it.unitn.disi.zanshin.model.gore.PerformativeRequirement) child);&#xA;&#x9;controller.suspend(child);&#xA;&#x9;controller.resume(requirement, parent);&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eOperations name="updateReferences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Retrieves the model id and continues only if this requirement is part of a model.&#xA;it.unitn.disi.zanshin.model.gore.GoalModel model = getAwReq().findGoalModel();&#xA;if (model != null) {&#xA;&#x9;Long modelId = model.getId();&#xA;&#x9;&#xA;&#x9;// Retrieves the repository service from the platform to be able to update the references.&#xA;&#x9;it.unitn.disi.zanshin.services.IRepositoryService repositoryService = it.unitn.disi.zanshin.core.Activator.getRepositoryService();&#xA;&#x9;&#xA;&#x9;// Updates references to requirement and child.&#xA;&#x9;if (requirement != null)&#xA;&#x9;&#x9;setRequirement(repositoryService.retrieveRequirement(modelId, requirement.eClass()));&#xA;&#x9;if (child != null)&#xA;&#x9;&#x9;setChild(repositoryService.retrieveRequirement(modelId, child.eClass()));&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" eType="ecore:EClass gore.ecore#//Requirement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="ecore:EEnum gore.ecore#//AggregationLevel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" eType="ecore:EClass gore.ecore#//Requirement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelaxReplace" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Retrieve the strategy's attributes.&#xA;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = getAwReq();&#xA;&#xA;// Attribute requirement defaults to the AwReq's target.&#xA;if (requirement == null) {&#xA;&#x9;setRequirement(awreq.getTarget());&#xA;&#x9;if (requirement == null) {&#xA;&#x9;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;requirement\&quot; and cannot be executed. Cannot use the default value because the referred AwReq doesn't have a target set.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;&#x9;return;&#xA;&#x9;}&#xA;}&#xA;&#xA;// Attribute copy defaults to TRUE.&#xA;if (copy == null) copy = Boolean.TRUE;&#xA;&#xA;// Attribute level defaults to INSTANCE.&#xA;if (level == null) level = it.unitn.disi.zanshin.model.gore.AggregationLevel.INSTANCE;&#xA;&#xA;// Attribute newRequirement is mandatory.&#xA;if (newRequirement == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;newRequirement\&quot; and cannot be executed.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the Relax by Replacing strategy.&#xA;strategyName += &quot;(&quot; + requirement.eClass().getName() + &quot;; &quot; + copy + &quot;; &quot; + level + &quot;; &quot; + newRequirement.eClass().getName() + &quot;)&quot;; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;if ((level == it.unitn.disi.zanshin.model.gore.AggregationLevel.CLASS) || (level == it.unitn.disi.zanshin.model.gore.AggregationLevel.BOTH)) {&#xA;&#x9;controller.disable(requirement.eClass());&#xA;&#x9;controller.enable(newRequirement.eClass());&#xA;}&#xA;if ((level == it.unitn.disi.zanshin.model.gore.AggregationLevel.INSTANCE) || (level == it.unitn.disi.zanshin.model.gore.AggregationLevel.BOTH)) {&#xA;&#x9;if ((copy) &amp;&amp; (requirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement) &amp;&amp; (newRequirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement)) &#xA;&#x9;&#x9;controller.copyData((it.unitn.disi.zanshin.model.gore.PerformativeRequirement) requirement, (it.unitn.disi.zanshin.model.gore.PerformativeRequirement) newRequirement);&#xA;&#x9;controller.terminate(requirement);&#xA;&#x9;if (requirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement)&#xA;&#x9;&#x9;controller.rollback((it.unitn.disi.zanshin.model.gore.PerformativeRequirement) requirement);&#xA;&#x9;controller.initiate(newRequirement);&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eOperations name="updateReferences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Retrieves the model id and continues only if this requirement is part of a model.&#xA;it.unitn.disi.zanshin.model.gore.GoalModel model = getAwReq().findGoalModel();&#xA;if (model != null) {&#xA;&#x9;Long modelId = model.getId();&#xA;&#x9;&#xA;&#x9;// Retrieves the repository service from the platform to be able to update the references.&#xA;&#x9;it.unitn.disi.zanshin.services.IRepositoryService repositoryService = it.unitn.disi.zanshin.core.Activator.getRepositoryService();&#xA;&#x9;&#xA;&#x9;// Updates references to requirement and newRequirement.&#xA;&#x9;if (requirement != null)&#xA;&#x9;&#x9;setRequirement(repositoryService.retrieveRequirement(modelId, requirement.eClass()));&#xA;&#x9;if (newRequirement != null)&#xA;&#x9;&#x9;setNewRequirement(repositoryService.retrieveRequirement(modelId, newRequirement.eClass()));&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" eType="ecore:EClass gore.ecore#//Requirement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="ecore:EEnum gore.ecore#//AggregationLevel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newRequirement" eType="ecore:EClass gore.ecore#//Requirement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RetryStrategy" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Retrieve the strategy's attributes.&#xA;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = getAwReq();&#xA;&#xA;// Attribute copy defaults to TRUE.&#xA;if (copy == null) copy = Boolean.TRUE;&#xA;&#xA;// Attribute time is mandatory.&#xA;if (time == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;time\&quot; and cannot be executed.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// The requirement to retry is always the AwReq's target.&#xA;it.unitn.disi.zanshin.model.gore.Requirement requirement = awreq.getTarget();&#xA;if (requirement == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} cannot be executed because the referred AwReq doesn't have a target set.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the Retry strategy.&#xA;strategyName += &quot;(&quot; + copy + &quot;; &quot; + time + &quot;)&quot;; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;it.unitn.disi.zanshin.model.gore.Requirement newRequirement = it.unitn.disi.zanshin.core.CoreUtils.createCopy(requirement);&#xA;if ((copy) &amp;&amp; (requirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement) &amp;&amp; (newRequirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement))&#xA;&#x9;controller.copyData((it.unitn.disi.zanshin.model.gore.PerformativeRequirement) requirement, (it.unitn.disi.zanshin.model.gore.PerformativeRequirement) newRequirement);&#xA;controller.terminate(requirement);&#xA;if (requirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement)&#xA;&#x9;controller.rollback((it.unitn.disi.zanshin.model.gore.PerformativeRequirement) requirement);&#xA;controller.waitFor(time);&#xA;controller.initiate(newRequirement);"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StrengthenEnableChildStrategy" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Retrieve the strategy's attributes.&#xA;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = getAwReq();&#xA;&#xA;// Attribute requirement defaults to the AwReq's target.&#xA;if (requirement == null) {&#xA;&#x9;setRequirement(awreq.getTarget());&#xA;&#x9;if (requirement == null) {&#xA;&#x9;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;requirement\&quot; and cannot be executed. Cannot use the default value because the referred AwReq doesn't have a target set.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;&#x9;return;&#xA;&#x9;}&#xA;}&#xA;&#xA;// Attribute level defaults to INSTANCE.&#xA;if (level == null) level = it.unitn.disi.zanshin.model.gore.AggregationLevel.INSTANCE;&#xA;&#xA;// Attribute child is mandatory.&#xA;if (child == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;child\&quot; and cannot be executed.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the Strengthen by Enabling Child strategy.&#xA;strategyName += &quot;(&quot; + requirement.eClass().getName() + &quot;; &quot; + level + &quot;; &quot; + child.eClass().getName() + &quot;)&quot;; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;if ((level == it.unitn.disi.zanshin.model.gore.AggregationLevel.CLASS) || (level == it.unitn.disi.zanshin.model.gore.AggregationLevel.BOTH)) {&#xA;&#x9;controller.enable(child.eClass());&#xA;}&#xA;if ((level == it.unitn.disi.zanshin.model.gore.AggregationLevel.INSTANCE) || (level == it.unitn.disi.zanshin.model.gore.AggregationLevel.BOTH)) {&#xA;&#x9;Requirement parent = requirement.getParent();&#xA;&#x9;controller.suspend(requirement);&#xA;&#x9;controller.resume(child, requirement);&#xA;&#x9;controller.initiate(child);&#xA;&#x9;controller.resume(requirement, parent);&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eOperations name="updateReferences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Retrieves the model id and continues only if this requirement is part of a model.&#xA;it.unitn.disi.zanshin.model.gore.GoalModel model = getAwReq().findGoalModel();&#xA;if (model != null) {&#xA;&#x9;Long modelId = model.getId();&#xA;&#x9;&#xA;&#x9;// Retrieves the repository service from the platform to be able to update the references.&#xA;&#x9;it.unitn.disi.zanshin.services.IRepositoryService repositoryService = it.unitn.disi.zanshin.core.Activator.getRepositoryService();&#xA;&#x9;&#xA;&#x9;// Updates references to requirement and child.&#xA;&#x9;if (requirement != null)&#xA;&#x9;&#x9;setRequirement(repositoryService.retrieveRequirement(modelId, requirement.eClass()));&#xA;&#x9;if (child != null)&#xA;&#x9;&#x9;setChild(repositoryService.retrieveRequirement(modelId, child.eClass()));&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" eType="ecore:EClass gore.ecore#//Requirement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="ecore:EEnum gore.ecore#//AggregationLevel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" eType="ecore:EClass gore.ecore#//Requirement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StrengthenReplace" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Retrieve the strategy's attributes.&#xA;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = getAwReq();&#xA;&#xA;// Attribute requirement defaults to the AwReq's target.&#xA;if (requirement == null) {&#xA;&#x9;setRequirement(awreq.getTarget());&#xA;&#x9;if (requirement == null) {&#xA;&#x9;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;requirement\&quot; and cannot be executed. Cannot use the default value because the referred AwReq doesn't have a target set.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;&#x9;return;&#xA;&#x9;}&#xA;}&#xA;&#xA;// Attribute copy defaults to TRUE.&#xA;if (copy == null) copy = Boolean.TRUE;&#xA;&#xA;// Attribute level defaults to INSTANCE.&#xA;if (level == null) level = it.unitn.disi.zanshin.model.gore.AggregationLevel.INSTANCE;&#xA;&#xA;// Attribute newRequirement is mandatory.&#xA;if (newRequirement == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;newRequirement\&quot; and cannot be executed.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the Strengthen by Replacing strategy.&#xA;strategyName += &quot;(&quot; + requirement.eClass().getName() + &quot;; &quot; + copy + &quot;; &quot; + level + &quot;; &quot; + newRequirement.eClass().getName() + &quot;)&quot;; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;if ((level == it.unitn.disi.zanshin.model.gore.AggregationLevel.CLASS) || (level == it.unitn.disi.zanshin.model.gore.AggregationLevel.BOTH)) {&#xA;&#x9;controller.disable(requirement.eClass());&#xA;&#x9;controller.enable(newRequirement.eClass());&#xA;}&#xA;if ((level == it.unitn.disi.zanshin.model.gore.AggregationLevel.INSTANCE) || (level == it.unitn.disi.zanshin.model.gore.AggregationLevel.BOTH)) {&#xA;&#x9;if ((copy) &amp;&amp; (requirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement) &amp;&amp; (newRequirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement)) &#xA;&#x9;&#x9;controller.copyData((it.unitn.disi.zanshin.model.gore.PerformativeRequirement) requirement, (it.unitn.disi.zanshin.model.gore.PerformativeRequirement) newRequirement);&#xA;&#x9;controller.terminate(requirement);&#xA;&#x9;if (requirement instanceof it.unitn.disi.zanshin.model.gore.PerformativeRequirement)&#xA;&#x9;&#x9;controller.rollback((it.unitn.disi.zanshin.model.gore.PerformativeRequirement) requirement);&#xA;&#x9;controller.initiate(newRequirement);&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eOperations name="updateReferences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Retrieves the model id and continues only if this requirement is part of a model.&#xA;it.unitn.disi.zanshin.model.gore.GoalModel model = getAwReq().findGoalModel();&#xA;if (model != null) {&#xA;&#x9;Long modelId = model.getId();&#xA;&#x9;&#xA;&#x9;// Retrieves the repository service from the platform to be able to update the references.&#xA;&#x9;it.unitn.disi.zanshin.services.IRepositoryService repositoryService = it.unitn.disi.zanshin.core.Activator.getRepositoryService();&#xA;&#x9;&#xA;&#x9;// Updates references to requirement and newRequirement.&#xA;&#x9;if (requirement != null)&#xA;&#x9;&#x9;setRequirement(repositoryService.retrieveRequirement(modelId, requirement.eClass()));&#xA;&#x9;if (newRequirement != null)&#xA;&#x9;&#x9;setNewRequirement(repositoryService.retrieveRequirement(modelId, newRequirement.eClass()));&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" eType="ecore:EClass gore.ecore#//Requirement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="ecore:EEnum gore.ecore#//AggregationLevel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newRequirement" eType="ecore:EClass gore.ecore#//Requirement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WarningStrategy" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Retrieve the strategy's attributes.&#xA;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = getAwReq();&#xA;&#xA;// Attribute actor is mandatory.&#xA;if (actor == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;actor\&quot; and cannot be executed.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the Warning strategy.&#xA;strategyName += &quot;(&quot; + actor.eClass().getName() + &quot;)&quot;; //$NON-NLS-1$ //$NON-NLS-2$&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;controller.sendWarning(actor, awreq);"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" eType="ecore:EClass gore.ecore#//Actor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReconfigurationApplicabilityCondition"
+      eSuperTypes="#//ApplicabilityCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// If the wrapped resolution condition wasn't specified, it defaults to a SimpleApplicabilityCondition.&#xA;if (wrappedCondition == null)&#xA;&#x9;wrappedCondition = it.unitn.disi.zanshin.model.eca.EcaFactory.eINSTANCE.createSimpleApplicabilityCondition();&#xA;&#xA;// Retrieves the reconfiguration strategy.&#xA;it.unitn.disi.zanshin.model.eca.AdaptationStrategy strategy = getStrategy();&#xA;String strategyName = strategy.eClass().getName();&#xA;if (!(strategy instanceof it.unitn.disi.zanshin.model.eca.ReconfigurationStrategy)) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;The Reconfiguration Applicability Condition was used with a {0}, but it can only be used with a Reconfiguration Strategy.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return false;&#xA;}&#xA;&#xA;// Attribute algorithmId is mandatory.&#xA;it.unitn.disi.zanshin.model.eca.ReconfigurationStrategy reconfigStrategy = (it.unitn.disi.zanshin.model.eca.ReconfigurationStrategy) strategy;&#xA;String algorithmId = reconfigStrategy.getAlgorithmId();&#xA;if (algorithmId == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;algorithmId\&quot; and cannot have its applicability evaluated.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return false;&#xA;}&#xA;&#xA;// Obtains a reference to the reconfiguration service and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.IReconfigurationService reconfigService = it.unitn.disi.zanshin.core.Activator.retrieveReconfigurationService(algorithmId);&#xA;if (reconfigService == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to evaluate the applicability of {0}, but an algorithm with id \&quot;{1}\&quot; is not registered!&quot;, strategyName, algorithmId); //$NON-NLS-1$&#xA;&#x9;return false;&#xA;}&#xA;&#xA;// If all is well so far, delegate the applicability evaluation to the reconfiguration service.&#xA;return reconfigService.checkApplicability(reconfigStrategy.getProcedureIds(), reconfigStrategy.getAwReq(), session, wrappedCondition);"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wrappedCondition" eType="#//ApplicabilityCondition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReconfigurationResolutionCondition"
+      eSuperTypes="#//ResolutionCondition">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// If the wrapped resolution condition wasn't specified, it defaults to a SimpleResolutionCondition.&#xA;if (wrappedCondition == null)&#xA;&#x9;wrappedCondition = it.unitn.disi.zanshin.model.eca.EcaFactory.eINSTANCE.createSimpleResolutionCondition();&#xA;&#xA;// Checks if this reconfiguration algorithm has been used before and retrieve the algorithm id.&#xA;String algorithmId = null;&#xA;java.util.List&lt;String> procedureIds = null;&#xA;for (it.unitn.disi.zanshin.model.eca.Event event : session.getEvents()) {&#xA;&#x9;it.unitn.disi.zanshin.model.eca.EcaAwReq awreq = (event == null) ? null : event.getAwReq();&#xA;&#x9;it.unitn.disi.zanshin.model.eca.AdaptationStrategy strategy = (awreq == null) ? null : awreq.getSelectedStrategy();&#xA;&#x9;if (strategy instanceof it.unitn.disi.zanshin.model.eca.ReconfigurationStrategy) {&#xA;&#x9;&#x9;algorithmId = ((it.unitn.disi.zanshin.model.eca.ReconfigurationStrategy) strategy).getAlgorithmId();&#xA;&#x9;&#x9;procedureIds = ((it.unitn.disi.zanshin.model.eca.ReconfigurationStrategy) strategy).getProcedureIds();&#xA;&#x9;}&#xA;}&#xA;&#xA;// If it hasn't been used, just use the wrapped condition to evaluate resolution.&#xA;if (algorithmId == null)&#xA;&#x9;return wrappedCondition.evaluate(session);&#xA;&#xA;// Otherwise, retrieve the reconfiguration service and delegate the evaluation to it.&#xA;it.unitn.disi.zanshin.services.IReconfigurationService reconfigService = it.unitn.disi.zanshin.core.Activator.retrieveReconfigurationService(algorithmId);&#xA;if (reconfigService == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to evaluate resolution with Reconfiguration Resolution Condition, but an algorithm with id \&quot;{0}\&quot; is not registered! Falling back to the wrapped condition.&quot;, algorithmId); //$NON-NLS-1$&#xA;&#x9;return wrappedCondition.evaluate(session);&#xA;}&#xA;return reconfigService.checkResolution(procedureIds, session, wrappedCondition);"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wrappedCondition" eType="#//ResolutionCondition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReconfigurationStrategy" eSuperTypes="#//AdaptationStrategy">
+    <eOperations name="execute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String strategyName = eClass().getName();&#xA;&#xA;// Obtains a reference to the target system's controller and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.ITargetSystemControllerService controller = it.unitn.disi.zanshin.core.Activator.getControllerService();&#xA;if (controller == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but the target system's controller has not yet been registered!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Attribute algorithmId is mandatory.&#xA;if (algorithmId == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Strategy {0} is missing mandatory attribute \&quot;algorithmId\&quot; and cannot be executed.&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Obtains a reference to the reconfiguration service and checks if it exists (if it has been registered).&#xA;it.unitn.disi.zanshin.services.IReconfigurationService reconfigService = it.unitn.disi.zanshin.core.Activator.retrieveReconfigurationService(algorithmId);&#xA;if (reconfigService == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but an algorithm with id \&quot;{1}\&quot; is not registered!&quot;, strategyName, algorithmId); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Attribute level defaults to CLASS.&#xA;if (level == null)&#xA;&#x9;level = it.unitn.disi.zanshin.model.gore.AggregationLevel.CLASS;&#xA;&#xA;// The AwReq and the goal model are mandatory.&#xA;it.unitn.disi.zanshin.model.gore.AwReq awreq = getAwReq();&#xA;if (awreq == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but no AwReq is associated with it!&quot;, strategyName); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;it.unitn.disi.zanshin.model.gore.GoalModel model = awreq.findGoalModel();&#xA;if (model == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.warn(&quot;Attempting to apply {0}, but associated AwReq {1} does not belong to a goal model!&quot;, strategyName, awreq.eClass().getName()); //$NON-NLS-1$&#xA;&#x9;return;&#xA;}&#xA;&#xA;// Executes the reconfiguration strategy.&#xA;strategyName += &quot;(&quot; + algorithmId + &quot;; &quot; + level + &quot;)&quot;; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.info(&quot;{0} Applying strategy {1}...&quot;, session.getId(), strategyName); //$NON-NLS-1$&#xA;it.unitn.disi.zanshin.model.gore.Configuration newConfig = reconfigService.findConfiguration(procedureIds, awreq);&#xA;controller.applyConfig(model, newConfig, level);"/>
+      </eAnnotations>
+      <eParameters name="session" eType="#//AdaptationSession"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithmId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="ecore:EEnum gore.ecore#//AggregationLevel"
+        defaultValueLiteral="class-level"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="procedureIds" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

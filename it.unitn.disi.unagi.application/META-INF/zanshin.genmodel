@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/it.unitn.disi.zanshin.core/src"
+    modelPluginID="it.unitn.disi.zanshin.core" modelName="Zanshin" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false">
+  <foreignModel>eca.ecore</foreignModel>
+  <foreignModel>gore.ecore</foreignModel>
+  <foreignModel>LTL.ecore</foreignModel>
+  <genPackages prefix="Eca" basePackage="it.unitn.disi.zanshin.model" disposableProviderFactory="true"
+      ecorePackage="eca.ecore#/">
+    <genClasses ecoreClass="eca.ecore#//EcaAwReq">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//EcaAwReq/condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//EcaAwReq/strategies"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//EcaAwReq/selectedStrategy"/>
+      <genOperations ecoreOperation="eca.ecore#//EcaAwReq/replaceWith">
+        <genParameters ecoreParameter="eca.ecore#//EcaAwReq/replaceWith/newRequirement"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="eca.ecore#//ResolutionCondition">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference eca.ecore#//ResolutionCondition/awReq"/>
+      <genOperations ecoreOperation="eca.ecore#//ResolutionCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//ResolutionCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="eca.ecore#//AdaptationStrategy">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference eca.ecore#//AdaptationStrategy/awReq"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//AdaptationStrategy/condition"/>
+      <genOperations ecoreOperation="eca.ecore#//AdaptationStrategy/execute">
+        <genParameters ecoreParameter="eca.ecore#//AdaptationStrategy/execute/session"/>
+      </genOperations>
+      <genOperations ecoreOperation="eca.ecore#//AdaptationStrategy/updateReferences"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="eca.ecore#//ApplicabilityCondition">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference eca.ecore#//ApplicabilityCondition/strategy"/>
+      <genOperations ecoreOperation="eca.ecore#//ApplicabilityCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//ApplicabilityCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//Event">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference eca.ecore#//Event/session"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//Event/awReq"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//Event/time"/>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//AdaptationSession">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//AdaptationSession/events"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//AdaptationSession/active"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//AdaptationSession/id"/>
+      <genOperations ecoreOperation="eca.ecore#//AdaptationSession/addEvent">
+        <genParameters ecoreParameter="eca.ecore#//AdaptationSession/addEvent/awreq"/>
+      </genOperations>
+      <genOperations ecoreOperation="eca.ecore#//AdaptationSession/terminate"/>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//SimpleResolutionCondition">
+      <genOperations ecoreOperation="eca.ecore#//SimpleResolutionCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//SimpleResolutionCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//AndRefinedResolutionCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//AndRefinedResolutionCondition/children"/>
+      <genOperations ecoreOperation="eca.ecore#//AndRefinedResolutionCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//AndRefinedResolutionCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//OrRefinedResolutionCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//OrRefinedResolutionCondition/children"/>
+      <genOperations ecoreOperation="eca.ecore#//OrRefinedResolutionCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//OrRefinedResolutionCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//SimpleApplicabilityCondition">
+      <genOperations ecoreOperation="eca.ecore#//SimpleApplicabilityCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//SimpleApplicabilityCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//MaxExecutionsPerSessionApplicabilityCondition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//MaxExecutionsPerSessionApplicabilityCondition/maxExecutions"/>
+      <genOperations ecoreOperation="eca.ecore#//MaxExecutionsPerSessionApplicabilityCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//MaxExecutionsPerSessionApplicabilityCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//AndRefinedApplicabilityCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//AndRefinedApplicabilityCondition/children"/>
+      <genOperations ecoreOperation="eca.ecore#//AndRefinedApplicabilityCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//AndRefinedApplicabilityCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//OrRefinedApplicabilityCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//OrRefinedApplicabilityCondition/children"/>
+      <genOperations ecoreOperation="eca.ecore#//OrRefinedApplicabilityCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//OrRefinedApplicabilityCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//AbortStrategy">
+      <genOperations ecoreOperation="eca.ecore#//AbortStrategy/execute">
+        <genParameters ecoreParameter="eca.ecore#//AbortStrategy/execute/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//DelegateStrategy">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//DelegateStrategy/actor"/>
+      <genOperations ecoreOperation="eca.ecore#//DelegateStrategy/execute">
+        <genParameters ecoreParameter="eca.ecore#//DelegateStrategy/execute/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//RelaxDisableChildStrategy">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//RelaxDisableChildStrategy/requirement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//RelaxDisableChildStrategy/level"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//RelaxDisableChildStrategy/child"/>
+      <genOperations ecoreOperation="eca.ecore#//RelaxDisableChildStrategy/execute">
+        <genParameters ecoreParameter="eca.ecore#//RelaxDisableChildStrategy/execute/session"/>
+      </genOperations>
+      <genOperations ecoreOperation="eca.ecore#//RelaxDisableChildStrategy/updateReferences"/>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//RelaxReplace">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//RelaxReplace/requirement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//RelaxReplace/copy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//RelaxReplace/level"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//RelaxReplace/newRequirement"/>
+      <genOperations ecoreOperation="eca.ecore#//RelaxReplace/execute">
+        <genParameters ecoreParameter="eca.ecore#//RelaxReplace/execute/session"/>
+      </genOperations>
+      <genOperations ecoreOperation="eca.ecore#//RelaxReplace/updateReferences"/>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//RetryStrategy">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//RetryStrategy/copy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//RetryStrategy/time"/>
+      <genOperations ecoreOperation="eca.ecore#//RetryStrategy/execute">
+        <genParameters ecoreParameter="eca.ecore#//RetryStrategy/execute/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//StrengthenEnableChildStrategy">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//StrengthenEnableChildStrategy/requirement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//StrengthenEnableChildStrategy/level"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//StrengthenEnableChildStrategy/child"/>
+      <genOperations ecoreOperation="eca.ecore#//StrengthenEnableChildStrategy/execute">
+        <genParameters ecoreParameter="eca.ecore#//StrengthenEnableChildStrategy/execute/session"/>
+      </genOperations>
+      <genOperations ecoreOperation="eca.ecore#//StrengthenEnableChildStrategy/updateReferences"/>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//StrengthenReplace">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//StrengthenReplace/requirement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//StrengthenReplace/copy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//StrengthenReplace/level"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//StrengthenReplace/newRequirement"/>
+      <genOperations ecoreOperation="eca.ecore#//StrengthenReplace/execute">
+        <genParameters ecoreParameter="eca.ecore#//StrengthenReplace/execute/session"/>
+      </genOperations>
+      <genOperations ecoreOperation="eca.ecore#//StrengthenReplace/updateReferences"/>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//WarningStrategy">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference eca.ecore#//WarningStrategy/actor"/>
+      <genOperations ecoreOperation="eca.ecore#//WarningStrategy/execute">
+        <genParameters ecoreParameter="eca.ecore#//WarningStrategy/execute/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//ReconfigurationResolutionCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//ReconfigurationResolutionCondition/wrappedCondition"/>
+      <genOperations ecoreOperation="eca.ecore#//ReconfigurationResolutionCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//ReconfigurationResolutionCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//ReconfigurationStrategy">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//ReconfigurationStrategy/algorithmId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute eca.ecore#//ReconfigurationStrategy/level"/>
+      <genOperations ecoreOperation="eca.ecore#//ReconfigurationStrategy/execute">
+        <genParameters ecoreParameter="eca.ecore#//ReconfigurationStrategy/execute/session"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="eca.ecore#//ReconfigurationApplicabilityCondition">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference eca.ecore#//ReconfigurationApplicabilityCondition/wrappedCondition"/>
+      <genOperations ecoreOperation="eca.ecore#//ReconfigurationApplicabilityCondition/evaluate">
+        <genParameters ecoreParameter="eca.ecore#//ReconfigurationApplicabilityCondition/evaluate/session"/>
+      </genOperations>
+    </genClasses>
+  </genPackages>
+  <genPackages prefix="Gore" basePackage="it.unitn.disi.zanshin.model" disposableProviderFactory="true"
+      ecorePackage="gore.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="gore.ecore#//AggregationLevel">
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//AggregationLevel/INSTANCE"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//AggregationLevel/CLASS"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//AggregationLevel/BOTH"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="gore.ecore#//DefinableRequirementState">
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//DefinableRequirementState/UNDEFINED"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//DefinableRequirementState/STARTED"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//DefinableRequirementState/SUCCEEDED"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//DefinableRequirementState/FAILED"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//DefinableRequirementState/CANCELED"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="gore.ecore#//DifferentialRelationOperator">
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//DifferentialRelationOperator/GREATER_THAN"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//DifferentialRelationOperator/FEWER_THAN"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="gore.ecore#//MonitorableMethod">
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//MonitorableMethod/START"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//MonitorableMethod/END"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//MonitorableMethod/SUCCESS"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//MonitorableMethod/FAIL"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//MonitorableMethod/CANCEL"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="gore.ecore#//ParameterMetric">
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//ParameterMetric/ENUMERATED"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//ParameterMetric/INTEGER"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//ParameterMetric/REAL"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="gore.ecore#//ParameterType">
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//ParameterType/VARIATION_POINT"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//ParameterType/ENUMERATED_CONTROL_VARIABLE"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//ParameterType/NUMERIC_CONTROL_VARIABLE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="gore.ecore#//RefinementType">
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//RefinementType/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="gore.ecore#//RefinementType/OR"/>
+    </genEnums>
+    <genClasses ecoreClass="gore.ecore#//Requirement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//Requirement/refinementType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference gore.ecore#//Requirement/children"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference gore.ecore#//Requirement/parent"/>
+      <genOperations ecoreOperation="gore.ecore#//Requirement/findGoalModel"/>
+      <genOperations ecoreOperation="gore.ecore#//Requirement/getChildrenStateCount"/>
+      <genOperations ecoreOperation="gore.ecore#//Requirement/replaceWith">
+        <genParameters ecoreParameter="gore.ecore#//Requirement/replaceWith/newRequirement"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//DefinableRequirement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//DefinableRequirement/time"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//DefinableRequirement/state"/>
+      <genOperations ecoreOperation="gore.ecore#//DefinableRequirement/start"/>
+      <genOperations ecoreOperation="gore.ecore#//DefinableRequirement/end"/>
+      <genOperations ecoreOperation="gore.ecore#//DefinableRequirement/success"/>
+      <genOperations ecoreOperation="gore.ecore#//DefinableRequirement/fail"/>
+      <genOperations ecoreOperation="gore.ecore#//DefinableRequirement/checkState"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//Softgoal">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference gore.ecore#//Softgoal/constraints"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//PerformativeRequirement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//PerformativeRequirement/startTime"/>
+      <genOperations ecoreOperation="gore.ecore#//PerformativeRequirement/cancel"/>
+      <genOperations ecoreOperation="gore.ecore#//PerformativeRequirement/checkState"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//QualityConstraint">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference gore.ecore#//QualityConstraint/softgoal"/>
+      <genOperations ecoreOperation="gore.ecore#//QualityConstraint/replaceWith">
+        <genParameters ecoreParameter="gore.ecore#//QualityConstraint/replaceWith/newRequirement"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//AwReq">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference gore.ecore#//AwReq/otherTargets"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference gore.ecore#//AwReq/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//AwReq/incrementCoefficient"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//DomainAssumption"/>
+    <genClasses ecoreClass="gore.ecore#//Goal">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference gore.ecore#//Goal/goalModel"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//Task"/>
+    <genClasses ecoreClass="gore.ecore#//Actor">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference gore.ecore#//Actor/goalModel"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//Configuration">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference gore.ecore#//Configuration/parameters"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference gore.ecore#//Configuration/goalModel"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//DifferentialRelation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference gore.ecore#//DifferentialRelation/indicator"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference gore.ecore#//DifferentialRelation/parameter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//DifferentialRelation/lowerBound"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//DifferentialRelation/upperBound"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//DifferentialRelation/operator"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//DifferentialRelation/value"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//GoalModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference gore.ecore#//GoalModel/rootGoal"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference gore.ecore#//GoalModel/actors"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//GoalModel/internalId"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference gore.ecore#//GoalModel/configuration"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference gore.ecore#//GoalModel/relations"/>
+      <genOperations ecoreOperation="gore.ecore#//GoalModel/getId"/>
+    </genClasses>
+    <genClasses ecoreClass="gore.ecore#//Parameter">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference gore.ecore#//Parameter/configuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//Parameter/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//Parameter/unit"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//Parameter/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute gore.ecore#//Parameter/metric"/>
+    </genClasses>
+  </genPackages>
+  <genPackages prefix="LTL" basePackage="org.eeat.model" disposableProviderFactory="true"
+      ecorePackage="LTL.ecore#/">
+    <genClasses ecoreClass="LTL.ecore#//OclAny">
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/after">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/after/exp1"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/after/exp2"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/after/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/after.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/after.1/exp1"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/after.1/exp2"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/after.2">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/after.2/exp1"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/after.2/exp2"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/after.2/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/between">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/between/exp1"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/between/exp2"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/between/exp3"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/always">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/always/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/always.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/always.1/expression"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/always.1/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/always.2">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/always.2/expression"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/always.2/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/before">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/before/exp1"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/before/exp2"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/before/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/before.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/before.1/exp1"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/before.1/exp2"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/before.2">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/before.2/exp1"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/before.2/exp2"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/before.2/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/eventually">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/eventually/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/eventually.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/eventually.1/expression"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/eventually.1/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/never">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/never/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/never.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/never.1/expression"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/never.1/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/never.2">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/never.2/expression"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/never.2/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/newPEval">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/newPEval/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/responds">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/responds/stimulus"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/responds/response"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/responds.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/responds.1/stimulus"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/responds.1/response"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/responds.1/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/sequence">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/sequence/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/sequence.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/sequence.1/expression"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/sequence.1/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/receivedEvent">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedEvent/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/receivedEvents">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedEvents/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/receivedMessages">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedMessages/className"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedMessages/methodName"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/receivedMessages.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedMessages.1/methodName"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/receivedMessage">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedMessage/methodName"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/receivedMessage.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedMessage.1/className"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedMessage.1/methodName"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/receivedProperties">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedProperties/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/receivedProperty">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/receivedProperty/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/responds.2">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/responds.2/stimulus"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/responds.2/response"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/responds.2/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/timeout">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/timeout/spec"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/unless">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/unless/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/unless.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/unless.1/expression"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/unless.1/timeout"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/until">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/until/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclAny/until.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/until.1/expression"/>
+        <genParameters ecoreParameter="LTL.ecore#//OclAny/until.1/timeout"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="LTL.ecore#//OclMessage">
+      <genOperations ecoreOperation="LTL.ecore#//OclMessage/argument">
+        <genParameters ecoreParameter="LTL.ecore#//OclMessage/argument/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclMessage/argument.1">
+        <genParameters ecoreParameter="LTL.ecore#//OclMessage/argument.1/expression"/>
+      </genOperations>
+      <genOperations ecoreOperation="LTL.ecore#//OclMessage/arguments"/>
+      <genOperations ecoreOperation="LTL.ecore#//OclMessage/className"/>
+      <genOperations ecoreOperation="LTL.ecore#//OclMessage/methodName"/>
+    </genClasses>
+    <genClasses ecoreClass="LTL.ecore#//Timeout">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute LTL.ecore#//Timeout/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="LTL.ecore#//PropertyEvent">
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/name"/>
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/satisfied"/>
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/openDate"/>
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/closeDate"/>
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/openEvent"/>
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/closeEvent"/>
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/scopeEvent"/>
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/support"/>
+      <genOperations ecoreOperation="LTL.ecore#//PropertyEvent/property"/>
+    </genClasses>
+    <genClasses ecoreClass="LTL.ecore#//Event">
+      <genOperations ecoreOperation="LTL.ecore#//Event/date"/>
+      <genOperations ecoreOperation="LTL.ecore#//Event/timestamp"/>
+      <genOperations ecoreOperation="LTL.ecore#//Event/object"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

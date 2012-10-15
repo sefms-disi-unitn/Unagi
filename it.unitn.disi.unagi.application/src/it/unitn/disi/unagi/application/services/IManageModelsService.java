@@ -1,10 +1,12 @@
 package it.unitn.disi.unagi.application.services;
 
 import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsModelException;
+import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsClassesException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotSaveRequirementsModelException;
 import it.unitn.disi.unagi.application.nls.Messages;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,7 +27,10 @@ public interface IManageModelsService {
 	String REQUIREMENTS_MODEL_EXTENSION = "ecore"; //$NON-NLS-1$
 
 	/** Path for the ECore file that defines base classes for goal model elements. */
-	IPath GOALMODEL_EMF_FILE_PATH = new Path("META-INF/goalmodel.ecore"); //$NON-NLS-1$
+	IPath GORE_EMF_FILE_PATH = new Path("META-INF/gore.ecore"); //$NON-NLS-1$
+	
+	/** Path for the GenModel file for the base packages eca, goalmodel and LTL. */
+	IPath BASE_GENMODEL_FILE_PATH = new Path("META-INF/zanshin.genmodel"); //$NON-NLS-1$
 
 	/** Name of the main goal used when creating a new requirements model. */
 	String MAIN_GOAL_BASE_NAME = Messages.getString("emf.mainGoal.baseName"); //$NON-NLS-1$
@@ -58,4 +63,14 @@ public interface IManageModelsService {
 	 *           If there are any problems in the deletion of the model.
 	 */
 	void deleteRequirementsModel(IProgressMonitor progressMonitor, IFile modelFile) throws CouldNotDeleteRequirementsModelException;
+
+	/**
+	 * TODO: document this method.
+	 * 
+	 * @param progressMonitor
+	 * @param modelFile
+	 * @return
+	 * @throws CouldNotGenerateRequirementsClassesException
+	 */
+	IFolder generateRequirementsClasses(IProgressMonitor progressMonitor, IFile modelFile) throws CouldNotGenerateRequirementsClassesException;
 }

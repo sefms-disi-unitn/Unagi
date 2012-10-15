@@ -18,7 +18,7 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class CompileRequirementsModelsHandler extends AbstractRequirementsModelsHandler {
+public class GenerateRequirementsClassesHandler extends AbstractRequirementsModelsHandler {
 	/** Service class for model management. */
 	@Inject
 	private IManageModelsService manageModelsService;
@@ -57,7 +57,7 @@ public class CompileRequirementsModelsHandler extends AbstractRequirementsModels
 	 */
 	@Override
 	protected void doExecute(IProgressMonitor monitor, IFile model) throws UnagiException {
-		// FIXME: implement this...
-		System.out.println("### compile " + model.getName() + " using: " + manageModelsService); //$NON-NLS-1$ //$NON-NLS-2$
+		// Delegates to the application class the generation of classes for the given model.
+		manageModelsService.generateRequirementsClasses(monitor, model);
 	}
 }
