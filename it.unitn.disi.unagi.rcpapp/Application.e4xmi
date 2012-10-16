@@ -29,11 +29,14 @@
       <children xsi:type="menu:Menu" xmi:id="_vJlvAMxEEeGuBuHp-YF6SA" elementId="org.eclipse.ui.file.menu" label="File" mnemonics="F">
         <children xsi:type="menu:Menu" xmi:id="_0WyMoMxEEeGuBuHp-YF6SA" elementId="it.unitn.disi.unagi.rcpapp.menu.file.new" label="New" mnemonics="N">
           <children xsi:type="menu:HandledMenuItem" xmi:id="_178zoMxEEeGuBuHp-YF6SA" elementId="it.unitn.disi.unagi.rcpapp.menuitem.file.new.project" label="Project..." iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-newproject.png" mnemonics="P" command="_xtecQMztEeGBSNGUoatfLQ"/>
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_dOEEoNKGEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.menuitem.file.new.requirementsModel" label="Requirements Model" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-newrequirementsmodel.png" mnemonics="R" command="_DOj1sNKGEeGvo_NHu81miw"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_dOEEoNKGEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.menuitem.file.new.requirementsModel" label="Requirements Model..." iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-newrequirementsmodel.png" mnemonics="R" command="_DOj1sNKGEeGvo_NHu81miw"/>
         </children>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_AUPdIMxFEeGuBuHp-YF6SA" elementId="it.unitn.disi.unagi.rcpapp.menuitem.file.openProject" label="Open Project(s)" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-openproject.png" mnemonics="O" command="_wGhTANJzEeGvo_NHu81miw"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_w-9cMAGtEeKh0tPBlU9cJg" elementId="it.unitn.disi.unagi.rcpapp.menuitem.file.closeProject" label="Close Project(s)" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-closeproject.png" mnemonics="C" command="_9jMY0AGtEeKh0tPBlU9cJg"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_VdKBQMztEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_0I53MBd7EeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.handledmenuitem.0" label="Save" mnemonics="S" command="_50Z9QBeCEeKmn8PVQOPSuw"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_0hyRQBd7EeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.handledmenuitem.0" label="Save All" mnemonics="A" command="_IL-fwBeDEeKmn8PVQOPSuw"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_z16CsBd7EeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.menuseparator.0"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_GGRGIMxFEeGuBuHp-YF6SA" elementId="it.unitn.disi.unagi.rcpapp.menuitem.quit" label="Exit" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-quit.png" mnemonics="x" command="_oaNlUMzmEeGBSNGUoatfLQ"/>
       </children>
     </mainMenu>
@@ -42,29 +45,36 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_iogoQMztEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.toolitem.newProject" label="" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-newproject.png" command="_xtecQMztEeGBSNGUoatfLQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_CeBVINJ8EeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.toolitem.openProjects" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-openproject.png" command="_wGhTANJzEeGvo_NHu81miw"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_WxUDoNKGEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.toolitem.newRequirementsModel" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-newrequirementsmodel.png" command="_DOj1sNKGEeGvo_NHu81miw"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_Vq3RUBeEEeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.toolbarseparator.0"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_WyvfYBeEEeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.handledtoolitem.0" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-save.png" command="_50Z9QBeCEeKmn8PVQOPSuw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_XHj40BeEEeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.handledtoolitem.0" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-saveall.png" command="_IL-fwBeDEeKmn8PVQOPSuw"/>
       </children>
     </trimBars>
   </children>
+  <handlers xmi:id="_6m0HQAGtEeKh0tPBlU9cJg" elementId="it.unitn.disi.unagi.rcpapp.handler.closeProjects" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.CloseProjectsHandler" command="_9jMY0AGtEeKh0tPBlU9cJg"/>
+  <handlers xmi:id="_DWbMgAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.handler.deleteRequirementsModels" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.DeleteRequirementsModelsHandler" command="_L88WYAM_EeKQ9a4abaQ5zg"/>
   <handlers xmi:id="_uy5lsMzmEeGBSNGUoatfLQ" elementId="org.eclipse.ui.file.exit.handler" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.QuitHandler" command="_oaNlUMzmEeGBSNGUoatfLQ"/>
+  <handlers xmi:id="_C4sHoAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.handler.generateRequirementsClasses" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.GenerateRequirementsClassesHandler" command="_LoB2UAM_EeKQ9a4abaQ5zg"/>
   <handlers xmi:id="_zl8ZwMztEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.handler.newProject" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.NewProjectHandler" command="_xtecQMztEeGBSNGUoatfLQ"/>
   <handlers xmi:id="_JkljoNKGEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.handler.0" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.NewRequirementsModelHandler" command="_DOj1sNKGEeGvo_NHu81miw"/>
   <handlers xmi:id="_rB2fQNJzEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.handler.openProjects" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.OpenProjectsHandler" command="_wGhTANJzEeGvo_NHu81miw"/>
-  <handlers xmi:id="_6m0HQAGtEeKh0tPBlU9cJg" elementId="it.unitn.disi.unagi.rcpapp.handler.closeProjects" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.CloseProjectsHandler" command="_9jMY0AGtEeKh0tPBlU9cJg"/>
-  <handlers xmi:id="_C4sHoAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.handler.generateRequirementsClasses" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.GenerateRequirementsClassesHandler" command="_LoB2UAM_EeKQ9a4abaQ5zg"/>
-  <handlers xmi:id="_DWbMgAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.handler.deleteRequirementsModels" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.DeleteRequirementsModelsHandler" command="_L88WYAM_EeKQ9a4abaQ5zg"/>
   <handlers xmi:id="_B4t-sAQLEeKmlJvOMiAzDw" elementId="it.unitn.disi.unagi.rcpapp.handler.openRequirementsModels" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.OpenRequirementsModelHandler" command="_6OtgYAQKEeKmlJvOMiAzDw"/>
+  <handlers xmi:id="_KADsgBeDEeKmn8PVQOPSuw" elementId="org.eclipse.ui.file.save.handler" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_50Z9QBeCEeKmn8PVQOPSuw"/>
+  <handlers xmi:id="_LJINYBeDEeKmn8PVQOPSuw" elementId="org.eclipse.ui.file.saveAll.handler" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveAllHandler" command="_IL-fwBeDEeKmn8PVQOPSuw"/>
   <bindingTables xmi:id="_EfyPQMzvEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.bindingtable.windows" bindingContext="_z-CewMzvEeGBSNGUoatfLQ">
     <bindings xmi:id="_g9OgQMzvEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.keybinding.exit" keySequence="M1+Q" command="_oaNlUMzmEeGBSNGUoatfLQ"/>
   </bindingTables>
   <rootContext xmi:id="_z-CewMzvEeGBSNGUoatfLQ" elementId="org.eclipse.ui.contexts.window" name="Window Binding Context"/>
+  <commands xmi:id="_9jMY0AGtEeKh0tPBlU9cJg" elementId="it.unitn.disi.unagi.rcpapp.command.closeProjects" commandName="Close Project(s)"/>
+  <commands xmi:id="_L88WYAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.command.deleteRequirementsModels" commandName="Delete Requirements Model(s)"/>
   <commands xmi:id="_oaNlUMzmEeGBSNGUoatfLQ" elementId="org.eclipse.ui.file.exit" commandName="Exit"/>
+  <commands xmi:id="_LoB2UAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.command.generateRequirementsClasses" commandName="Generate Classes from Model(s)"/>
   <commands xmi:id="_xtecQMztEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.command.newProject" commandName="New Project"/>
   <commands xmi:id="_DOj1sNKGEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.command.newRequirementsModel" commandName="New Requirements Model"/>
   <commands xmi:id="_wGhTANJzEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.command.openProjects" commandName="Open Project(s)"/>
-  <commands xmi:id="_9jMY0AGtEeKh0tPBlU9cJg" elementId="it.unitn.disi.unagi.rcpapp.command.closeProjects" commandName="Close Project(s)"/>
-  <commands xmi:id="_LoB2UAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.command.generateRequirementsClasses" commandName="Generate Classes from Model(s)"/>
-  <commands xmi:id="_L88WYAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.command.deleteRequirementsModels" commandName="Delete Requirements Model(s)"/>
   <commands xmi:id="_6OtgYAQKEeKmlJvOMiAzDw" elementId="it.unitn.disi.unagi.rcpapp.command.openRequirementsModels" commandName="Open Requirements Model(s)"/>
+  <commands xmi:id="_50Z9QBeCEeKmn8PVQOPSuw" elementId="org.eclipse.ui.file.save" commandName="Save"/>
+  <commands xmi:id="_IL-fwBeDEeKmn8PVQOPSuw" elementId="org.eclipse.ui.file.saveAll" commandName="Save All"/>
   <addons xmi:id="_eZ3mMcxAEeGyH_V5C42AUw" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_eZ3mMsxAEeGyH_V5C42AUw" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_eZ3mM8xAEeGyH_V5C42AUw" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
