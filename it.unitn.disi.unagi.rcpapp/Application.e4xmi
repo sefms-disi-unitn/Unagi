@@ -3,8 +3,8 @@
   <children xsi:type="basic:TrimmedWindow" xmi:id="_iniggMxAEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.window.main" label="Unagi (Zanshin CASE Tool)" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/unagi-icon-16.gif" x="0" y="0" width="1024" height="768">
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_wbfjIMxBEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.perspectivestack.main">
       <children xsi:type="advanced:Perspective" xmi:id="_zFZkoMxBEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.perspective.main" label="Unagi" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/unagi-icon-16.gif">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_24xvoMxBEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.partsashcontainer.main" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_5ACXEMxBEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.partstack.left">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_24xvoMxBEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.partsashcontainer.main" selectedElement="_5ACXEMxBEeGyH_V5C42AUw" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_5ACXEMxBEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.partstack.left" selectedElement="_7BXVoMxBEeGyH_V5C42AUw">
             <children xsi:type="basic:Part" xmi:id="_7BXVoMxBEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.part.projectExplorer" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.views.UnagiProjectExplorerView" label="Projects" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/object-16-projects.png">
               <menus xsi:type="menu:PopupMenu" xmi:id="_JcZJcAJ0EeKVx4mTasqxHA" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.default" label="Default Popup Menu"/>
               <menus xsi:type="menu:PopupMenu" xmi:id="_yNGxoAJuEeKVx4mTasqxHA" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.project" label="Popup Menu for Projects">
