@@ -50,8 +50,8 @@ public class CreateNewRequirementsModelBasicWizardPage extends WizardPage implem
 
 	/** Constructor. */
 	public CreateNewRequirementsModelBasicWizardPage() {
-		super(Messages.getString("gui.createRequirementsModel.basicPage.title")); //$NON-NLS-1$
-		setTitle(Messages.getString("gui.createRequirementsModel.basicPage.title")); //$NON-NLS-1$
+		super(Messages.getString("gui.createRequirementsModelWizard.basicPage.title")); //$NON-NLS-1$
+		setTitle(Messages.getString("gui.createRequirementsModelWizard.basicPage.title")); //$NON-NLS-1$
 	}
 
 	/** @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite) */
@@ -74,7 +74,7 @@ public class CreateNewRequirementsModelBasicWizardPage extends WizardPage implem
 
 		// Creates the label for the project field.
 		Label projectLabel = new Label(container, SWT.NULL);
-		projectLabel.setText(Messages.getString("gui.createRequirementsModel.basicPage.field.project")); //$NON-NLS-1$
+		projectLabel.setText(Messages.getString("gui.createRequirementsModelWizard.basicPage.field.project")); //$NON-NLS-1$
 
 		// Creates the project field, which is not editable (project is already selected before).
 		projectField = new Text(container, SWT.BORDER | SWT.SINGLE);
@@ -84,7 +84,7 @@ public class CreateNewRequirementsModelBasicWizardPage extends WizardPage implem
 
 		// Creates the label for the name field.
 		Label nameLabel = new Label(container, SWT.NULL);
-		nameLabel.setText(Messages.getString("gui.createRequirementsModel.basicPage.field.name")); //$NON-NLS-1$
+		nameLabel.setText(Messages.getString("gui.createRequirementsModelWizard.basicPage.field.name")); //$NON-NLS-1$
 
 		// Creates the name field and focuses on it.
 		nameField = new Text(container, SWT.BORDER | SWT.SINGLE);
@@ -97,7 +97,7 @@ public class CreateNewRequirementsModelBasicWizardPage extends WizardPage implem
 
 		// Creates the label for the base package field.
 		Label basePackageLabel = new Label(container, SWT.NULL);
-		basePackageLabel.setText(Messages.getString("gui.createRequirementsModel.basicPage.field.basePackage")); //$NON-NLS-1$
+		basePackageLabel.setText(Messages.getString("gui.createRequirementsModelWizard.basicPage.field.basePackage")); //$NON-NLS-1$
 
 		// Creates the base package field.
 		basePackageField = new Text(container, SWT.BORDER | SWT.SINGLE);

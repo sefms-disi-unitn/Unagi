@@ -44,7 +44,7 @@ public class CreateNewRequirementsModelWizard extends Wizard implements INewWiza
 	public CreateNewRequirementsModelWizard() {
 		LogUtil.log.debug("Creating a \"Create New Requirements Model\" wizard."); //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
-		setWindowTitle(Messages.getString("gui.createRequirementsModel.title")); //$NON-NLS-1$
+		setWindowTitle(Messages.getString("gui.createRequirementsModelWizard.title")); //$NON-NLS-1$
 	}
 
 	/** @see org.eclipse.jface.wizard.Wizard#addPages() */
