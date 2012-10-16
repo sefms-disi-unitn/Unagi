@@ -1,12 +1,12 @@
 package it.unitn.disi.unagi.rcpapp.views.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import it.unitn.disi.unagi.application.services.IManageModelsService;
+import it.unitn.disi.unagi.application.services.IManageSourcesService;
 import it.unitn.disi.unagi.rcpapp.nls.Messages;
 import it.unitn.disi.util.gui.ImageUtil;
 import it.unitn.disi.util.logging.LogUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -63,7 +63,7 @@ public class JavaPackageProjectTreeElement extends AbstractProjectTreeElement {
 			// Places all file resources under the models folder in a list.
 			if (folder.exists())
 				for (IResource resource : folder.members())
-					if ((resource.getType() == IResource.FILE) && (resource.getFullPath().getFileExtension().equals(IManageModelsService.JAVA_SOURCE_EXTENSION)))
+					if ((resource.getType() == IResource.FILE) && (resource.getFullPath().getFileExtension().equals(IManageSourcesService.JAVA_SOURCE_EXTENSION)))
 						sourceFiles.add(new JavaSourceProjectTreeElement(bundle, project, this, (IFile) resource));
 
 			// Convert the list to an array to return.

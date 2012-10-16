@@ -1,7 +1,7 @@
 package it.unitn.disi.unagi.rcpapp.views.models;
 
-import it.unitn.disi.unagi.application.services.IManageModelsService;
 import it.unitn.disi.unagi.application.services.IManageProjectsService;
+import it.unitn.disi.unagi.application.services.IManageSourcesService;
 import it.unitn.disi.unagi.rcpapp.nls.Messages;
 import it.unitn.disi.util.gui.ImageUtil;
 import it.unitn.disi.util.logging.LogUtil;
@@ -172,7 +172,7 @@ public class SourcesFolderProjectTreeElement extends AbstractProjectTreeElement 
 				switch (resource.getType()) {
 				case IResource.FILE:
 					// If it's a file, checks that it is a Java source, then adds it to the sources set.
-					if (resource.getFullPath().getFileExtension().equals(IManageModelsService.JAVA_SOURCE_EXTENSION)) {
+					if (resource.getFullPath().getFileExtension().equals(IManageSourcesService.JAVA_SOURCE_EXTENSION)) {
 						sources.add((IFile) resource);
 						count++;
 					}

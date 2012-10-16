@@ -1,9 +1,9 @@
 package it.unitn.disi.unagi.application.internal.services;
 
 import it.unitn.disi.unagi.application.Activator;
+import it.unitn.disi.unagi.application.exceptions.CouldNotCreateRequirementsModelException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsModelException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsClassesException;
-import it.unitn.disi.unagi.application.exceptions.CouldNotSaveRequirementsModelException;
 import it.unitn.disi.unagi.application.nls.Messages;
 import it.unitn.disi.unagi.application.services.IManageModelsService;
 import it.unitn.disi.unagi.application.services.IManageProjectsService;
@@ -45,7 +45,7 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class ManageModelsService implements IManageModelsService {
+public class ManageModelsService extends ManageFilesService implements IManageModelsService {
 	/** TODO: document this field. */
 	private static final String GENMODEL_FILE_EXTENSION = "genmodel"; //$NON-NLS-1$
 
@@ -54,21 +54,21 @@ public class ManageModelsService implements IManageModelsService {
 	 *      org.eclipse.core.resources.IProject, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public IFile createNewRequirementsModel(IProgressMonitor progressMonitor, IProject project, String name, String basePackage) throws CouldNotSaveRequirementsModelException {
+	public IFile createNewRequirementsModel(IProgressMonitor progressMonitor, IProject project, String name, String basePackage) throws CouldNotCreateRequirementsModelException {
 		String projectName = project.getName();
 		LogUtil.log.info("Creating a new requirements model in project: {0}.", projectName); //$NON-NLS-1$
 
 		// If the project doesn't exist, throws a Unagi exception.
 		if (!project.exists()) {
 			LogUtil.log.warn("Cannot create new requirements model, project already exists: {0}.", projectName); //$NON-NLS-1$
-			throw new CouldNotSaveRequirementsModelException(project);
+			throw new CouldNotCreateRequirementsModelException(project);
 		}
 
 		// Obtains the models folder. Checks if it exists and is accessible.
 		IFolder modelsFolder = project.getFolder(IManageProjectsService.MODELS_PROJECT_SUBDIR);
 		if ((!modelsFolder.exists()) || (!modelsFolder.isAccessible())) {
 			LogUtil.log.warn("Cannot create new requirements model, project's models folder doesn't exist or is not accessible: {0}.", projectName); //$NON-NLS-1$
-			throw new CouldNotSaveRequirementsModelException(project);
+			throw new CouldNotCreateRequirementsModelException(project);
 		}
 
 		// Determines the name of the file to be created, generating new names if a file with the same name already exists.
@@ -87,7 +87,7 @@ public class ManageModelsService implements IManageModelsService {
 		}
 		catch (CoreException | IOException e) {
 			LogUtil.log.error("Unagi caught an Eclipse exception while trying to create a new requirements model in project: {0}.", e, projectName); //$NON-NLS-1$
-			throw new CouldNotSaveRequirementsModelException(project, e);
+			throw new CouldNotCreateRequirementsModelException(project, e);
 		}
 
 		// Returns the newly created file.

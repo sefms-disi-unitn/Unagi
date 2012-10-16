@@ -49,7 +49,7 @@ public abstract class AbstractRequirementsModelsHandler extends AbstractHandler 
 	public boolean isAtLeastOneModelSelected(ESelectionService selectionService) {
 		Object selection = selectionService.getSelection(UnagiProjectExplorerView.VIEW_ID);
 
-		// Single selection of a project tree element is OK.
+		// Single selection of a model element is OK.
 		if ((selection != null) && (selection instanceof RequirementsModelProjectTreeElement))
 			return true;
 
@@ -63,14 +63,14 @@ public abstract class AbstractRequirementsModelsHandler extends AbstractHandler 
 			if (!(obj instanceof RequirementsModelProjectTreeElement))
 				return false;
 
-		// If it was an array and all elements were project tree elements, then it's OK.
+		// If it was an array and all elements were model elements, then it's OK.
 		return true;
 	}
 
 	/**
 	 * Retrieves the single selected model from the workspace.
 	 * 
-	 * Note that this method does not check if only a single project was selected, returning null if that is not the case.
+	 * Note that this method does not check if only a single model was selected, returning null if that is not the case.
 	 * 
 	 * @param selectionService
 	 *          The platform's selection service, used to determine what is the user's current workspace selection.
@@ -90,7 +90,7 @@ public abstract class AbstractRequirementsModelsHandler extends AbstractHandler 
 	/**
 	 * Retrieves all selected models from the workspace.
 	 * 
-	 * Note that this method does not check if at least one project was selected, returning an empty set if that is not
+	 * Note that this method does not check if at least one model was selected, returning an empty set if that is not
 	 * the case.
 	 * 
 	 * @param selectionService
@@ -108,7 +108,7 @@ public abstract class AbstractRequirementsModelsHandler extends AbstractHandler 
 		}
 
 		// Otherwise it has to be an array (multiple selection). Add all models.
-		if (selection instanceof Object[]) {
+		else if (selection instanceof Object[]) {
 			Object[] multipleSelection = (Object[]) selection;
 			for (Object obj : multipleSelection) {
 				if (obj instanceof RequirementsModelProjectTreeElement) {
@@ -124,7 +124,7 @@ public abstract class AbstractRequirementsModelsHandler extends AbstractHandler 
 	/**
 	 * Executes the command for a single-selected model.
 	 * 
-	 * Note that this method does not check if only a single project was selected, doing nothing if that is not the case.
+	 * Note that this method does not check if only a single model was selected, doing nothing if that is not the case.
 	 * 
 	 * @param selectionService
 	 *          The platform's selection service, used to determine what is the user's current workspace selection.
@@ -138,7 +138,7 @@ public abstract class AbstractRequirementsModelsHandler extends AbstractHandler 
 	/**
 	 * Executes the command for all selected models.
 	 * 
-	 * Note that this method does not check if at least one project was selected, doing nothing if that is not the case.
+	 * Note that this method does not check if at least one model was selected, doing nothing if that is not the case.
 	 * 
 	 * @param selectionService
 	 *          The platform's selection service, used to determine what is the user's current workspace selection.
@@ -196,7 +196,7 @@ public abstract class AbstractRequirementsModelsHandler extends AbstractHandler 
 	 * @param model
 	 *          The model to handle.
 	 * @throws UnagiException
-	 *           If anything goes wrong during the specific handling of the project.
+	 *           If anything goes wrong during the specific handling of the model.
 	 */
 	protected abstract void doExecute(IProgressMonitor monitor, IFile model) throws UnagiException;
 }

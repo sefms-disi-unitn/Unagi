@@ -8,17 +8,17 @@ import org.eclipse.core.resources.IProject;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class CouldNotSaveRequirementsModelException extends UnagiException {
+public class CouldNotCreateRequirementsModelException extends UnagiException {
 	/** Project whose requirements model creation triggered the error. */
 	private IProject project;
 	
 	/** Constructor. */
-	public CouldNotSaveRequirementsModelException(IProject project) {
+	public CouldNotCreateRequirementsModelException(IProject project) {
 		this.project = project;
 	}
 	
 	/** Constructor. */
-	public CouldNotSaveRequirementsModelException(IProject project, Throwable t) {
+	public CouldNotCreateRequirementsModelException(IProject project, Throwable t) {
 		super(t);
 		this.project = project;
 	}

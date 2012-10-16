@@ -19,6 +19,9 @@
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_xyc_cAM-EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.menuitem.projectExplorer.requirementsModel.generateClasses" label="Generate classes" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-compilerequirementsmodels.png" mnemonics="C" command="_LoB2UAM_EeKQ9a4abaQ5zg"/>
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_yJ85cAM-EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.menuitem.projectExplorer.requirementsModel.delete" label="Delete" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-deleterequirementsmodels.png" mnemonics="D" command="_L88WYAM_EeKQ9a4abaQ5zg"/>
               </menus>
+              <menus xsi:type="menu:PopupMenu" xmi:id="_YPNfkBeTEeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.javaSource" label="Popup Menu for Java Sources">
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_IN_CMBeUEeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.javaSource.open" label="Open" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-openjavasource.png" mnemonics="O" command="_58GQ8BeTEeKmn8PVQOPSuw"/>
+              </menus>
             </children>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_5xoMEMxBEeGyH_V5C42AUw" elementId="it.unitn.disi.unagi.rcpapp.partstack.right"/>
@@ -56,9 +59,10 @@
   <handlers xmi:id="_uy5lsMzmEeGBSNGUoatfLQ" elementId="org.eclipse.ui.file.exit.handler" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.QuitHandler" command="_oaNlUMzmEeGBSNGUoatfLQ"/>
   <handlers xmi:id="_C4sHoAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.handler.generateRequirementsClasses" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.GenerateRequirementsClassesHandler" command="_LoB2UAM_EeKQ9a4abaQ5zg"/>
   <handlers xmi:id="_zl8ZwMztEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.handler.newProject" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.NewProjectHandler" command="_xtecQMztEeGBSNGUoatfLQ"/>
-  <handlers xmi:id="_JkljoNKGEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.handler.0" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.NewRequirementsModelHandler" command="_DOj1sNKGEeGvo_NHu81miw"/>
+  <handlers xmi:id="_JkljoNKGEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.handler.newRequirementsModel" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.NewRequirementsModelHandler" command="_DOj1sNKGEeGvo_NHu81miw"/>
+  <handlers xmi:id="_-dbuIBeTEeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.handler.openJavaSources" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.OpenJavaSourcesHandler" command="_58GQ8BeTEeKmn8PVQOPSuw"/>
   <handlers xmi:id="_rB2fQNJzEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.handler.openProjects" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.OpenProjectsHandler" command="_wGhTANJzEeGvo_NHu81miw"/>
-  <handlers xmi:id="_B4t-sAQLEeKmlJvOMiAzDw" elementId="it.unitn.disi.unagi.rcpapp.handler.openRequirementsModels" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.OpenRequirementsModelHandler" command="_6OtgYAQKEeKmlJvOMiAzDw"/>
+  <handlers xmi:id="_B4t-sAQLEeKmlJvOMiAzDw" elementId="it.unitn.disi.unagi.rcpapp.handler.openRequirementsModels" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.OpenRequirementsModelsHandler" command="_6OtgYAQKEeKmlJvOMiAzDw"/>
   <handlers xmi:id="_KADsgBeDEeKmn8PVQOPSuw" elementId="org.eclipse.ui.file.save.handler" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_50Z9QBeCEeKmn8PVQOPSuw"/>
   <handlers xmi:id="_LJINYBeDEeKmn8PVQOPSuw" elementId="org.eclipse.ui.file.saveAll.handler" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveAllHandler" command="_IL-fwBeDEeKmn8PVQOPSuw"/>
   <bindingTables xmi:id="_EfyPQMzvEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.bindingtable.windows" bindingContext="_z-CewMzvEeGBSNGUoatfLQ">
@@ -71,6 +75,7 @@
   <commands xmi:id="_LoB2UAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.command.generateRequirementsClasses" commandName="Generate Classes from Model(s)"/>
   <commands xmi:id="_xtecQMztEeGBSNGUoatfLQ" elementId="it.unitn.disi.unagi.rcpapp.command.newProject" commandName="New Project"/>
   <commands xmi:id="_DOj1sNKGEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.command.newRequirementsModel" commandName="New Requirements Model"/>
+  <commands xmi:id="_58GQ8BeTEeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.command.openJavaSources" commandName="Open Java Source(s)"/>
   <commands xmi:id="_wGhTANJzEeGvo_NHu81miw" elementId="it.unitn.disi.unagi.rcpapp.command.openProjects" commandName="Open Project(s)"/>
   <commands xmi:id="_6OtgYAQKEeKmlJvOMiAzDw" elementId="it.unitn.disi.unagi.rcpapp.command.openRequirementsModels" commandName="Open Requirements Model(s)"/>
   <commands xmi:id="_50Z9QBeCEeKmn8PVQOPSuw" elementId="org.eclipse.ui.file.save" commandName="Save"/>

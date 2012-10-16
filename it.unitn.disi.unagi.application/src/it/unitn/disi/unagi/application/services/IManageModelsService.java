@@ -1,8 +1,8 @@
 package it.unitn.disi.unagi.application.services;
 
+import it.unitn.disi.unagi.application.exceptions.CouldNotCreateRequirementsModelException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsModelException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsClassesException;
-import it.unitn.disi.unagi.application.exceptions.CouldNotSaveRequirementsModelException;
 import it.unitn.disi.unagi.application.nls.Messages;
 
 import org.eclipse.core.resources.IFile;
@@ -22,13 +22,10 @@ import org.eclipse.core.runtime.Path;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public interface IManageModelsService {
+public interface IManageModelsService extends IManageFilesService {
 	/** File extension for requirements models. */
 	String REQUIREMENTS_MODEL_EXTENSION = "ecore"; //$NON-NLS-1$
 	
-	/** File extension for Java source files. */
-	String JAVA_SOURCE_EXTENSION = "java"; //$NON-NLS-1$
-
 	/** Path for the ECore file that defines base classes for goal model elements. */
 	IPath GORE_EMF_FILE_PATH = new Path("META-INF/gore.ecore"); //$NON-NLS-1$
 	
@@ -50,10 +47,10 @@ public interface IManageModelsService {
 	 * @param basePackage
 	 *          The base package for the new requirements model.
 	 * @return The file that represents the newly created requirements model.
-	 * @throws CouldNotSaveRequirementsModelException
+	 * @throws CouldNotCreateRequirementsModelException
 	 *           If there are any problems in the creation of the model.
 	 */
-	IFile createNewRequirementsModel(IProgressMonitor progressMonitor, IProject project, String name, String basePackage) throws CouldNotSaveRequirementsModelException;
+	IFile createNewRequirementsModel(IProgressMonitor progressMonitor, IProject project, String name, String basePackage) throws CouldNotCreateRequirementsModelException;
 
 	/**
 	 * Deletes a requirements model from a project, also deleting it from the file system.
