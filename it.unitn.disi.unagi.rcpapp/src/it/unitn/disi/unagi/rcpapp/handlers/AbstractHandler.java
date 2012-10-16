@@ -43,8 +43,7 @@ public abstract class AbstractHandler {
 		if (classKey == null) {
 			String className = getClass().getSimpleName();
 			if (className.contains(DEFAULT_HANDLER_CLASS_SUFFIX))
-				;
-			className = className.substring(0, className.indexOf(DEFAULT_HANDLER_CLASS_SUFFIX));
+				className = className.substring(0, className.indexOf(DEFAULT_HANDLER_CLASS_SUFFIX));
 			classKey = className.substring(0, 1).toLowerCase() + className.substring(1);
 		}
 
