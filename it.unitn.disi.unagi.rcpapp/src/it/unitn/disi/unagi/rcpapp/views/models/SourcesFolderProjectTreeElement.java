@@ -23,7 +23,7 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
 /**
- * Project tree element that represents a folder containing Java source files.
+ * Project tree element that represents a folder containing source files.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
@@ -63,14 +63,14 @@ public class SourcesFolderProjectTreeElement extends AbstractProjectTreeElement 
 	@Override
 	public Object[] getChildren() {
 		Object[] children = null;
-		List<JavaPackageProjectTreeElement> javaPackages = new ArrayList<>();
+		List<SourcePackageProjectTreeElement> javaPackages = new ArrayList<>();
 		try {
 			// Finds all packages that contain at least one class.
 			Map<String, IFolder> packagesMap = scanSourcesFolderForPackages();
 
 			// For each package, create a project tree element that represents it.
 			for (Map.Entry<String, IFolder> entry : packagesMap.entrySet()) {
-				JavaPackageProjectTreeElement packageElem = new JavaPackageProjectTreeElement(bundle, project, this, entry.getKey(), entry.getValue());
+				SourcePackageProjectTreeElement packageElem = new SourcePackageProjectTreeElement(bundle, project, this, entry.getKey(), entry.getValue());
 				javaPackages.add(packageElem);
 			}
 
@@ -117,7 +117,7 @@ public class SourcesFolderProjectTreeElement extends AbstractProjectTreeElement 
 	}
 
 	/**
-	 * Scans the source folder and identifies all folders containing Java source files. Assembles a map that associates
+	 * Scans the source folder and identifies all folders containing source files. Assembles a map that associates
 	 * the package name (in Java-style fully qualified name) with the folder.
 	 * 
 	 * @return A tree map that associates package names to their folders in the project.
@@ -151,17 +151,17 @@ public class SourcesFolderProjectTreeElement extends AbstractProjectTreeElement 
 	}
 
 	/**
-	 * Traverses the given folder recursively and returns all Java source files found in the current folder or any of its
+	 * Traverses the given folder recursively and returns all source files found in the current folder or any of its
 	 * sub-folders.
 	 * 
 	 * @param folder
 	 *          The folder to traverse recursively.
-	 * @return A hash set of IFile elements, representing the Java source files that were found.
+	 * @return A hash set of IFile elements, representing the source files that were found.
 	 * @throws CoreException
 	 *           If Eclipse cannot list the members of a given IFolder object.
 	 */
 	private Set<IFile> recursivelyFindJavaSources(IFolder folder) throws CoreException {
-		LogUtil.log.debug("Traversing a source folder looking for Java source files: {0}.", folder.getFullPath()); //$NON-NLS-1$
+		LogUtil.log.debug("Traversing a source folder looking for source files: {0}.", folder.getFullPath()); //$NON-NLS-1$
 		Set<IFile> sources = new HashSet<>();
 
 		// Goes through the members of the folder.
@@ -171,8 +171,8 @@ public class SourcesFolderProjectTreeElement extends AbstractProjectTreeElement 
 				// Checks if it's a file or a folder.
 				switch (resource.getType()) {
 				case IResource.FILE:
-					// If it's a file, checks that it is a Java source, then adds it to the sources set.
-					if (resource.getFullPath().getFileExtension().equals(IManageSourcesService.JAVA_SOURCE_EXTENSION)) {
+					// If it's a file, checks that it is a source, then adds it to the sources set.
+					if (resource.getFullPath().getFileExtension().equals(IManageSourcesService.SOURCE_FILE_EXTENSION)) {
 						sources.add((IFile) resource);
 						count++;
 					}

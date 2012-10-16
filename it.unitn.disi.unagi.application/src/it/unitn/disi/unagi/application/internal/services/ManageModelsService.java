@@ -171,13 +171,13 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 			// Creates the genmodel file that is used to generate the Java classes.
 			Resource genModelResource = createGenModelFile(progressMonitor, modelFile, modelName, basePackage, sourcesFolder);
 	
-			// Generates the Java sources for the classes declared in the model.
+			// Generates the sources for the classes declared in the model.
 			generateClasses(progressMonitor, genModelResource, modelFile);
 			
 			return sourcesFolder;
 		}
 		catch (IOException | CoreException e) {
-			LogUtil.log.error("Unagi caught an exception while trying to generate Java sources from a requirements model: {0}.", e, modelFile.getName()); //$NON-NLS-1$
+			LogUtil.log.error("Unagi caught an exception while trying to generate sources from a requirements model: {0}.", e, modelFile.getName()); //$NON-NLS-1$
 			throw new CouldNotGenerateRequirementsClassesException(modelFile, e);
 		}
 	}

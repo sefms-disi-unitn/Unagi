@@ -7,6 +7,6 @@ package it.unitn.disi.unagi.application.services;
  * @version 1.0
  */
 public interface IManageSourcesService extends IManageFilesService {
-	/** File extension for Java source files. */
-	String JAVA_SOURCE_EXTENSION = "java"; //$NON-NLS-1$
+	/** File extension for source files. */
+	String SOURCE_FILE_EXTENSION = "java"; //$NON-NLS-1$
 }

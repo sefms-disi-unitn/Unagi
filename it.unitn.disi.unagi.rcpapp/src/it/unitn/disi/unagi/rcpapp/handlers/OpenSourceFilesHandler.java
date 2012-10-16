@@ -3,7 +3,7 @@ package it.unitn.disi.unagi.rcpapp.handlers;
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.IManageFilesService;
 import it.unitn.disi.unagi.rcpapp.IUnagiRcpAppBundleInfoProvider;
-import it.unitn.disi.unagi.rcpapp.views.JavaSourceEditorPart;
+import it.unitn.disi.unagi.rcpapp.views.SourceFileEditorPart;
 import it.unitn.disi.util.logging.LogUtil;
 
 import javax.inject.Inject;
@@ -23,12 +23,12 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * Handler for the "Open Java Source(s)" command.
+ * Handler for the "Open Source File(s)" command.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class OpenJavaSourcesHandler extends AbstractJavaSourcesHandler {
+public class OpenSourceFilesHandler extends AbstractSourceFilesHandler {
 	/** The bundle's activator, used to retrieve global information about the bundle. */
 	@Inject
 	private IUnagiRcpAppBundleInfoProvider activator;
@@ -53,7 +53,7 @@ public class OpenJavaSourcesHandler extends AbstractJavaSourcesHandler {
 	 */
 	@Execute
 	public void execute(ESelectionService selectionService) {
-		LogUtil.log.debug("Executing \"Open Java Source(s)\" command."); //$NON-NLS-1$
+		LogUtil.log.debug("Executing \"Open Source File(s)\" command."); //$NON-NLS-1$
 
 		// This command can be executed for multiple models.
 		executeForMultipleSources(selectionService);
@@ -73,7 +73,7 @@ public class OpenJavaSourcesHandler extends AbstractJavaSourcesHandler {
 		return isAtLeastOneSourceSelected(selectionService);
 	}
 
-	/** @see it.unitn.disi.unagi.rcpapp.handlers.AbstractJavaSourcesHandler#doExecute(org.eclipse.core.runtime.IProgressMonitor, org.eclipse.core.resources.IFile) */
+	/** @see it.unitn.disi.unagi.rcpapp.handlers.AbstractSourceFilesHandler#doExecute(org.eclipse.core.runtime.IProgressMonitor, org.eclipse.core.resources.IFile) */
 	@Override
 	protected void doExecute(IProgressMonitor monitor, final IFile source) throws UnagiException {
 		final String sourceName = source.getName();
@@ -84,14 +84,14 @@ public class OpenJavaSourcesHandler extends AbstractJavaSourcesHandler {
 				// Retrieves the part stack in which the source editor will be opened.
 				MPartStack stack = (MPartStack) modelService.find(activator.getEditorStackId(), application);
 
-				// Creates a new part for the source editor, sets its label and indicates the Java Source Editor as the part to use.
-				String editorURI = "bundleclass://" + activator.getBundleId() + '/' + JavaSourceEditorPart.PART_ID; //$NON-NLS-1$
+				// Creates a new part for the source editor, sets its label and indicates the Source Editor as the part to use.
+				String editorURI = "bundleclass://" + activator.getBundleId() + '/' + SourceFileEditorPart.PART_ID; //$NON-NLS-1$
 				MInputPart part = MBasicFactory.INSTANCE.createInputPart();
 				part.setLabel(sourceName);
 				part.setContributionURI(editorURI);
 				part.setCloseable(true);
 
-				// Sets the Java source file URI as the input for the editor.
+				// Sets the source file URI as the input for the editor.
 				part.setInputURI(sourceURI.toString());
 				
 				// Embeds extra information in the transient data map, such as the IFile object that is being open.

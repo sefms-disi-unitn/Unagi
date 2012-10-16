@@ -2,8 +2,8 @@ package it.unitn.disi.unagi.rcpapp.handlers;
 
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.rcpapp.views.UnagiProjectExplorerView;
-import it.unitn.disi.unagi.rcpapp.views.models.JavaPackageProjectTreeElement;
-import it.unitn.disi.unagi.rcpapp.views.models.JavaSourceProjectTreeElement;
+import it.unitn.disi.unagi.rcpapp.views.models.SourcePackageProjectTreeElement;
+import it.unitn.disi.unagi.rcpapp.views.models.SourceFileProjectTreeElement;
 import it.unitn.disi.util.gui.DialogUtil;
 import it.unitn.disi.util.logging.LogUtil;
 
@@ -25,7 +25,7 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public abstract class AbstractJavaSourcesHandler extends AbstractHandler {
+public abstract class AbstractSourceFilesHandler extends AbstractHandler {
 	/**
 	 * Verifies if a single source is selected in the workspace. Should be used by handlers whose commands operate in one
 	 * and only one source.
@@ -36,14 +36,14 @@ public abstract class AbstractJavaSourcesHandler extends AbstractHandler {
 	 */
 	public boolean isSingleSourceSelected(ESelectionService selectionService) {
 		Object selection = selectionService.getSelection(UnagiProjectExplorerView.VIEW_ID);
-		return ((selection != null) && (selection instanceof JavaSourceProjectTreeElement));
+		return ((selection != null) && (selection instanceof SourceFileProjectTreeElement));
 	}
 
 	/**
 	 * Verifies if at least one source is selected in the workspace. Should be used by handlers whose commands operate in
 	 * one or more sources at once.
 	 * 
-	 * Note that if a Java package is selected, we consider that all of its sources are selected.
+	 * Note that if a package is selected, we consider that all of its sources are selected.
 	 * 
 	 * @param selectionService
 	 *          The platform's selection service, used to determine what is the user's current workspace selection.
@@ -53,25 +53,25 @@ public abstract class AbstractJavaSourcesHandler extends AbstractHandler {
 		Object selection = selectionService.getSelection(UnagiProjectExplorerView.VIEW_ID);
 
 		// Single selection of a project tree element is OK.
-		if ((selection != null) && ((selection instanceof JavaSourceProjectTreeElement) || (selection instanceof JavaPackageProjectTreeElement)))
+		if ((selection != null) && ((selection instanceof SourceFileProjectTreeElement) || (selection instanceof SourcePackageProjectTreeElement)))
 			return true;
 
 		// Otherwise it has to be an array (multiple selection).
 		if (!(selection instanceof Object[]))
 			return false;
 
-		// Checks if the array contains only Java sources and java package elements.
+		// Checks if the array contains only sources and package elements.
 		Object[] multipleSelection = (Object[]) selection;
 		for (Object obj : multipleSelection)
-			if (!(obj instanceof JavaSourceProjectTreeElement) && !(obj instanceof JavaPackageProjectTreeElement))
+			if (!(obj instanceof SourceFileProjectTreeElement) && !(obj instanceof SourcePackageProjectTreeElement))
 				return false;
 
-		// If it was an array and all elements were Java sources/packages, then it's OK.
+		// If it was an array and all elements were sources/packages, then it's OK.
 		return true;
 	}
 
 	/**
-	 * Retrieves the single selected java source from the workspace.
+	 * Retrieves the single selected source from the workspace.
 	 * 
 	 * Note that this method does not check if only a single source was selected, returning null if that is not the case.
 	 * 
@@ -82,11 +82,11 @@ public abstract class AbstractJavaSourcesHandler extends AbstractHandler {
 	public IFile retrieveSingleSelectedSource(ESelectionService selectionService) {
 		// First checks that there is a single source element selected.
 		Object selection = selectionService.getSelection(UnagiProjectExplorerView.VIEW_ID);
-		if ((selection == null) || (!(selection instanceof JavaSourceProjectTreeElement)))
+		if ((selection == null) || (!(selection instanceof SourceFileProjectTreeElement)))
 			return null;
 
 		// Then retrieves the model to which the selected element refers.
-		JavaSourceProjectTreeElement element = (JavaSourceProjectTreeElement) selection;
+		SourceFileProjectTreeElement element = (SourceFileProjectTreeElement) selection;
 		return element.getSourceFile();
 	}
 
@@ -104,27 +104,27 @@ public abstract class AbstractJavaSourcesHandler extends AbstractHandler {
 		Set<IFile> sources = new HashSet<>();
 		Object selection = selectionService.getSelection(UnagiProjectExplorerView.VIEW_ID);
 
-		// First checks if single selection of Java source, returning a set with a single element in this case.
-		if ((selection != null) && (selection instanceof JavaSourceProjectTreeElement)) {
-			IFile model = ((JavaSourceProjectTreeElement) selection).getSourceFile();
+		// First checks if single selection of source, returning a set with a single element in this case.
+		if ((selection != null) && (selection instanceof SourceFileProjectTreeElement)) {
+			IFile model = ((SourceFileProjectTreeElement) selection).getSourceFile();
 			sources.add(model);
 		}
 
-		// Then checks if single selection of Java package, returning a set with all package classes.
-		else if ((selection != null) && (selection instanceof JavaPackageProjectTreeElement)) {
-			addSourcesFromPackage((JavaPackageProjectTreeElement) selection, sources);
+		// Then checks if single selection of package, returning a set with all package classes.
+		else if ((selection != null) && (selection instanceof SourcePackageProjectTreeElement)) {
+			addSourcesFromPackage((SourcePackageProjectTreeElement) selection, sources);
 		}
 
 		// Otherwise it has to be an array (multiple selection). Add all sources (single and package).
 		else if (selection instanceof Object[]) {
 			Object[] multipleSelection = (Object[]) selection;
 			for (Object obj : multipleSelection) {
-				if (obj instanceof JavaSourceProjectTreeElement) {
-					IFile model = ((JavaSourceProjectTreeElement) obj).getSourceFile();
+				if (obj instanceof SourceFileProjectTreeElement) {
+					IFile model = ((SourceFileProjectTreeElement) obj).getSourceFile();
 					sources.add(model);
 				}
-				else if (obj instanceof JavaPackageProjectTreeElement) {
-					addSourcesFromPackage((JavaPackageProjectTreeElement) obj, sources);
+				else if (obj instanceof SourcePackageProjectTreeElement) {
+					addSourcesFromPackage((SourcePackageProjectTreeElement) obj, sources);
 				}
 			}
 		}
@@ -138,10 +138,10 @@ public abstract class AbstractJavaSourcesHandler extends AbstractHandler {
 	 * @param pkgElem
 	 * @param sources
 	 */
-	private void addSourcesFromPackage(JavaPackageProjectTreeElement pkgElem, Set<IFile> sources) {
+	private void addSourcesFromPackage(SourcePackageProjectTreeElement pkgElem, Set<IFile> sources) {
 		for (Object obj : pkgElem.getChildren()) {
-			if (obj instanceof JavaSourceProjectTreeElement) {
-				IFile model = ((JavaSourceProjectTreeElement) obj).getSourceFile();
+			if (obj instanceof SourceFileProjectTreeElement) {
+				IFile model = ((SourceFileProjectTreeElement) obj).getSourceFile();
 				sources.add(model);
 			}
 		}

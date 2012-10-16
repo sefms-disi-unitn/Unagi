@@ -14,9 +14,9 @@ import org.eclipse.e4.core.di.annotations.Creatable;
  * @version 1.0
  */
 @Creatable
-public class JavaSourceEditorPart extends AbstractTextEditorPart {
+public class SourceFileEditorPart extends AbstractTextEditorPart {
 	/** ID of this part. */
-	public static final String PART_ID = JavaSourceEditorPart.class.getName();
+	public static final String PART_ID = SourceFileEditorPart.class.getName();
 
 	/** Service class for model management. */
 	@Inject

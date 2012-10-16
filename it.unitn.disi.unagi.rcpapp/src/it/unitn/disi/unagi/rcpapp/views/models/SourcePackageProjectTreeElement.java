@@ -17,12 +17,12 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
 /**
- * Project tree element that represents a java package in the Java sources folder.
+ * Project tree element that represents a package in the sources folder.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class JavaPackageProjectTreeElement extends AbstractProjectTreeElement {
+public class SourcePackageProjectTreeElement extends AbstractProjectTreeElement {
 	/** Path to the icon that should be displayed for elements of this type. */
 	private static final String ICON_PATH = Messages.getIconPath("object.package.16"); //$NON-NLS-1$
 
@@ -39,9 +39,9 @@ public class JavaPackageProjectTreeElement extends AbstractProjectTreeElement {
 	private SourcesFolderProjectTreeElement parent;
 
 	/** Constructor. */
-	public JavaPackageProjectTreeElement(Bundle bundle, IProject project, SourcesFolderProjectTreeElement parent, String name, IFolder folder) {
+	public SourcePackageProjectTreeElement(Bundle bundle, IProject project, SourcesFolderProjectTreeElement parent, String name, IFolder folder) {
 		super(bundle);
-		LogUtil.log.debug("Creating a tree element for java package {0} in project {1}.", name, project.getName()); //$NON-NLS-1$
+		LogUtil.log.debug("Creating a tree element for package {0} in project {1}.", name, project.getName()); //$NON-NLS-1$
 		this.project = project;
 		this.parent = parent;
 		this.name = name;
@@ -58,13 +58,13 @@ public class JavaPackageProjectTreeElement extends AbstractProjectTreeElement {
 	@Override
 	public Object[] getChildren() {
 		Object[] children = null;
-		List<JavaSourceProjectTreeElement> sourceFiles = new ArrayList<>();
+		List<SourceFileProjectTreeElement> sourceFiles = new ArrayList<>();
 		try {
 			// Places all file resources under the models folder in a list.
 			if (folder.exists())
 				for (IResource resource : folder.members())
-					if ((resource.getType() == IResource.FILE) && (resource.getFullPath().getFileExtension().equals(IManageSourcesService.JAVA_SOURCE_EXTENSION)))
-						sourceFiles.add(new JavaSourceProjectTreeElement(bundle, project, this, (IFile) resource));
+					if ((resource.getType() == IResource.FILE) && (resource.getFullPath().getFileExtension().equals(IManageSourcesService.SOURCE_FILE_EXTENSION)))
+						sourceFiles.add(new SourceFileProjectTreeElement(bundle, project, this, (IFile) resource));
 
 			// Convert the list to an array to return.
 			children = sourceFiles.toArray();
@@ -89,7 +89,7 @@ public class JavaPackageProjectTreeElement extends AbstractProjectTreeElement {
 			hasChildren = folder.members().length > 0;
 		}
 		catch (CoreException e) {
-			LogUtil.log.error("Unagi caught an Eclipse error when retrieving the members of Java package {0} in project {1}.", e, name, project.getName()); //$NON-NLS-1$
+			LogUtil.log.error("Unagi caught an Eclipse error when retrieving the members of package {0} in project {1}.", e, name, project.getName()); //$NON-NLS-1$
 		}
 		return hasChildren;
 	}
@@ -104,7 +104,7 @@ public class JavaPackageProjectTreeElement extends AbstractProjectTreeElement {
 	/** @see it.unitn.disi.unagi.rcpapp.views.models.AbstractProjectTreeElement#getImage() */
 	@Override
 	public Image getImage() {
-		// Return the icon that represents Java packages.
+		// Return the icon that represents packages.
 		return ImageUtil.loadImage(bundle, ICON_PATH);
 	}
 }
