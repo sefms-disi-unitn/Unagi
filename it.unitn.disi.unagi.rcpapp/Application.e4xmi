@@ -9,6 +9,7 @@
               <menus xsi:type="menu:PopupMenu" xmi:id="_JcZJcAJ0EeKVx4mTasqxHA" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.default" label="Default Popup Menu"/>
               <menus xsi:type="menu:PopupMenu" xmi:id="_zVyJoBemEeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.constraintsFile" label="Popup Menu for Constraints File">
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_cCQRYBepEeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.constraintsFile.open" label="Open" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-openconstraintsfile.png" mnemonics="O" command="_7qr_EBemEeKdH-6dqpYAAQ"/>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_i1y3UBiREeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.menuitem.projectExplorer.constraintsFile.compileConstraintsFiles" label="Compile" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-compileconstraintsfile.png" mnemonics="C" command="_qN4fMBiREeKdH-6dqpYAAQ"/>
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_0nVtsBiOEeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.menuitem.projectExplorer.constraintsFile.delete" label="Delete" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-deleteconstraintsfiles.png" mnemonics="D" command="_pPFmkBiPEeKdH-6dqpYAAQ"/>
               </menus>
               <menus xsi:type="menu:PopupMenu" xmi:id="_yNGxoAJuEeKVx4mTasqxHA" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.project" label="Popup Menu for Projects">
@@ -22,7 +23,7 @@
               </menus>
               <menus xsi:type="menu:PopupMenu" xmi:id="_8YYXsAO_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.requirementsModel" label="Popup Menu for Requirements Models">
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_HN-zMAQLEeKmlJvOMiAzDw" elementId="it.unitn.disi.unagi.rcpapp.menuitem.projectExplorer.requirementsModel.open" label="Open" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-openrequirementsmodel.png" mnemonics="O" command="_6OtgYAQKEeKmlJvOMiAzDw"/>
-                <children xsi:type="menu:HandledMenuItem" xmi:id="_xyc_cAM-EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.menuitem.projectExplorer.requirementsModel.generateClasses" label="Generate classes" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-compilerequirementsmodels.png" mnemonics="C" command="_LoB2UAM_EeKQ9a4abaQ5zg"/>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_xyc_cAM-EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.menuitem.projectExplorer.requirementsModel.generateClasses" label="Generate classes" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-generaterequirementsclasses.png" mnemonics="C" command="_LoB2UAM_EeKQ9a4abaQ5zg"/>
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_yJ85cAM-EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.menuitem.projectExplorer.requirementsModel.delete" label="Delete" iconURI="platform:/plugin/it.unitn.disi.unagi.rcpapp/icons/action-16-deleterequirementsmodels.png" mnemonics="D" command="_L88WYAM_EeKQ9a4abaQ5zg"/>
               </menus>
               <menus xsi:type="menu:PopupMenu" xmi:id="_YPNfkBeTEeKmn8PVQOPSuw" elementId="it.unitn.disi.unagi.rcpapp.popupmenu.projectExplorer.sourceFile" label="Popup Menu for Source Files">
@@ -63,6 +64,7 @@
     </trimBars>
   </children>
   <handlers xmi:id="_6m0HQAGtEeKh0tPBlU9cJg" elementId="it.unitn.disi.unagi.rcpapp.handler.closeProjects" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.CloseProjectsHandler" command="_9jMY0AGtEeKh0tPBlU9cJg"/>
+  <handlers xmi:id="_wuwLMBiREeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.handler.compileConstraintsFiles" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.CompileConstraintFilesHandler" command="_qN4fMBiREeKdH-6dqpYAAQ"/>
   <handlers xmi:id="_tmGDEBiPEeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.handler.deleteConstraintsFiles" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.DeleteConstraintsFilesHandler" command="_pPFmkBiPEeKdH-6dqpYAAQ"/>
   <handlers xmi:id="_DWbMgAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.handler.deleteRequirementsModels" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.DeleteRequirementsModelsHandler" command="_L88WYAM_EeKQ9a4abaQ5zg"/>
   <handlers xmi:id="_uy5lsMzmEeGBSNGUoatfLQ" elementId="org.eclipse.ui.file.exit.handler" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.QuitHandler" command="_oaNlUMzmEeGBSNGUoatfLQ"/>
@@ -81,6 +83,7 @@
   </bindingTables>
   <rootContext xmi:id="_z-CewMzvEeGBSNGUoatfLQ" elementId="org.eclipse.ui.contexts.window" name="Window Binding Context"/>
   <commands xmi:id="_9jMY0AGtEeKh0tPBlU9cJg" elementId="it.unitn.disi.unagi.rcpapp.command.closeProjects" commandName="Close Project(s)"/>
+  <commands xmi:id="_qN4fMBiREeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.command.compileConstraintsFiles" commandName="Compile Constraints File(s)"/>
   <commands xmi:id="_pPFmkBiPEeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.command.deleteConstraintsFiles" commandName="Delete Constraints File(s)"/>
   <commands xmi:id="_L88WYAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.command.deleteRequirementsModels" commandName="Delete Requirements Model(s)"/>
   <commands xmi:id="_oaNlUMzmEeGBSNGUoatfLQ" elementId="org.eclipse.ui.file.exit" commandName="Exit"/>

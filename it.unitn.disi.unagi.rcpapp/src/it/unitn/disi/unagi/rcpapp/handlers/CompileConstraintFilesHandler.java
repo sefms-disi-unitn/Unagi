@@ -1,7 +1,7 @@
 package it.unitn.disi.unagi.rcpapp.handlers;
 
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
-import it.unitn.disi.unagi.application.services.IManageModelsService;
+import it.unitn.disi.unagi.application.services.IManageConstraintsService;
 import it.unitn.disi.util.logging.LogUtil;
 
 import javax.inject.Inject;
@@ -13,15 +13,15 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 
 /**
- * Handler for the "Generate Requirements Classes" command.
+ * Handler for the "Compile Constraints Files" command.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class GenerateRequirementsClassesHandler extends AbstractRequirementsModelsHandler {
-	/** Service class for model management. */
+public class CompileConstraintFilesHandler extends AbstractConstraintsFilesHandler {
+	/** Service class for constraints files management. */
 	@Inject
-	private IManageModelsService manageModelsService;
+	private IManageConstraintsService manageConstraintsService;
 
 	/**
 	 * Method that handles the command's execution.
@@ -31,10 +31,10 @@ public class GenerateRequirementsClassesHandler extends AbstractRequirementsMode
 	 */
 	@Execute
 	public void execute(ESelectionService selectionService) {
-		LogUtil.log.debug("Executing \"Generate Requirements Classe(s)\" command."); //$NON-NLS-1$
+		LogUtil.log.debug("Executing \"Compile Constraints File(s)\" command."); //$NON-NLS-1$
 
-		// This command can be executed for multiple models.
-		executeForMultipleModels(selectionService);
+		// This command can be executed for multiple files.
+		executeForMultipleConstraints(selectionService);
 	}
 
 	/**
@@ -47,8 +47,8 @@ public class GenerateRequirementsClassesHandler extends AbstractRequirementsMode
 	 */
 	@CanExecute
 	public boolean canExecute(ESelectionService selectionService) {
-		// Can only compile requirements models if at least one of them is selected.
-		return isAtLeastOneModelSelected(selectionService);
+		// Can only compile constraints files if at least one of them is selected.
+		return isAtLeastOneConstraintsSelected(selectionService);
 	}
 
 	/**
@@ -56,8 +56,8 @@ public class GenerateRequirementsClassesHandler extends AbstractRequirementsMode
 	 *      org.eclipse.core.resources.IFile)
 	 */
 	@Override
-	protected void doExecute(IProgressMonitor monitor, IFile model) throws UnagiException {
-		// Delegates to the application class the generation of classes for the given model.
-		manageModelsService.generateRequirementsClasses(monitor, model);
+	protected void doExecute(IProgressMonitor monitor, IFile file) throws UnagiException {
+		// Delegates to the application class the compilation of the constraints file.
+		System.out.println("###### STOPPED HERE: Compile file: " + file.getFullPath());
 	}
 }
