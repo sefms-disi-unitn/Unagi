@@ -35,7 +35,7 @@ public class ProjectProjectTreeElement extends AbstractProjectTreeElement {
 
 		// Build the project's children.
 		children = new AbstractProjectTreeElement[2];
-		children[0] = new RequirementsFolderProjectTreeElement(bundle, project, this);
+		children[0] = new ModelsFolderProjectTreeElement(bundle, project, this);
 		children[1] = new SourcesFolderProjectTreeElement(bundle, project, this);
 	}
 

@@ -14,7 +14,7 @@ import org.eclipse.core.resources.IFile;
 public interface IManageFilesService {
 	/** TODO: document this field. */
 	String FILE_KEY = "unagi.managed.file"; //$NON-NLS-1$
-	
+
 	/**
 	 * TODO: document this method.
 	 * 

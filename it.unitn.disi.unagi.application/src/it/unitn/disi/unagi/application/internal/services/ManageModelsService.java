@@ -1,8 +1,8 @@
 package it.unitn.disi.unagi.application.internal.services;
 
 import it.unitn.disi.unagi.application.Activator;
-import it.unitn.disi.unagi.application.exceptions.CouldNotCreateRequirementsModelException;
-import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsModelException;
+import it.unitn.disi.unagi.application.exceptions.CouldNotCreateFileException;
+import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsClassesException;
 import it.unitn.disi.unagi.application.nls.Messages;
 import it.unitn.disi.unagi.application.services.IManageModelsService;
@@ -54,60 +54,31 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	 *      org.eclipse.core.resources.IProject, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public IFile createNewRequirementsModel(IProgressMonitor progressMonitor, IProject project, String name, String basePackage) throws CouldNotCreateRequirementsModelException {
+	public IFile createNewRequirementsModel(IProgressMonitor progressMonitor, IProject project, String name, String basePackage) throws CouldNotCreateFileException {
 		String projectName = project.getName();
-		LogUtil.log.info("Creating a new requirements model in project: {0}.", projectName); //$NON-NLS-1$
+		LogUtil.log.info("Creating new requirements model {0} (base package: {1}) in project {2}.", name, basePackage, projectName); //$NON-NLS-1$
 
-		// If the project doesn't exist, throws a Unagi exception.
-		if (!project.exists()) {
-			LogUtil.log.warn("Cannot create new requirements model, project already exists: {0}.", projectName); //$NON-NLS-1$
-			throw new CouldNotCreateRequirementsModelException(project);
-		}
-
-		// Obtains the models folder. Checks if it exists and is accessible.
+		// Obtains the models folder.
 		IFolder modelsFolder = project.getFolder(IManageProjectsService.MODELS_PROJECT_SUBDIR);
-		if ((!modelsFolder.exists()) || (!modelsFolder.isAccessible())) {
-			LogUtil.log.warn("Cannot create new requirements model, project's models folder doesn't exist or is not accessible: {0}.", projectName); //$NON-NLS-1$
-			throw new CouldNotCreateRequirementsModelException(project);
-		}
 
-		// Determines the name of the file to be created, generating new names if a file with the same name already exists.
-		int count = 2;
-		String fileName = name + "." + IManageModelsService.REQUIREMENTS_MODEL_EXTENSION; //$NON-NLS-1$
-		IFile modelFile = modelsFolder.getFile(fileName);
-		while (modelFile.exists()) {
-			fileName = name + (count++) + "." + IManageModelsService.REQUIREMENTS_MODEL_EXTENSION; //$NON-NLS-1$
-			modelFile = modelsFolder.getFile(fileName);
-		}
+		// Generates a file object in the folder, checking that the file can be created later.
+		String fileName = name + '.' + REQUIREMENTS_MODEL_EXTENSION;
+		IFile modelFile = generateCreatableFile(modelsFolder, fileName);
 
-		// Creates the new file in the project.
+		// Creates the new model file in the project.
+		createNewFile(progressMonitor, modelFile);
+
+		// Generates initial contents for the requirements file.
 		try {
-			modelFile.create(null, true, progressMonitor);
-			createRequirementsEMFContents(modelFile, name, basePackage);
+			createRequirementsContents(modelFile, name, basePackage);
 		}
-		catch (CoreException | IOException e) {
-			LogUtil.log.error("Unagi caught an Eclipse exception while trying to create a new requirements model in project: {0}.", e, projectName); //$NON-NLS-1$
-			throw new CouldNotCreateRequirementsModelException(project, e);
+		catch (IOException e) {
+			LogUtil.log.error("Could not create initial contents for requirements model {0} in project {1}.", e, modelFile.getFullPath(), projectName); //$NON-NLS-1$
+			throw new CouldNotCreateFileException(modelFile);
 		}
 
 		// Returns the newly created file.
 		return modelFile;
-	}
-
-	/**
-	 * @see it.unitn.disi.unagi.application.services.IManageModelsService#deleteRequirementsModel(org.eclipse.core.runtime.IProgressMonitor,
-	 *      org.eclipse.core.resources.IFile)
-	 */
-	@Override
-	public void deleteRequirementsModel(IProgressMonitor progressMonitor, IFile modelFile) throws CouldNotDeleteRequirementsModelException {
-		// Deletes the file from the workspace.
-		try {
-			modelFile.delete(true, progressMonitor);
-		}
-		catch (CoreException e) {
-			LogUtil.log.error("Unagi caught an Eclipse exception while trying to delete a requirements model: {0}.", e, modelFile.getName()); //$NON-NLS-1$
-			throw new CouldNotDeleteRequirementsModelException(modelFile, e);
-		}
 	}
 
 	/**
@@ -118,7 +89,7 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	 * @throws IOException
 	 *           In case any I/O errors occur during this process.
 	 */
-	private void createRequirementsEMFContents(IFile modelFile, String name, String basePackage) throws IOException {
+	private void createRequirementsContents(IFile modelFile, String name, String basePackage) throws IOException {
 		String modelFilePath = modelFile.getLocationURI().toString();
 		LogUtil.log.info("Creating basic EMF contents for requirements file: {0}.", modelFilePath); //$NON-NLS-1$
 
@@ -154,6 +125,16 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	}
 
 	/**
+	 * @see it.unitn.disi.unagi.application.services.IManageModelsService#deleteRequirementsModel(org.eclipse.core.runtime.IProgressMonitor,
+	 *      org.eclipse.core.resources.IFile)
+	 */
+	@Override
+	public void deleteRequirementsModel(IProgressMonitor progressMonitor, IFile modelFile) throws CouldNotDeleteFileException {
+		// Deletes the file from the workspace.
+		deleteFile(progressMonitor, modelFile);
+	}
+
+	/**
 	 * @see it.unitn.disi.unagi.application.services.IManageModelsService#generateRequirementsClasses(org.eclipse.core.runtime.IProgressMonitor,
 	 *      org.eclipse.core.resources.IFile)
 	 */
@@ -162,18 +143,18 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 		try {
 			IProject project = modelFile.getProject();
 			IFolder sourcesFolder = project.getFolder(IManageProjectsService.SOURCES_PROJECT_SUBDIR);
-			
+
 			// Extracts model name and base package from the model file.
 			EPackage ePackage = extractEMFPackage(modelFile);
 			String modelName = modelFile.getLocation().removeFileExtension().lastSegment();
 			String basePackage = ePackage.getNsPrefix();
-	
+
 			// Creates the genmodel file that is used to generate the Java classes.
 			Resource genModelResource = createGenModelFile(progressMonitor, modelFile, modelName, basePackage, sourcesFolder);
-	
+
 			// Generates the sources for the classes declared in the model.
 			generateClasses(progressMonitor, genModelResource, modelFile);
-			
+
 			return sourcesFolder;
 		}
 		catch (IOException | CoreException e) {
@@ -204,7 +185,8 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	/**
 	 * TODO: document this method.
 	 * 
-	 * This method's implementation is based on code taken from the run() method of class org.eclipse.emf.codegen.ecore.Generator.
+	 * This method's implementation is based on code taken from the run() method of class
+	 * org.eclipse.emf.codegen.ecore.Generator.
 	 * 
 	 * @param modelName
 	 * @param modelFile
@@ -215,47 +197,47 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	 * @see org.eclipse.emf.codegen.ecore.Generator
 	 */
 	private Resource createGenModelFile(IProgressMonitor progressMonitor, IFile modelFile, String modelName, String basePackage, IFolder sourcesFolder) throws IOException {
-    // Create paths and URI objects for the model, the sources directory and the genmodel file. 
+		// Create paths and URI objects for the model, the sources directory and the genmodel file.
 		IPath ecorePath = modelFile.getLocation();
-    IPath sourcesDirPath = sourcesFolder.getFullPath();
-    IPath genModelPath = ecorePath.removeFileExtension().addFileExtension(GENMODEL_FILE_EXTENSION);
-    URI ecoreURI = URI.createFileURI(ecorePath.toString());
-    URI genModelURI = URI.createFileURI(genModelPath.toString());
-    
-    // Obtains the ECore package from the model file.
-    ResourceSet resourceSet = new ResourceSetImpl();
-    resourceSet.getURIConverter().getURIMap().putAll(EcorePlugin.computePlatformURIMap());
-    Resource resource = resourceSet.getResource(ecoreURI, true);
-    EPackage ePackage = (EPackage)resource.getContents().get(0);
+		IPath sourcesDirPath = sourcesFolder.getFullPath();
+		IPath genModelPath = ecorePath.removeFileExtension().addFileExtension(GENMODEL_FILE_EXTENSION);
+		URI ecoreURI = URI.createFileURI(ecorePath.toString());
+		URI genModelURI = URI.createFileURI(genModelPath.toString());
 
-    // Updates the progress monitor with the task that is about to happen.
-    progressMonitor.beginTask("", 2); //$NON-NLS-1$
-    progressMonitor.subTask(Messages.getFormattedString("task.generateRequirementsClasses.createGenModelFile.description", modelName, genModelPath)); //$NON-NLS-1$
+		// Obtains the ECore package from the model file.
+		ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.getURIConverter().getURIMap().putAll(EcorePlugin.computePlatformURIMap());
+		Resource resource = resourceSet.getResource(ecoreURI, true);
+		EPackage ePackage = (EPackage) resource.getContents().get(0);
 
-    // Creates the genmodel file as a resource in the workspace and configures its parameters.
-    // setModelDirectory() indicates where the class generation should take place.
-    Resource genModelResource = Resource.Factory.Registry.INSTANCE.getFactory(genModelURI).createResource(genModelURI);
-    GenModel genModel = GenModelFactory.eINSTANCE.createGenModel();
-    genModelResource.getContents().add(genModel);
-    resourceSet.getResources().add(genModelResource);
-    genModel.setModelDirectory(sourcesDirPath.toString());
-    genModel.getForeignModel().add(ecorePath.lastSegment());
-    genModel.initialize(Collections.singleton(ePackage));
-    GenPackage genPackage = genModel.getGenPackages().get(0);
-    genModel.setModelName(genModelURI.trimFileExtension().lastSegment());
-    genPackage.setBasePackage(basePackage);
-    
-    //
+		// Updates the progress monitor with the task that is about to happen.
+		progressMonitor.beginTask("", 2); //$NON-NLS-1$
+		progressMonitor.subTask(Messages.getFormattedString("task.generateRequirementsClasses.createGenModelFile.description", modelName, genModelPath)); //$NON-NLS-1$
+
+		// Creates the genmodel file as a resource in the workspace and configures its parameters.
+		// setModelDirectory() indicates where the class generation should take place.
+		Resource genModelResource = Resource.Factory.Registry.INSTANCE.getFactory(genModelURI).createResource(genModelURI);
+		GenModel genModel = GenModelFactory.eINSTANCE.createGenModel();
+		genModelResource.getContents().add(genModel);
+		resourceSet.getResources().add(genModelResource);
+		genModel.setModelDirectory(sourcesDirPath.toString());
+		genModel.getForeignModel().add(ecorePath.lastSegment());
+		genModel.initialize(Collections.singleton(ePackage));
+		GenPackage genPackage = genModel.getGenPackages().get(0);
+		genModel.setModelName(genModelURI.trimFileExtension().lastSegment());
+		genPackage.setBasePackage(basePackage);
+
+		//
 		URL baseGenModelURL = FileLocator.find(Activator.getBundle(), IManageModelsService.BASE_GENMODEL_FILE_PATH, Collections.EMPTY_MAP);
 		Resource baseGenModelResource = resourceSet.createResource(URI.createURI(baseGenModelURL.toString()));
 		baseGenModelResource.load(Collections.EMPTY_MAP);
-		GenModel baseGenModel = (GenModel)baseGenModelResource.getContents().get(0);
+		GenModel baseGenModel = (GenModel) baseGenModelResource.getContents().get(0);
 		for (GenPackage pkg : baseGenModel.getGenPackages())
 			genModel.getUsedGenPackages().add(pkg);
 
-    // Generates the genmodel file and updates the progress monitor.
-    progressMonitor.worked(1);
-    genModelResource.save(Collections.EMPTY_MAP);
+		// Generates the genmodel file and updates the progress monitor.
+		progressMonitor.worked(1);
+		genModelResource.save(Collections.EMPTY_MAP);
 
 		// Returns the genmodel object.
 		return genModelResource;

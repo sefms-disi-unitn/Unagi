@@ -85,7 +85,7 @@ public abstract class AbstractSourceFilesHandler extends AbstractHandler {
 		if ((selection == null) || (!(selection instanceof SourceFileProjectTreeElement)))
 			return null;
 
-		// Then retrieves the model to which the selected element refers.
+		// Then retrieves the file to which the selected element refers.
 		SourceFileProjectTreeElement element = (SourceFileProjectTreeElement) selection;
 		return element.getSourceFile();
 	}

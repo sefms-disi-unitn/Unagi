@@ -1,7 +1,7 @@
 package it.unitn.disi.unagi.application.services;
 
-import it.unitn.disi.unagi.application.exceptions.CouldNotCreateRequirementsModelException;
-import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteRequirementsModelException;
+import it.unitn.disi.unagi.application.exceptions.CouldNotCreateFileException;
+import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsClassesException;
 import it.unitn.disi.unagi.application.nls.Messages;
 
@@ -47,10 +47,10 @@ public interface IManageModelsService extends IManageFilesService {
 	 * @param basePackage
 	 *          The base package for the new requirements model.
 	 * @return The file that represents the newly created requirements model.
-	 * @throws CouldNotCreateRequirementsModelException
+	 * @throws CouldNotCreateFileException
 	 *           If there are any problems in the creation of the model.
 	 */
-	IFile createNewRequirementsModel(IProgressMonitor progressMonitor, IProject project, String name, String basePackage) throws CouldNotCreateRequirementsModelException;
+	IFile createNewRequirementsModel(IProgressMonitor progressMonitor, IProject project, String name, String basePackage) throws CouldNotCreateFileException;
 
 	/**
 	 * Deletes a requirements model from a project, also deleting it from the file system.
@@ -59,10 +59,10 @@ public interface IManageModelsService extends IManageFilesService {
 	 *          The workbench's progress monitor, in case the operation takes a long time.
 	 * @param modelFile
 	 *          The file representing the requirements model to be deleted.
-	 * @throws CouldNotDeleteRequirementsModelException
+	 * @throws CouldNotDeleteFileException
 	 *           If there are any problems in the deletion of the model.
 	 */
-	void deleteRequirementsModel(IProgressMonitor progressMonitor, IFile modelFile) throws CouldNotDeleteRequirementsModelException;
+	void deleteRequirementsModel(IProgressMonitor progressMonitor, IFile modelFile) throws CouldNotDeleteFileException;
 
 	/**
 	 * TODO: document this method.

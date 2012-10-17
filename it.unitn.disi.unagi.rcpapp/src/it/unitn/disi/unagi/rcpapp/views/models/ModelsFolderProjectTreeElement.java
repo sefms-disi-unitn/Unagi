@@ -1,5 +1,6 @@
 package it.unitn.disi.unagi.rcpapp.views.models;
 
+import it.unitn.disi.unagi.application.services.IManageConstraintsService;
 import it.unitn.disi.unagi.application.services.IManageModelsService;
 import it.unitn.disi.unagi.application.services.IManageProjectsService;
 import it.unitn.disi.unagi.rcpapp.nls.Messages;
@@ -23,7 +24,7 @@ import org.osgi.framework.Bundle;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class RequirementsFolderProjectTreeElement extends AbstractProjectTreeElement {
+public class ModelsFolderProjectTreeElement extends AbstractProjectTreeElement {
 	/** Name that should be displayed by this element in the tree. */
 	private static final String NAME = Messages.getString("object.models"); //$NON-NLS-1$
 
@@ -40,7 +41,7 @@ public class RequirementsFolderProjectTreeElement extends AbstractProjectTreeEle
 	private ProjectProjectTreeElement parent;
 
 	/** Constructor. */
-	public RequirementsFolderProjectTreeElement(Bundle bundle, IProject project, ProjectProjectTreeElement parent) {
+	public ModelsFolderProjectTreeElement(Bundle bundle, IProject project, ProjectProjectTreeElement parent) {
 		super(bundle);
 		LogUtil.log.debug("Creating a tree element for the models folder of project: {0}.", project.getName()); //$NON-NLS-1$
 		this.project = project;
@@ -58,16 +59,28 @@ public class RequirementsFolderProjectTreeElement extends AbstractProjectTreeEle
 	@Override
 	public Object[] getChildren() {
 		Object[] children = null;
-		List<RequirementsModelProjectTreeElement> requirementsFiles = new ArrayList<>();
+		List<ModelProjectTreeElement> modelFiles = new ArrayList<>();
 		try {
-			// Places all file resources under the models folder in a list.
+			// Places all recognized file resources under the models folder in a list.
 			if (modelsFolder.exists())
 				for (IResource resource : modelsFolder.members())
-					if ((resource.getType() == IResource.FILE) && (resource.getFullPath().getFileExtension().equals(IManageModelsService.REQUIREMENTS_MODEL_EXTENSION)))
-						requirementsFiles.add(new RequirementsModelProjectTreeElement(bundle, project, this, (IFile) resource));
+					if (resource.getType() == IResource.FILE) {
+						switch (resource.getFullPath().getFileExtension()) {
+
+						// Checks if the resource is a requirements model file.
+						case IManageModelsService.REQUIREMENTS_MODEL_EXTENSION:
+							modelFiles.add(new RequirementsModelProjectTreeElement(bundle, project, this, (IFile) resource));
+							break;
+
+						// Checks if the resource is a constraints file.
+						case IManageConstraintsService.CONSTRAINTS_FILE_EXTENSION:
+							modelFiles.add(new ConstraintsFileProjectTreeElement(bundle, project, this, (IFile) resource));
+							break;
+						}
+					}
 
 			// Convert the list to an array to return.
-			children = requirementsFiles.toArray();
+			children = modelFiles.toArray();
 		}
 		catch (CoreException e) {
 			LogUtil.log.error("Unagi caught an Eclipse error when retrieving the members of models folder: {0}/{1}.", e, project.getName(), modelsFolder.getName()); //$NON-NLS-1$
