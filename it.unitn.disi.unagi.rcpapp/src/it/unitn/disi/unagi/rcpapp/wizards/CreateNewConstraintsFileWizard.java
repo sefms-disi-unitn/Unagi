@@ -1,7 +1,7 @@
 package it.unitn.disi.unagi.rcpapp.wizards;
 
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
-import it.unitn.disi.unagi.application.services.IManageModelsService;
+import it.unitn.disi.unagi.application.services.IManageConstraintsService;
 import it.unitn.disi.unagi.rcpapp.IUnagiRcpAppBundleInfoProvider;
 import it.unitn.disi.unagi.rcpapp.nls.Messages;
 import it.unitn.disi.util.gui.DialogUtil;
@@ -21,30 +21,30 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 /**
- * The "Create Requirements Model" wizard, which guides the user in the creation of a new requirements model.
+ * The "Create New Constraints File" wizard, which guides the user in the creation of a new constraints file.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
 @Creatable
-public class CreateNewRequirementsModelWizard extends Wizard implements INewWizard {
+public class CreateNewConstraintsFileWizard extends Wizard implements INewWizard {
 	/** The bundle's activator, used to retrieve global information on the RCP application. */
 	@Inject
 	protected IUnagiRcpAppBundleInfoProvider activator;
 
-	/** Service class for model management. */
+	/** Service class for constraints file management. */
 	@Inject
-	private IManageModelsService manageModelsService;
+	private IManageConstraintsService manageConstraintsService;
 
 	/** Wizard page that asks for the basic information on the project. */
 	@Inject
-	private CreateNewRequirementsModelBasicWizardPage basicPage;
+	private CreateNewConstraintsFileBasicWizardPage basicPage;
 
 	/** Constructor. */
-	public CreateNewRequirementsModelWizard() {
-		LogUtil.log.debug("Creating a \"Create New Requirements Model\" wizard."); //$NON-NLS-1$
+	public CreateNewConstraintsFileWizard() {
+		LogUtil.log.debug("Creating a \"Create New Constraints File\" wizard."); //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
-		setWindowTitle(Messages.getString("gui.createNewRequirementsModelWizard.title")); //$NON-NLS-1$
+		setWindowTitle(Messages.getString("gui.createNewConstraintsFileWizard.title")); //$NON-NLS-1$
 	}
 
 	/** @see org.eclipse.jface.wizard.Wizard#addPages() */
@@ -57,29 +57,28 @@ public class CreateNewRequirementsModelWizard extends Wizard implements INewWiza
 	/** @see org.eclipse.jface.wizard.Wizard#performFinish() */
 	@Override
 	public boolean performFinish() {
-		LogUtil.log.debug("Finishing a \"Create New Requirements Model\" wizard."); //$NON-NLS-1$
+		LogUtil.log.debug("Finishing a \"Create New Constraints File\" wizard."); //$NON-NLS-1$
 
-		// Creates a new requirements model with the name that was specified in the wizard.
+		// Creates a new constraints file with the name that was specified in the wizard.
 		final IProject project = basicPage.getSelectedProject();
 		final String projectName = project.getName();
 		final String name = basicPage.getModelName();
-		final String basePackage = basicPage.getBasePackage();
 
-		// Creates and schedules the job that will create the new requirements model.
-		Job job = new Job(Messages.getFormattedString("service.createNewRequirementsModel.description", name, projectName)) { //$NON-NLS-1$
+		// Creates and schedules the job that will create the new constraints file.
+		Job job = new Job(Messages.getFormattedString("service.createNewConstraintsFile.description", name, projectName)) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					// Creates the new project.
-					manageModelsService.createNewRequirementsModel(monitor, project, name, basePackage);
+					manageConstraintsService.createNewConstraintsFile(monitor, project, name);
 				}
 				catch (UnagiException e) {
-					LogUtil.log.error("The \"Create New Requirements Model\" wizard was unable to create a new requirements model.", e); //$NON-NLS-1$
+					LogUtil.log.error("The \"Create New Constraints File\" wizard was unable to create a new constraints file.", e); //$NON-NLS-1$
 
 					// If the project could not be saved, show an error message.
-					final String statusMsg = Messages.getString("service.createNewRequirementsModel.error.status"); //$NON-NLS-1$
-					final String errorTitle = Messages.getString("service.createNewRequirementsModel.error.title"); //$NON-NLS-1$
-					final String errorMessage = Messages.getFormattedString("service.createNewRequirementsModel.error.message", name, projectName); //$NON-NLS-1$
+					final String statusMsg = Messages.getString("service.createNewConstraintsFile.error.status"); //$NON-NLS-1$
+					final String errorTitle = Messages.getString("service.createNewConstraintsFile.error.title"); //$NON-NLS-1$
+					final String errorMessage = Messages.getFormattedString("service.createNewConstraintsFile.error.message", name, projectName); //$NON-NLS-1$
 					return DialogUtil.displayError(activator.getBundleId(), statusMsg, errorTitle, errorMessage);
 				}
 

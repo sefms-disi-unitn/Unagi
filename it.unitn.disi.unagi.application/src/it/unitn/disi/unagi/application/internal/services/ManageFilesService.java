@@ -11,6 +11,7 @@ import it.unitn.disi.util.logging.LogUtil;
 
 import java.io.IOException;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -33,16 +34,15 @@ public abstract class ManageFilesService implements IManageFilesService {
 	 * @throws CouldNotCreateFileException
 	 */
 	protected IFile createNewFile(IProgressMonitor progressMonitor, IFile file) throws CouldNotCreateFileException {
-		String projectName = file.getProject().getName();
 		String filePath = file.getFullPath().toString();
-		LogUtil.log.info("Creating new file {0} in project: {1}.", filePath, projectName); //$NON-NLS-1$
+		LogUtil.log.info("Creating new file {0}.", filePath); //$NON-NLS-1$
 
 		// Creates the new file in the project.
 		try {
 			file.create(null, true, progressMonitor);
 		}
 		catch (CoreException e) {
-			LogUtil.log.error("Unagi caught an Eclipse exception while trying to create a file {0} in project {1}.", e, filePath, projectName); //$NON-NLS-1$
+			LogUtil.log.error("Unagi caught an Eclipse exception while trying to create a file {0}.", e, filePath); //$NON-NLS-1$
 			throw new CouldNotCreateFileException(file, e);
 		}
 
@@ -79,25 +79,24 @@ public abstract class ManageFilesService implements IManageFilesService {
 	 */
 	protected void checkCreatableFile(IFile file) throws CouldNotCreateFileException {
 		IProject project = file.getProject();
-		String projectName = project.getName();
 		String filePath = file.getFullPath().toString();
 
 		// Checks if the project really exists.
 		if (!project.exists()) {
-			LogUtil.log.error("Cannot create new file {0}, project doesn't exist: {1}.", filePath, projectName); //$NON-NLS-1$
+			LogUtil.log.error("Cannot create new file {0}, project doesn't exist: {1}.", filePath, project.getName()); //$NON-NLS-1$
 			throw new CouldNotCreateFileException(file);
 		}
 
 		// Checks that the folder in which the file should be created exists and is accessible.
-		IFolder folder = project.getFolder(file.getFullPath().removeLastSegments(1));
-		if ((!folder.exists()) || (!folder.isAccessible())) {
-			LogUtil.log.error("Cannot create new file {0} in project {1}. Containing folder doesn't exist or is not accessible.", filePath, projectName); //$NON-NLS-1$
+		IContainer folder = file.getParent();
+		if ((! (folder instanceof IFolder)) || (!folder.exists()) || (!folder.isAccessible())) {
+			LogUtil.log.error("Cannot create new file {0}. Containing folder doesn't exist or is not accessible.", filePath); //$NON-NLS-1$
 			throw new CouldNotCreateFileException(file);
 		}
 
 		// Checks that a file in this path doesn't yet exist.
 		if (file.exists()) {
-			LogUtil.log.error("Cannot create new file {0} in project {1}. The file already exists.", filePath, projectName); //$NON-NLS-1$
+			LogUtil.log.error("Cannot create new file {0}. The file already exists.", filePath); //$NON-NLS-1$
 			throw new CouldNotCreateFileException(file);
 		}
 	}
@@ -141,15 +140,12 @@ public abstract class ManageFilesService implements IManageFilesService {
 	 * @throws CouldNotDeleteFileException
 	 */
 	protected void deleteFile(IProgressMonitor progressMonitor, IFile file) throws CouldNotDeleteFileException {
-		String projectName = file.getProject().getName();
-		String filePath = file.getFullPath().toString();
-
 		// Deletes the file from the workspace.
 		try {
 			file.delete(true, progressMonitor);
 		}
 		catch (CoreException e) {
-			LogUtil.log.error("Unagi caught an Eclipse exception while trying to delete file {0} in project {1}.", e, filePath, projectName); //$NON-NLS-1$
+			LogUtil.log.error("Unagi caught an Eclipse exception while trying to delete file {0}.", e, file.getFullPath()); //$NON-NLS-1$
 			throw new CouldNotDeleteFileException(file, e);
 		}
 	}

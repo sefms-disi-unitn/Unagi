@@ -73,7 +73,7 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 			createRequirementsContents(modelFile, name, basePackage);
 		}
 		catch (IOException e) {
-			LogUtil.log.error("Could not create initial contents for requirements model {0} in project {1}.", e, modelFile.getFullPath(), projectName); //$NON-NLS-1$
+			LogUtil.log.error("Could not create initial contents for requirements model {0}.", e, modelFile.getFullPath()); //$NON-NLS-1$
 			throw new CouldNotCreateFileException(modelFile);
 		}
 
@@ -94,11 +94,11 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 		LogUtil.log.info("Creating basic EMF contents for requirements file: {0}.", modelFilePath); //$NON-NLS-1$
 
 		// Initializes the standalone factory implementation for ecore files and a new resource set.
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(IManageModelsService.REQUIREMENTS_MODEL_EXTENSION, new EcoreResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(REQUIREMENTS_MODEL_EXTENSION, new EcoreResourceFactoryImpl());
 		ResourceSet resourceSet = new ResourceSetImpl();
 
 		// Loads the goal model EMF file.
-		URL url = FileLocator.find(Activator.getBundle(), IManageModelsService.GORE_EMF_FILE_PATH, Collections.EMPTY_MAP);
+		URL url = FileLocator.find(Activator.getBundle(), GORE_EMF_FILE_PATH, Collections.EMPTY_MAP);
 		Resource ddlResource = resourceSet.createResource(URI.createURI(url.toString()));
 		ddlResource.load(Collections.EMPTY_MAP);
 
@@ -111,7 +111,7 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 
 		// Create the main goal for the requirements file and adds it to its package.
 		final EClass mainGoal = EcoreFactory.eINSTANCE.createEClass();
-		mainGoal.setName(IManageModelsService.MAIN_GOAL_BASE_NAME);
+		mainGoal.setName(MAIN_GOAL_BASE_NAME);
 		newPackage.getEClassifiers().add(mainGoal);
 
 		// Add the class Goal from the Goal Model EMF file as superclass of the main goal in the requirements model.
@@ -228,7 +228,7 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 		genPackage.setBasePackage(basePackage);
 
 		//
-		URL baseGenModelURL = FileLocator.find(Activator.getBundle(), IManageModelsService.BASE_GENMODEL_FILE_PATH, Collections.EMPTY_MAP);
+		URL baseGenModelURL = FileLocator.find(Activator.getBundle(), BASE_GENMODEL_FILE_PATH, Collections.EMPTY_MAP);
 		Resource baseGenModelResource = resourceSet.createResource(URI.createURI(baseGenModelURL.toString()));
 		baseGenModelResource.load(Collections.EMPTY_MAP);
 		GenModel baseGenModel = (GenModel) baseGenModelResource.getContents().get(0);

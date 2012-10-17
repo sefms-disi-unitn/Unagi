@@ -1,0 +1,5 @@
+package ${packageName}
+
+/* Write your OCLtm constraints here. */
+
+endpackage

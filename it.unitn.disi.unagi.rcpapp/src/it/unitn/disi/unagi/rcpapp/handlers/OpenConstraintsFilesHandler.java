@@ -56,7 +56,7 @@ public class OpenConstraintsFilesHandler extends AbstractConstraintsFilesHandler
 		LogUtil.log.debug("Executing \"Open Constraints File(s)\" command."); //$NON-NLS-1$
 
 		// This command can be executed for multiple models.
-		executeForMultipleConstraintss(selectionService);
+		executeForMultipleConstraints(selectionService);
 	}
 
 	/**

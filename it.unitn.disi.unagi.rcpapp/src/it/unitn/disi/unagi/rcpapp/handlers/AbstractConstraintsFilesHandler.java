@@ -99,7 +99,7 @@ public abstract class AbstractConstraintsFilesHandler extends AbstractHandler {
 	 *          The platform's selection service, used to determine what is the user's current workspace selection.
 	 * @return A set containing all constraints files that are currently selected in the workspace.
 	 */
-	public Set<IFile> retrieveMultipleSelectedConstraintss(ESelectionService selectionService) {
+	public Set<IFile> retrieveMultipleSelectedConstraints(ESelectionService selectionService) {
 		Set<IFile> constraints = new HashSet<>();
 		Object selection = selectionService.getSelection(UnagiProjectExplorerView.VIEW_ID);
 
@@ -147,8 +147,8 @@ public abstract class AbstractConstraintsFilesHandler extends AbstractHandler {
 	 * @param selectionService
 	 *          The platform's selection service, used to determine what is the user's current workspace selection.
 	 */
-	public void executeForMultipleConstraintss(ESelectionService selectionService) {
-		Set<IFile> constraints = retrieveMultipleSelectedConstraintss(selectionService);
+	public void executeForMultipleConstraints(ESelectionService selectionService) {
+		Set<IFile> constraints = retrieveMultipleSelectedConstraints(selectionService);
 		for (IFile model : constraints) {
 			handleSingleConstraints(model);
 		}
