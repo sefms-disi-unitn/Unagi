@@ -20,18 +20,23 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * TODO: document this type.
+ * Abstract editor part that implements handling of generic text files.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
 @Creatable
 public abstract class AbstractTextEditorPart implements MDirtyable, ModifyListener {
+	/** Name of a fixed-width fort to use in the text editor. */
+	private static final String FIXED_WIDTH_FONT_NAME = "Courier New"; //$NON-NLS-1$
+
 	/** The bundle's activator, used to retrieve global information about the bundle. */
 	@Inject
 	protected IUnagiRcpAppBundleInfoProvider activator;
@@ -39,30 +44,39 @@ public abstract class AbstractTextEditorPart implements MDirtyable, ModifyListen
 	/** The string key that corresponds to the concrete class that implements this abstract class. */
 	private String classKey;
 
-	/** TODO: document this field. */
+	/** The Eclipse part which holds the editor (this part is what gets actually added to the part stack). */
 	protected MPart part;
-	
-	/** TODO: document this field. */
+
+	/** The file that is opened by the editor. */
 	protected IFile file;
 
-	/** TODO: document this field. */
+	/** The text area widget that shows the contents of the file. */
 	protected Text textWidget;
 
 	/**
-	 * TODO: document this method.
+	 * Initializes widgets and other contents of the editor part.
 	 * 
 	 * @param parent
+	 *          The parent component that holds the editor.
+	 * @param input
+	 *          The input (i.e., information on the file) that has been set for this editor.
+	 * @param part
+	 *          The Eclipse part which holds the editor.
 	 */
 	@PostConstruct
 	public void init(Composite parent, MInput input, MPart part) {
 		this.part = part;
-		
+
 		// Retrieves the reference to the IFile object from the transient map.
-		file = (IFile)part.getTransientData().get(IManageFilesService.FILE_KEY);
+		file = (IFile) part.getTransientData().get(IManageFilesService.FILE_KEY);
 
 		// Uses a single text widget for the entire editor.
 		parent.setLayout(new FillLayout());
-		textWidget = new Text(parent, SWT.MULTI | SWT.WRAP);
+		textWidget = new Text(parent, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+
+		// Sets the font for a fixed-width style.
+		FontData fontData = new FontData(FIXED_WIDTH_FONT_NAME, 12, SWT.NORMAL);
+		textWidget.setFont(new Font(parent.getDisplay(), fontData));
 
 		// Retrieves the contents of the file that is being edited.
 		textWidget.setText(retrieveFileContents());
@@ -72,7 +86,7 @@ public abstract class AbstractTextEditorPart implements MDirtyable, ModifyListen
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Sets the focus on the main component of the editor part (i.e., the text area).
 	 */
 	@Focus
 	protected void setFocus() {
@@ -131,7 +145,7 @@ public abstract class AbstractTextEditorPart implements MDirtyable, ModifyListen
 	@Persist
 	public void save() {
 		String path = file.getFullPath().toString();
-		
+
 		// Asks the service class to save the file.
 		try {
 			LogUtil.log.info("Saving the contents of editor {0} to file: {1}", part.getLabel(), path); //$NON-NLS-1$
@@ -141,7 +155,7 @@ public abstract class AbstractTextEditorPart implements MDirtyable, ModifyListen
 			// If writing was successful (no exceptions), sets the editor as clean.
 			setDirty(false);
 		}
-		
+
 		// In case of application errors, shows an error dialog.
 		catch (UnagiException e) {
 			String classKey = getClassKey();
@@ -160,7 +174,7 @@ public abstract class AbstractTextEditorPart implements MDirtyable, ModifyListen
 	 */
 	private String retrieveFileContents() {
 		String path = file.getFullPath().toString();
-		
+
 		try {
 			LogUtil.log.info("Reading the contents of file {0} for editor: {1}", path, part.getLabel()); //$NON-NLS-1$
 			IManageFilesService manageFilesService = getManageFilesService();
@@ -195,9 +209,9 @@ public abstract class AbstractTextEditorPart implements MDirtyable, ModifyListen
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Template method to be implemented by the concrete subclasses, providing the actual file management service class.
 	 * 
-	 * @return
+	 * @return The file management service class that should handle the type of file edited by this editor part.
 	 */
 	protected abstract IManageFilesService getManageFilesService();
 }
