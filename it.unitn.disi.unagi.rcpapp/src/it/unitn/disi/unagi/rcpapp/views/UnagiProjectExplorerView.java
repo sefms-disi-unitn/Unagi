@@ -131,7 +131,9 @@ public class UnagiProjectExplorerView implements IResourceChangeListener, ISelec
 	/** @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent) */
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
-		// FIXME: learn how to work with deltas for a more efficient refresh.
+		// TODO: issue #16
+		// https://github.com/sefms-disi-unitn/Unagi/issues/16
+		
 		// Currently, anything that is done to the workspace resets the entire tree. Fix that.
 		if (event.getSource() instanceof IWorkspace)
 			Display.getDefault().syncExec(new Runnable() {

@@ -144,8 +144,9 @@ public class CreateNewRequirementsModelBasicWizardPage extends WizardPage implem
 	/** @see org.eclipse.swt.events.KeyListener#keyReleased(org.eclipse.swt.events.KeyEvent) */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// FIXME: check if the name has no space and the file doesn't exist. Add an Eclipse-like error to the field when
-		// there's a problem. Check that the extension wasn't specified also and that the file doesn't exist.
+		// TODO: issue #17
+		// https://github.com/sefms-disi-unitn/Unagi/issues/17
+
 		// The page is complete if the project is selected and both name and base package are filled.
 		setPageComplete((selectedProject != null) && (!nameField.getText().isEmpty()) && (!basePackageField.getText().isEmpty()));
 	}

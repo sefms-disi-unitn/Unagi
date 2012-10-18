@@ -94,6 +94,9 @@ public class CreateNewProjectBasicWizardPage extends WizardPage {
 	 *          The key event passed on by the event dispatcher.
 	 */
 	private final void processNameFieldKeyReleased(KeyEvent e) {
+		// TODO: issue #17
+		// https://github.com/sefms-disi-unitn/Unagi/issues/17
+
 		// Checks if all required fields are filled to set the page complete flag.
 		setPageComplete(isAllFilled());
 	}

@@ -32,6 +32,9 @@ public class ProjectProjectTreeElement extends AbstractProjectTreeElement {
 		super(bundle);
 		this.project = project;
 		LogUtil.log.debug("Creating a tree element for project: {0}.", project.getName()); //$NON-NLS-1$
+		
+		// TODO: issue #15
+		// https://github.com/sefms-disi-unitn/Unagi/issues/15
 
 		// Build the project's children.
 		children = new AbstractProjectTreeElement[2];
@@ -55,7 +58,6 @@ public class ProjectProjectTreeElement extends AbstractProjectTreeElement {
 	/** @see it.unitn.disi.unagi.rcpapp.views.models.AbstractProjectTreeElement#hasChildren() */
 	@Override
 	public boolean hasChildren() {
-		// FIXME: should we check if the project is well-formed? Has all folders, etc.
 		return true;
 	}
 
