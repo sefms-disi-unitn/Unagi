@@ -1,7 +1,7 @@
 package it.unitn.disi.unagi.rcpapp.handlers;
 
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
-import it.unitn.disi.unagi.application.services.IManageConstraintsService;
+import it.unitn.disi.unagi.application.services.IManageModelsService;
 import it.unitn.disi.util.logging.LogUtil;
 
 import javax.inject.Inject;
@@ -19,9 +19,9 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
  * @version 1.0
  */
 public class CompileConstraintFilesHandler extends AbstractConstraintsFilesHandler {
-	/** Service class for constraints files management. */
+	/** Service class for model management. */
 	@Inject
-	private IManageConstraintsService manageConstraintsService;
+	private IManageModelsService manageModelsService;
 
 	/**
 	 * Method that handles the command's execution.

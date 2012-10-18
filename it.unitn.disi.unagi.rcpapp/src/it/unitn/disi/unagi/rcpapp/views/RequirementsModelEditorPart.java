@@ -8,15 +8,16 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
 
 /**
- * TODO: document this type.
+ * Editor part for requirements models. Should be loaded in the "editor area" when the user open one of the models she
+ * has created.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
 @Creatable
-public class EcoreEditorPart extends AbstractTextEditorPart {
+public class RequirementsModelEditorPart extends AbstractTextEditorPart {
 	/** ID of this part. */
-	public static final String PART_ID = EcoreEditorPart.class.getName();
+	public static final String PART_ID = RequirementsModelEditorPart.class.getName();
 
 	/** Service class for model management. */
 	@Inject

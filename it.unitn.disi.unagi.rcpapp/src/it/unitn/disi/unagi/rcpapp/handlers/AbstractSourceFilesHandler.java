@@ -133,10 +133,13 @@ public abstract class AbstractSourceFilesHandler extends AbstractHandler {
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Internal method that adds to a given set all file descriptors from source code files that belong to a given source
+	 * package.
 	 * 
 	 * @param pkgElem
+	 *          The package whose source code files should be added to the set.
 	 * @param sources
+	 *          The set of file descriptors in which the files should be added.
 	 */
 	private void addSourcesFromPackage(SourcePackageProjectTreeElement pkgElem, Set<IFile> sources) {
 		for (Object obj : pkgElem.getChildren()) {

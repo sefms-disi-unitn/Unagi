@@ -1,6 +1,5 @@
 package it.unitn.disi.unagi.rcpapp.views.models;
 
-import it.unitn.disi.unagi.application.services.IManageConstraintsService;
 import it.unitn.disi.unagi.application.services.IManageModelsService;
 import it.unitn.disi.unagi.application.services.IManageProjectsService;
 import it.unitn.disi.unagi.rcpapp.nls.Messages;
@@ -19,7 +18,7 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
 /**
- * Project tree element that represents a folder containing requirements models.
+ * Project tree element that represents a folder containing models (requirements, constraints, etc.).
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
@@ -73,7 +72,7 @@ public class ModelsFolderProjectTreeElement extends AbstractProjectTreeElement {
 							break;
 
 						// Checks if the resource is a constraints file.
-						case IManageConstraintsService.CONSTRAINTS_FILE_EXTENSION:
+						case IManageModelsService.CONSTRAINTS_FILE_EXTENSION:
 							modelFiles.add(new ConstraintsFileProjectTreeElement(bundle, project, this, (IFile) resource));
 							break;
 						}

@@ -4,12 +4,12 @@ import it.unitn.disi.unagi.application.exceptions.CouldNotCreateFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotReadFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotSaveFileException;
-import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.IManageFilesService;
 import it.unitn.disi.util.io.FileIOUtil;
 import it.unitn.disi.util.logging.LogUtil;
 
 import java.io.IOException;
+import java.net.URL;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -19,19 +19,26 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * TODO: document this type.
+ * Abstract class that implements methods related to file management. Can be extended by any service class whose purpose
+ * is to manipulate some kind of file type.
+ * 
+ * Notice that some methods are protected and should be called by the specific service class, whereas some are public
+ * which allow GUI classes to treat any file management service the same way (i.e., to use polymorphism).
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
 public abstract class ManageFilesService implements IManageFilesService {
 	/**
-	 * TODO: document this method.
+	 * Internal (protected) method for creating a new file.
 	 * 
 	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
 	 * @param file
-	 * @return
+	 *          The file descriptor that represents a file in an Eclipse project.
+	 * @return The same file descriptor that was passed as argument, but now the actual file has been created.
 	 * @throws CouldNotCreateFileException
+	 *           If there are any problems in the creation of the file.
 	 */
 	protected IFile createNewFile(IProgressMonitor progressMonitor, IFile file) throws CouldNotCreateFileException {
 		String filePath = file.getFullPath().toString();
@@ -51,15 +58,18 @@ public abstract class ManageFilesService implements IManageFilesService {
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Internal (protected) method for generating a file descriptor for a file that can be created, i.e., the method
+	 * checks if all necessary conditions for file creation are present.
 	 * 
 	 * @param folder
-	 * @param name
-	 * @param extension
-	 * @return
-	 * @throws UnagiException 
+	 *          The folder descriptor that indicates where the file should be created.
+	 * @param fileName
+	 *          The name of the file to be created.
+	 * @return The file descriptor for a file whose conditions for creation have been verified.
+	 * @throws CouldNotCreateFileException
+	 *           If some condition for creation fails the verification.
 	 */
-	protected IFile generateCreatableFile(IFolder folder, String fileName) throws CouldNotCreateFileException {
+	protected IFile generateCreatableFileDescriptor(IFolder folder, String fileName) throws CouldNotCreateFileException {
 		// Creates an IFile reference to it in the specified folder.
 		IFile file = folder.getFile(fileName);
 
@@ -72,24 +82,28 @@ public abstract class ManageFilesService implements IManageFilesService {
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Internal (protected) method for verifying the conditions for file creation: a file with the same name must not
+	 * exist in the folder, the folder should exist and be accessible and, finally, the Eclipse project should exist and
+	 * be open.
 	 * 
 	 * @param file
-	 * @throws UnagiException
+	 *          The file descriptor representing a file that we want to check if it can be created.
+	 * @throws CouldNotCreateFileException
+	 *           If some condition for creation fails the verification.
 	 */
 	protected void checkCreatableFile(IFile file) throws CouldNotCreateFileException {
 		IProject project = file.getProject();
 		String filePath = file.getFullPath().toString();
 
 		// Checks if the project really exists.
-		if (!project.exists()) {
+		if (!project.exists() || !project.isOpen()) {
 			LogUtil.log.error("Cannot create new file {0}, project doesn't exist: {1}.", filePath, project.getName()); //$NON-NLS-1$
 			throw new CouldNotCreateFileException(file);
 		}
 
 		// Checks that the folder in which the file should be created exists and is accessible.
 		IContainer folder = file.getParent();
-		if ((! (folder instanceof IFolder)) || (!folder.exists()) || (!folder.isAccessible())) {
+		if ((!(folder instanceof IFolder)) || (!folder.exists()) || (!folder.isAccessible())) {
 			LogUtil.log.error("Cannot create new file {0}. Containing folder doesn't exist or is not accessible.", filePath); //$NON-NLS-1$
 			throw new CouldNotCreateFileException(file);
 		}
@@ -106,7 +120,8 @@ public abstract class ManageFilesService implements IManageFilesService {
 	public StringBuffer readFile(IFile file) throws CouldNotReadFileException {
 		// Tries to read the contents of the file from its location.
 		try {
-			return FileIOUtil.readFile(file.getLocation().toString());
+			URL fileURL = file.getLocationURI().toURL();
+			return FileIOUtil.readFile(fileURL);
 		}
 
 		// In case of I/O errors, throws an application exception.
@@ -133,11 +148,14 @@ public abstract class ManageFilesService implements IManageFilesService {
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Internal (protected) method for deleting an existing file.
 	 * 
 	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
 	 * @param file
+	 *          The file descriptor that represents a file in an Eclipse project.
 	 * @throws CouldNotDeleteFileException
+	 *           If there are any problems in the deletion of the file.
 	 */
 	protected void deleteFile(IProgressMonitor progressMonitor, IFile file) throws CouldNotDeleteFileException {
 		// Deletes the file from the workspace.

@@ -1,7 +1,7 @@
 package it.unitn.disi.unagi.rcpapp.wizards;
 
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
-import it.unitn.disi.unagi.application.services.IManageConstraintsService;
+import it.unitn.disi.unagi.application.services.IManageModelsService;
 import it.unitn.disi.unagi.rcpapp.IUnagiRcpAppBundleInfoProvider;
 import it.unitn.disi.unagi.rcpapp.nls.Messages;
 import it.unitn.disi.util.gui.DialogUtil;
@@ -34,7 +34,7 @@ public class CreateNewConstraintsFileWizard extends Wizard implements INewWizard
 
 	/** Service class for constraints file management. */
 	@Inject
-	private IManageConstraintsService manageConstraintsService;
+	private IManageModelsService manageModelsService;
 
 	/** Wizard page that asks for the basic information on the project. */
 	@Inject
@@ -70,7 +70,7 @@ public class CreateNewConstraintsFileWizard extends Wizard implements INewWizard
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					// Creates the new project.
-					manageConstraintsService.createNewConstraintsFile(monitor, project, name);
+					manageModelsService.createNewConstraintsFile(monitor, project, name);
 				}
 				catch (UnagiException e) {
 					LogUtil.log.error("The \"Create New Constraints File\" wizard was unable to create a new constraints file.", e); //$NON-NLS-1$

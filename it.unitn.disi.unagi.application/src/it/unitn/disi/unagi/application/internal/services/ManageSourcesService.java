@@ -3,7 +3,7 @@ package it.unitn.disi.unagi.application.internal.services;
 import it.unitn.disi.unagi.application.services.IManageSourcesService;
 
 /**
- * TODO: document this type.
+ * Implementation for the service class for source files management.
  *
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0

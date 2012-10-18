@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.Path;
 
 /**
  * Interface for the model management service, which allows the user to perform operations, such as creation, deletion,
- * compilation, etc., on models such as requirements models.
+ * compilation, etc., on models such as requirements models or constraints files.
  * 
  * Services contain application business logic that is GUI-independent and should be registered by the application
  * bundle in OSGi for proper dependency injection in the GUI classes provided by the main RCPApp bundle.
@@ -25,15 +25,24 @@ import org.eclipse.core.runtime.Path;
 public interface IManageModelsService extends IManageFilesService {
 	/** File extension for requirements models. */
 	String REQUIREMENTS_MODEL_EXTENSION = "ecore"; //$NON-NLS-1$
-	
-	/** Path for the ECore file that defines base classes for goal model elements. */
+
+	/** File extension for constraint files. */
+	String CONSTRAINTS_FILE_EXTENSION = "ocl"; //$NON-NLS-1$
+
+	/** Path for the file that defines base classes for goal model elements. */
 	IPath GORE_EMF_FILE_PATH = new Path("META-INF/gore.ecore"); //$NON-NLS-1$
-	
-	/** Path for the GenModel file for the base packages eca, goalmodel and LTL. */
+
+	/** Path for the generator file for the base packages eca, goalmodel and LTL. */
 	IPath BASE_GENMODEL_FILE_PATH = new Path("META-INF/zanshin.genmodel"); //$NON-NLS-1$
+
+	/** Path for the template for new constraints files. */
+	IPath CONSTRAINTS_TEMPLATE_FILE_PATH = new Path("META-INF/template.ocl"); //$NON-NLS-1$;
 
 	/** Name of the main goal used when creating a new requirements model. */
 	String MAIN_GOAL_BASE_NAME = Messages.getString("emf.mainGoal.baseName"); //$NON-NLS-1$
+
+	/** Name of the variable that represents the package name in the constraints template file. */
+	String CONSTRAINTS_VARIABLE_PACKAGE_NAME = "packageName"; //$NON-NLS-1$
 
 	/**
 	 * Creates a new requirements model in the given project.
@@ -65,12 +74,42 @@ public interface IManageModelsService extends IManageFilesService {
 	void deleteRequirementsModel(IProgressMonitor progressMonitor, IFile modelFile) throws CouldNotDeleteFileException;
 
 	/**
-	 * TODO: document this method.
+	 * Generates source files for the classes that are defined in a given requirements model.
 	 * 
 	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
 	 * @param modelFile
-	 * @return
+	 *          The file representing the requirements model whose classes should be generated.
+	 * @return The folder in which the classes were generated.
 	 * @throws CouldNotGenerateRequirementsClassesException
+	 *           If there are any problems in the generation of source files.
 	 */
 	IFolder generateRequirementsClasses(IProgressMonitor progressMonitor, IFile modelFile) throws CouldNotGenerateRequirementsClassesException;
+
+	/**
+	 * Creates a new constraints file in the given project.
+	 * 
+	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
+	 * @param project
+	 *          The project in which the file should be created.
+	 * @param name
+	 *          The name of the new constraints file.
+	 * @return The newly created constraints file.
+	 * @throws CouldNotCreateFileException
+	 *           If there are any problems in the creation of the file.
+	 */
+	IFile createNewConstraintsFile(IProgressMonitor progressMonitor, IProject project, String name) throws CouldNotCreateFileException;
+
+	/**
+	 * Deletes a constraints file from a project, also deleting it from the file system.
+	 * 
+	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
+	 * @param constraintsFile
+	 *          The constraints file to be deleted.
+	 * @throws CouldNotDeleteFileException
+	 *           If there are any problems in the deletion of the file.
+	 */
+	void deleteConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotDeleteFileException;
 }

@@ -3,7 +3,7 @@ package it.unitn.disi.unagi.rcpapp.handlers;
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.IManageFilesService;
 import it.unitn.disi.unagi.rcpapp.IUnagiRcpAppBundleInfoProvider;
-import it.unitn.disi.unagi.rcpapp.views.EcoreEditorPart;
+import it.unitn.disi.unagi.rcpapp.views.RequirementsModelEditorPart;
 import it.unitn.disi.util.logging.LogUtil;
 
 import javax.inject.Inject;
@@ -87,8 +87,8 @@ public class OpenRequirementsModelsHandler extends AbstractRequirementsModelsHan
 				// Retrieves the part stack in which the model editor will be open.
 				MPartStack stack = (MPartStack) modelService.find(activator.getEditorStackId(), application);
 
-				// Creates a new part for the model editor, sets its label and indicates the ECore Editor as the part to use.
-				String editorURI = "bundleclass://" + activator.getBundleId() + '/' + EcoreEditorPart.PART_ID; //$NON-NLS-1$
+				// Creates a new part for the model editor, sets its label and indicates the Requirements Model Editor as the part to use.
+				String editorURI = "bundleclass://" + activator.getBundleId() + '/' + RequirementsModelEditorPart.PART_ID; //$NON-NLS-1$
 				MInputPart part = MBasicFactory.INSTANCE.createInputPart();
 				part.setLabel(modelName);
 				part.setContributionURI(editorURI);

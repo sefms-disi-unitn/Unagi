@@ -7,11 +7,16 @@ import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsCl
 import it.unitn.disi.unagi.application.nls.Messages;
 import it.unitn.disi.unagi.application.services.IManageModelsService;
 import it.unitn.disi.unagi.application.services.IManageProjectsService;
+import it.unitn.disi.util.io.FileIOUtil;
 import it.unitn.disi.util.logging.LogUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -46,7 +51,7 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
  * @version 1.0
  */
 public class ManageModelsService extends ManageFilesService implements IManageModelsService {
-	/** TODO: document this field. */
+	/** File extension for model generation files. */
 	private static final String GENMODEL_FILE_EXTENSION = "genmodel"; //$NON-NLS-1$
 
 	/**
@@ -63,7 +68,7 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 
 		// Generates a file object in the folder, checking that the file can be created later.
 		String fileName = name + '.' + REQUIREMENTS_MODEL_EXTENSION;
-		IFile modelFile = generateCreatableFile(modelsFolder, fileName);
+		IFile modelFile = generateCreatableFileDescriptor(modelsFolder, fileName);
 
 		// Creates the new model file in the project.
 		createNewFile(progressMonitor, modelFile);
@@ -82,7 +87,7 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	}
 
 	/**
-	 * Internal method that creates the basic EMF contents of a new ECore file that is being created.
+	 * Internal method that creates the basic EMF contents of a new requirements model file that is being created.
 	 * 
 	 * @param modelFile
 	 *          The workspace file in which to put the contents.
@@ -153,7 +158,7 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 			Resource genModelResource = createGenModelFile(progressMonitor, modelFile, modelName, basePackage, sourcesFolder);
 
 			// Generates the sources for the classes declared in the model.
-			generateClasses(progressMonitor, genModelResource, modelFile);
+			generateClasses(progressMonitor, genModelResource);
 
 			return sourcesFolder;
 		}
@@ -164,10 +169,11 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Internal method for retrieving the EPackage element from an EMF ECore file.
 	 * 
 	 * @param modelFile
-	 * @return
+	 *          The ECore file from which to retrieve the ECore package element.
+	 * @return The EPackage element representing an ECore package.
 	 */
 	private EPackage extractEMFPackage(IFile modelFile) {
 		// Initializes the ECore model.
@@ -183,17 +189,25 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	}
 
 	/**
-	 * TODO: document this method.
+	 * Internal method for creating the model generation file from a given EMF ECore file.
 	 * 
 	 * This method's implementation is based on code taken from the run() method of class
 	 * org.eclipse.emf.codegen.ecore.Generator.
 	 * 
-	 * @param modelName
+	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
 	 * @param modelFile
+	 *          The ECore file that defines the classes that guide the generation of source code.
+	 * @param modelName
+	 *          The name of the model that is defined in the model file.
 	 * @param basePackage
+	 *          The base package under which the classes should be generated.
 	 * @param sourcesFolder
-	 * @return
-	 * @throws CouldNotGenerateRequirementsClassesException
+	 *          The folder in which source code files should be generated.
+	 * @return A resource file that represents a model generator that can be used for actually generating the source code
+	 *         in a later step.
+	 * @throws IOException
+	 *           If there are any problems in the creation of the model generation file.
 	 * @see org.eclipse.emf.codegen.ecore.Generator
 	 */
 	private Resource createGenModelFile(IProgressMonitor progressMonitor, IFile modelFile, String modelName, String basePackage, IFolder sourcesFolder) throws IOException {
@@ -243,7 +257,21 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 		return genModelResource;
 	}
 
-	private void generateClasses(IProgressMonitor progressMonitor, Resource genModelResource, IFile modelFile) throws CoreException {
+	/**
+	 * Internal method for generating source code files given the instructions contained in the model generator file that
+	 * was created earlier from the EMF Ecore file that defines the model.
+	 * 
+	 * This method's implementation is based on code taken from the run() method of class
+	 * org.eclipse.emf.codegen.ecore.Generator.
+	 * 
+	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
+	 * @param genModelResource
+	 *          The model generator file that contains the instructions for source code generation.
+	 * @throws CoreException
+	 *           If there are any problems in the generation of source files.
+	 */
+	private void generateClasses(IProgressMonitor progressMonitor, Resource genModelResource) throws CoreException {
 		// Retrieves the genmodel object from the genmodel resource and checks that it's valid.
 		GenModel genModel = (GenModel) genModelResource.getContents().get(0);
 		IStatus status = genModel.validate();
@@ -264,5 +292,75 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 
 		// Generates the source code following the instructions contained in the genmodel file.
 		generator.generate(genModel, GenBaseGeneratorAdapter.MODEL_PROJECT_TYPE, CodeGenUtil.EclipseUtil.createMonitor(progressMonitor, 1));
+	}
+
+	/**
+	 * @see it.unitn.disi.unagi.application.services.IManageConstraintsService#createNewConstraintsFile(org.eclipse.core.runtime.IProgressMonitor,
+	 *      org.eclipse.core.resources.IProject, java.lang.String)
+	 */
+	@Override
+	public IFile createNewConstraintsFile(IProgressMonitor progressMonitor, IProject project, String name) throws CouldNotCreateFileException {
+		String projectName = project.getName();
+		LogUtil.log.info("Creating a new constraints file {0} in project {1}.", name, projectName); //$NON-NLS-1$
+
+		// Obtains the models folder.
+		IFolder modelsFolder = project.getFolder(IManageProjectsService.MODELS_PROJECT_SUBDIR);
+
+		// Generates a file object in the folder, checking that the file can be created later.
+		String fileName = name + '.' + CONSTRAINTS_FILE_EXTENSION;
+		IFile constraintsFile = generateCreatableFileDescriptor(modelsFolder, fileName);
+
+		// Creates the new constraints file in the project.
+		createNewFile(progressMonitor, constraintsFile);
+
+		// Generates initial contents for the constraints file.
+		try {
+			createConstraintsContents(progressMonitor, constraintsFile, name);
+		}
+		catch (IOException | CoreException e) {
+			LogUtil.log.error("Could not create initial contents for requirements model {0}.", e, constraintsFile.getFullPath()); //$NON-NLS-1$
+			throw new CouldNotCreateFileException(constraintsFile);
+		}
+
+		// Returns the newly created file.
+		return constraintsFile;
+	}
+
+	/**
+	 * Internal method that creates the basic contents of a new constraints file that is being created.
+	 * 
+	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
+	 * @param constraintsFile
+	 *          The workspace file in which to put the contents.
+	 * @param packageName
+	 *          The name of the package that is being defined in this constraints file.
+	 * @throws CoreException
+	 *           In case Eclipse cannot set the contents of the file.
+	 * @throws IOException
+	 *           In case any I/O errors occur during the processing of the template for constraints files.
+	 */
+	private void createConstraintsContents(IProgressMonitor progressMonitor, IFile constraintsFile, String packageName) throws CoreException, IOException {
+		// Loads the template for constraints files from the plug-in bundle.
+		URL templateFileURL = FileLocator.find(Activator.getBundle(), CONSTRAINTS_TEMPLATE_FILE_PATH, Collections.EMPTY_MAP);
+
+		// Process the template, replacing the package name with the name of the file (without extension).
+		Map<String, Object> map = new HashMap<>();
+		map.put(CONSTRAINTS_VARIABLE_PACKAGE_NAME, packageName);
+		String contents = FileIOUtil.processTemplate(templateFileURL, map);
+
+		// Changes the contents of the constraints file.
+		InputStream source = new ByteArrayInputStream(contents.getBytes());
+		constraintsFile.setContents(source, true, false, progressMonitor);
+	}
+
+	/**
+	 * @see it.unitn.disi.unagi.application.services.IManageConstraintsService#deleteConstraintsFile(org.eclipse.core.runtime.IProgressMonitor,
+	 *      org.eclipse.core.resources.IFile)
+	 */
+	@Override
+	public void deleteConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotDeleteFileException {
+		// Deletes the file from the workspace.
+		deleteFile(progressMonitor, constraintsFile);
 	}
 }

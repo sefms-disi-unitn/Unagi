@@ -8,7 +8,8 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
 
 /**
- * TODO: document this type.
+ * Editor part for source files. Should be loaded in the "editor area" when the user opens one of the source files that
+ * were generated from the requirements.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0

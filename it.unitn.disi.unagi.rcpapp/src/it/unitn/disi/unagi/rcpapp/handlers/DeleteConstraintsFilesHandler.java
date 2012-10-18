@@ -1,7 +1,7 @@
 package it.unitn.disi.unagi.rcpapp.handlers;
 
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
-import it.unitn.disi.unagi.application.services.IManageConstraintsService;
+import it.unitn.disi.unagi.application.services.IManageModelsService;
 import it.unitn.disi.unagi.rcpapp.nls.Messages;
 import it.unitn.disi.util.logging.LogUtil;
 
@@ -26,9 +26,9 @@ import org.eclipse.swt.widgets.Shell;
  * @version 1.0
  */
 public class DeleteConstraintsFilesHandler extends AbstractConstraintsFilesHandler {
-	/** Service class for constraints files management. */
+	/** Service class for model management. */
 	@Inject
-	private IManageConstraintsService manageConstraintsService;
+	private IManageModelsService manageModelsService;
 
 	/**
 	 * Method that handles the command's execution.
@@ -77,6 +77,6 @@ public class DeleteConstraintsFilesHandler extends AbstractConstraintsFilesHandl
 	@Override
 	protected void doExecute(IProgressMonitor monitor, IFile file) throws UnagiException {
 		// Delegates to the application class the deletion of the given file.
-		manageConstraintsService.deleteConstraintsFile(monitor, file);
+		manageModelsService.deleteConstraintsFile(monitor, file);
 	}
 }

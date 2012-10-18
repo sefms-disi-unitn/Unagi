@@ -21,10 +21,10 @@ public interface IManageProjectsService {
 	/** Name of the project sub-directory that will hold the project's models. */
 	String MODELS_PROJECT_SUBDIR = Messages.getString("fs.models.folderName"); //$NON-NLS-1$
 	
-	/** TODO: document this field. */
+	/** name of the project sub-directory that will hold the project's source code files. */
 	String SOURCES_PROJECT_SUBDIR = Messages.getString("fs.sources.folderName"); //$NON-NLS-1$
 	
-	/** TODO: document this field. */
+	/** Name of the project sub-directory that will hold the project's compiled classes. */
 	String CLASSES_PROJECT_SUBDIR = Messages.getString("fs.classes.folderName"); //$NON-NLS-1$
 
 	/** List of names of sub-directories that should exist/be created for every Unagi project. */
