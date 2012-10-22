@@ -29,7 +29,7 @@ public interface IManageFilesService {
 	 * @throws CouldNotReadFileException
 	 *           If there are any problems in reading the file.
 	 */
-	StringBuffer readFile(IFile file) throws CouldNotReadFileException;
+	String readFile(IFile file) throws CouldNotReadFileException;
 
 	/**
 	 * Saves a given content to the specified file.

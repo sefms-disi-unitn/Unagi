@@ -18,7 +18,7 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class CompileConstraintFilesHandler extends AbstractConstraintsFilesHandler {
+public class CompileConstraintsFilesHandler extends AbstractConstraintsFilesHandler {
 	/** Service class for model management. */
 	@Inject
 	private IManageModelsService manageModelsService;
@@ -58,6 +58,6 @@ public class CompileConstraintFilesHandler extends AbstractConstraintsFilesHandl
 	@Override
 	protected void doExecute(IProgressMonitor monitor, IFile file) throws UnagiException {
 		// Delegates to the application class the compilation of the constraints file.
-		System.out.println("###### STOPPED HERE: Compile file: " + file.getFullPath());
+		manageModelsService.compileConstraintsFile(monitor, file);
 	}
 }

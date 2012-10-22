@@ -1,5 +1,6 @@
 package it.unitn.disi.unagi.application.services;
 
+import it.unitn.disi.unagi.application.exceptions.CouldNotCompileConstraintsFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsClassesException;
@@ -31,6 +32,12 @@ public interface IManageModelsService extends IManageFilesService {
 
 	/** Path for the file that defines base classes for goal model elements. */
 	IPath GORE_EMF_FILE_PATH = new Path("META-INF/gore.ecore"); //$NON-NLS-1$
+
+	/** Path for the file that defines base classes for goal model elements. */
+	IPath ECA_EMF_FILE_PATH = new Path("META-INF/eca.ecore"); //$NON-NLS-1$
+
+	/** Path for the file that defines base classes for goal model elements. */
+	IPath LTL_EMF_FILE_PATH = new Path("META-INF/ltl.ecore"); //$NON-NLS-1$
 
 	/** Path for the generator file for the base packages eca, goalmodel and LTL. */
 	IPath BASE_GENMODEL_FILE_PATH = new Path("META-INF/zanshin.genmodel"); //$NON-NLS-1$
@@ -112,4 +119,13 @@ public interface IManageModelsService extends IManageFilesService {
 	 *           If there are any problems in the deletion of the file.
 	 */
 	void deleteConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotDeleteFileException;
+	
+	/**
+	 * TODO: document this method.
+	 * @param progressMonitor
+	 * @param constraintsFile
+	 * @return
+	 * @throws CouldNotCompileConstraintsFileException
+	 */
+	IFile compileConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotCompileConstraintsFileException;
 }

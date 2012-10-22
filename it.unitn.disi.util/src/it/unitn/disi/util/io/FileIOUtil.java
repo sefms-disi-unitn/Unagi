@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.Writer;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,29 +46,31 @@ public class FileIOUtil {
 	 * @throws IOException
 	 *           If there are any I/O problems reading the contents of the file from its URL.
 	 */
-	public static StringBuffer readFile(URL url) throws IOException {
-		StringBuffer stringBuffer = new StringBuffer();
+	public static StringBuilder readFile(URL url) throws IOException {
+		StringBuilder builder = new StringBuilder();
 
 		// Opens an input stream using the given URL.
 		InputStream inputStream = url.openConnection().getInputStream();
 
 		// Reads from the input stream into the string buffer and returns.
-		performRead(new InputStreamReader(inputStream), stringBuffer);
-		return stringBuffer;
+		try (Reader reader = new InputStreamReader(inputStream)) {
+			performRead(reader, builder);
+			return builder;
+		}
 	}
 
 	/**
 	 * Internal method that performs the actual reading of contents, given an open reader (which could be a file reader,
-	 * input stream reader, string reader, etc.). This method also closes the reader when finished.
+	 * input stream reader, string reader, etc.).
 	 * 
 	 * @param reader
 	 *          The reader that allows us to access the contents.
-	 * @param stringBuffer
-	 *          The string buffer in which to place the contents read.
+	 * @param builder
+	 *          The string builder in which to place the contents read.
 	 * @throws IOException
 	 *           If there are any I/O problems using the given reader.
 	 */
-	private static void performRead(Reader reader, StringBuffer stringBuffer) throws IOException {
+	private static void performRead(Reader reader, StringBuilder builder) throws IOException {
 		// Defines a 1KB buffer to use in the reading.
 		char[] buffer = new char[1024];
 
@@ -78,11 +79,8 @@ public class FileIOUtil {
 			int charsRead = reader.read(buffer);
 			if (charsRead == -1)
 				break;
-			stringBuffer.append(buffer, 0, charsRead);
+			builder.append(buffer, 0, charsRead);
 		}
-
-		// Closes the reader.
-		reader.close();
 	}
 
 	/**
@@ -101,21 +99,16 @@ public class FileIOUtil {
 	 */
 	public static void saveFile(String uri, String contents) throws IOException {
 		// Creates a string reader to read the contents little by little and also a file writer.
-		StringReader reader = new StringReader(contents);
-		FileWriter writer = new FileWriter(uri);
-
-		// Reads the contents one KB at a time and write it to the file.
-		char[] buffer = new char[1024];
-		for (;;) {
-			int charsRead = reader.read(buffer);
-			if (charsRead == -1)
-				break;
-			writer.write(buffer, 0, charsRead);
+		try (StringReader reader = new StringReader(contents); FileWriter writer = new FileWriter(uri)) {
+			// Reads the contents one KB at a time and write it to the file.
+			char[] buffer = new char[1024];
+			for (;;) {
+				int charsRead = reader.read(buffer);
+				if (charsRead == -1)
+					break;
+				writer.write(buffer, 0, charsRead);
+			}
 		}
-
-		// Closes the reader and the writer.
-		reader.close();
-		writer.close();
 	}
 
 	/**
@@ -131,35 +124,33 @@ public class FileIOUtil {
 	 *           If there are any I/O problems reading the contents of the template file.
 	 */
 	public static String processTemplate(URL url, Map<String, Object> map) throws IOException {
-		StringBuilder builder = new StringBuilder();
-
 		// Reads the file into a buffer.
-		StringBuffer buffer = readFile(url);
+		StringBuilder builder = readFile(url);
 
 		// Reads the buffer line by line.
-		Scanner scanner = new Scanner(buffer.toString());
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-
-			// Translates the given map to one that uses regular expressions for variables as keys. This is done so the
-			// concatenation and the toString() are not repeated for each line that contains a variable declaration char.
-			Map<String, String> varMap = new HashMap<>();
-			for (Map.Entry<String, Object> entry : map.entrySet())
-				varMap.put(VARIABLE_DECLARATION_REGEX_PREFIX + entry.getKey() + VARIABLE_DECLARATION_REGEX_SUFFIX, entry.getValue().toString());
-
-			// Looks for variables in the line and replace them with their values.
-			if (line.contains(Character.toString(VARIABLE_DECLARATION_CHAR))) {
-				for (Map.Entry<String, String> entry : varMap.entrySet()) {
-					line = line.replaceAll(entry.getKey(), entry.getValue());
+		try (Scanner scanner = new Scanner(builder.toString())) {
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+	
+				// Translates the given map to one that uses regular expressions for variables as keys. This is done so the
+				// concatenation and the toString() are not repeated for each line that contains a variable declaration char.
+				Map<String, String> varMap = new HashMap<>();
+				for (Map.Entry<String, Object> entry : map.entrySet())
+					varMap.put(VARIABLE_DECLARATION_REGEX_PREFIX + entry.getKey() + VARIABLE_DECLARATION_REGEX_SUFFIX, entry.getValue().toString());
+	
+				// Looks for variables in the line and replace them with their values.
+				if (line.contains(Character.toString(VARIABLE_DECLARATION_CHAR))) {
+					for (Map.Entry<String, String> entry : varMap.entrySet()) {
+						line = line.replaceAll(entry.getKey(), entry.getValue());
+					}
 				}
+	
+				// Adds the line to the builder.
+				builder.append(line).append('\n');
 			}
-
-			// Adds the line to the builder.
-			builder.append(line).append('\n');
+	
+			// Returns the built string.
+			return builder.toString();
 		}
-
-		// Closes the scanner and returns the built string.
-		scanner.close();
-		return builder.toString();
 	}
 }

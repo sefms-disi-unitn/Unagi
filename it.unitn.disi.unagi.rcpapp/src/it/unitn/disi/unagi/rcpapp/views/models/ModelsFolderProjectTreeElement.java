@@ -64,7 +64,7 @@ public class ModelsFolderProjectTreeElement extends AbstractProjectTreeElement {
 			if (modelsFolder.exists())
 				for (IResource resource : modelsFolder.members())
 					if (resource.getType() == IResource.FILE) {
-						switch (resource.getFullPath().getFileExtension()) {
+						switch (resource.getFileExtension()) {
 
 						// Checks if the resource is a requirements model file.
 						case IManageModelsService.REQUIREMENTS_MODEL_EXTENSION:

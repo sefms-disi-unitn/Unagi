@@ -117,11 +117,12 @@ public abstract class ManageFilesService implements IManageFilesService {
 
 	/** @see it.unitn.disi.unagi.application.services.IManageFilesService#readFile(org.eclipse.core.resources.IFile) */
 	@Override
-	public StringBuffer readFile(IFile file) throws CouldNotReadFileException {
+	public String readFile(IFile file) throws CouldNotReadFileException {
 		// Tries to read the contents of the file from its location.
 		try {
 			URL fileURL = file.getLocationURI().toURL();
-			return FileIOUtil.readFile(fileURL);
+			StringBuilder contents = FileIOUtil.readFile(fileURL);
+			return contents.toString();
 		}
 
 		// In case of I/O errors, throws an application exception.
