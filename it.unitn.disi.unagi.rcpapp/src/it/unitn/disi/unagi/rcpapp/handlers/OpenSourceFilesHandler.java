@@ -73,7 +73,10 @@ public class OpenSourceFilesHandler extends AbstractSourceFilesHandler {
 		return isAtLeastOneSourceSelected(selectionService);
 	}
 
-	/** @see it.unitn.disi.unagi.rcpapp.handlers.AbstractSourceFilesHandler#doExecute(org.eclipse.core.runtime.IProgressMonitor, org.eclipse.core.resources.IFile) */
+	/**
+	 * @see it.unitn.disi.unagi.rcpapp.handlers.AbstractSourceFilesHandler#doExecute(org.eclipse.core.runtime.IProgressMonitor,
+	 *      org.eclipse.core.resources.IFile)
+	 */
 	@Override
 	protected void doExecute(IProgressMonitor monitor, final IFile source) throws UnagiException {
 		final String sourceName = source.getName();
@@ -93,7 +96,7 @@ public class OpenSourceFilesHandler extends AbstractSourceFilesHandler {
 
 				// Sets the source file URI as the input for the editor.
 				part.setInputURI(sourceURI.toString());
-				
+
 				// Embeds extra information in the transient data map, such as the IFile object that is being open.
 				part.getTransientData().put(IManageFilesService.FILE_KEY, source);
 

@@ -133,7 +133,7 @@ public class UnagiProjectExplorerView implements IResourceChangeListener, ISelec
 	public void resourceChanged(IResourceChangeEvent event) {
 		// TODO: issue #16
 		// https://github.com/sefms-disi-unitn/Unagi/issues/16
-		
+
 		// Currently, anything that is done to the workspace resets the entire tree. Fix that.
 		if (event.getSource() instanceof IWorkspace)
 			Display.getDefault().syncExec(new Runnable() {

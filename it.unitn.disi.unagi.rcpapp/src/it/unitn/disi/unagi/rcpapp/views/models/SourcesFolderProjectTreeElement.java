@@ -117,8 +117,8 @@ public class SourcesFolderProjectTreeElement extends AbstractProjectTreeElement 
 	}
 
 	/**
-	 * Scans the source folder and identifies all folders containing source files. Assembles a map that associates
-	 * the package name (in Java-style fully qualified name) with the folder.
+	 * Scans the source folder and identifies all folders containing source files. Assembles a map that associates the
+	 * package name (in Java-style fully qualified name) with the folder.
 	 * 
 	 * @return A tree map that associates package names to their folders in the project.
 	 * @throws CoreException

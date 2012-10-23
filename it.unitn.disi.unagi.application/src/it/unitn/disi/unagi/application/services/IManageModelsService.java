@@ -136,4 +136,16 @@ public interface IManageModelsService extends IManageFilesService {
 	 *           If there are any problems in the compilation of the constraints.
 	 */
 	IFile compileConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotCompileConstraintsFileException;
+
+	/**
+	 * Deletes a rules file from a project, also deleting it from the file system.
+	 * 
+	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
+	 * @param rulesFile
+	 *          The rules file to be deleted.
+	 * @throws CouldNotDeleteFileException
+	 *           If there are any problems in the deletion of the file.
+	 */
+	void deleteRulesFile(IProgressMonitor progressMonitor, IFile rulesFile) throws CouldNotDeleteFileException;
 }

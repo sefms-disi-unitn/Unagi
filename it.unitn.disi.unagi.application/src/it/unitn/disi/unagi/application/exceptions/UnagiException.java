@@ -2,7 +2,7 @@ package it.unitn.disi.unagi.application.exceptions;
 
 /**
  * Superclass of all exceptions that are application-specific for Unagi.
- *
+ * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */

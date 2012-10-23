@@ -90,8 +90,8 @@ public abstract class AbstractRequirementsModelsHandler extends AbstractHandler 
 	/**
 	 * Retrieves all selected models from the workspace.
 	 * 
-	 * Note that this method does not check if at least one model was selected, returning an empty set if that is not
-	 * the case.
+	 * Note that this method does not check if at least one model was selected, returning an empty set if that is not the
+	 * case.
 	 * 
 	 * @param selectionService
 	 *          The platform's selection service, used to determine what is the user's current workspace selection.

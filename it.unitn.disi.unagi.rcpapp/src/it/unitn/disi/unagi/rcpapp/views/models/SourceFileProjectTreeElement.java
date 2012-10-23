@@ -21,7 +21,7 @@ public class SourceFileProjectTreeElement extends AbstractProjectTreeElement {
 
 	/** ID of the pop-up menu that should appear if an element of this type is right-clicked. */
 	private static final String SOURCE_FILE_POPUP_MENU_ID = POPUP_MENU_PREFIX + "sourceFile"; //$NON-NLS-1$
-	
+
 	/** ID of the default command for double-clicks on an element of this type. */
 	private static final String SOURCE_FILE_DEFAULT_COMMAND_ID = "it.unitn.disi.unagi.rcpapp.command.openSourceFiles"; //$NON-NLS-1$
 

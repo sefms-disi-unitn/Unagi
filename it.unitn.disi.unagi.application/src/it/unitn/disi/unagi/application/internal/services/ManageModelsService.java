@@ -434,4 +434,14 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 		// Returns the list of requirements models.
 		return models;
 	}
+
+	/**
+	 * @see it.unitn.disi.unagi.application.services.IManageModelsService#deleteRulesFile(org.eclipse.core.runtime.IProgressMonitor,
+	 *      org.eclipse.core.resources.IFile)
+	 */
+	@Override
+	public void deleteRulesFile(IProgressMonitor progressMonitor, IFile rulesFile) throws CouldNotDeleteFileException {
+		// Deletes the file from the workspace.
+		deleteFile(progressMonitor, rulesFile);
+	}
 }

@@ -87,7 +87,8 @@ public class OpenRequirementsModelsHandler extends AbstractRequirementsModelsHan
 				// Retrieves the part stack in which the model editor will be open.
 				MPartStack stack = (MPartStack) modelService.find(activator.getEditorStackId(), application);
 
-				// Creates a new part for the model editor, sets its label and indicates the Requirements Model Editor as the part to use.
+				// Creates a new part for the model editor, sets its label and indicates the Requirements Model Editor as the
+				// part to use.
 				String editorURI = "bundleclass://" + activator.getBundleId() + '/' + RequirementsModelEditorPart.PART_ID; //$NON-NLS-1$
 				MInputPart part = MBasicFactory.INSTANCE.createInputPart();
 				part.setLabel(modelName);
@@ -96,7 +97,7 @@ public class OpenRequirementsModelsHandler extends AbstractRequirementsModelsHan
 
 				// Sets the requirements model file URI as the input for the editor.
 				part.setInputURI(modelURI.toString());
-				
+
 				// Embeds extra information in the transient data map, such as the IFile object that is being opened.
 				part.getTransientData().put(IManageFilesService.FILE_KEY, model);
 

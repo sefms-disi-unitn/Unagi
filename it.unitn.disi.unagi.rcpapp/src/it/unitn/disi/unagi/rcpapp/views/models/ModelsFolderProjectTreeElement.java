@@ -75,6 +75,11 @@ public class ModelsFolderProjectTreeElement extends AbstractProjectTreeElement {
 						case IManageModelsService.CONSTRAINTS_FILE_EXTENSION:
 							modelFiles.add(new ConstraintsFileProjectTreeElement(bundle, project, this, (IFile) resource));
 							break;
+
+						// Checks if the resource is a rules file.
+						case IManageModelsService.RULES_FILE_EXTENSION:
+							modelFiles.add(new RulesFileProjectTreeElement(bundle, project, this, (IFile) resource));
+							break;
 						}
 					}
 

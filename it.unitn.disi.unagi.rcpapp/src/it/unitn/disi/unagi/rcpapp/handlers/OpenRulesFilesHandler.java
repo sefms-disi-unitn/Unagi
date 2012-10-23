@@ -3,7 +3,7 @@ package it.unitn.disi.unagi.rcpapp.handlers;
 import it.unitn.disi.unagi.application.exceptions.UnagiException;
 import it.unitn.disi.unagi.application.services.IManageFilesService;
 import it.unitn.disi.unagi.rcpapp.IUnagiRcpAppBundleInfoProvider;
-import it.unitn.disi.unagi.rcpapp.views.ConstraintsFileEditorPart;
+import it.unitn.disi.unagi.rcpapp.views.RulesFileEditorPart;
 import it.unitn.disi.util.logging.LogUtil;
 
 import javax.inject.Inject;
@@ -23,12 +23,12 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * Handler for the "Open Constraints File(s)" command.
+ * Handler for the "Open Rules File(s)" command.
  * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
-public class OpenConstraintsFilesHandler extends AbstractConstraintsFilesHandler {
+public class OpenRulesFilesHandler extends AbstractRulesFilesHandler {
 	/** The bundle's activator, used to retrieve global information about the bundle. */
 	@Inject
 	private IUnagiRcpAppBundleInfoProvider activator;
@@ -53,10 +53,10 @@ public class OpenConstraintsFilesHandler extends AbstractConstraintsFilesHandler
 	 */
 	@Execute
 	public void execute(ESelectionService selectionService) {
-		LogUtil.log.debug("Executing \"Open Constraints File(s)\" command."); //$NON-NLS-1$
+		LogUtil.log.debug("Executing \"Open Rules File(s)\" command."); //$NON-NLS-1$
 
 		// This command can be executed for multiple models.
-		executeForMultipleConstraints(selectionService);
+		executeForMultipleRules(selectionService);
 	}
 
 	/**
@@ -70,36 +70,35 @@ public class OpenConstraintsFilesHandler extends AbstractConstraintsFilesHandler
 	@CanExecute
 	public boolean canExecute(ESelectionService selectionService) {
 		// Can only compile requirements models if at least one of them is selected.
-		return isAtLeastOneConstraintsSelected(selectionService);
+		return isAtLeastOneRulesSelected(selectionService);
 	}
 
 	/**
-	 * @see it.unitn.disi.unagi.rcpapp.handlers.AbstractConstraintsFilesHandler#doExecute(org.eclipse.core.runtime.IProgressMonitor,
-	 *      org.eclipse.core.reconstraintss.IFile)
+	 * @see it.unitn.disi.unagi.rcpapp.handlers.AbstractRulesFilesHandler#doExecute(org.eclipse.core.runtime.IProgressMonitor,
+	 *      org.eclipse.core.reruless.IFile)
 	 */
 	@Override
-	protected void doExecute(IProgressMonitor monitor, final IFile constraints) throws UnagiException {
-		final String constraintsName = constraints.getName();
-		final String constraintsURI = constraints.getLocation().toString();
+	protected void doExecute(IProgressMonitor monitor, final IFile rules) throws UnagiException {
+		final String rulesName = rules.getName();
+		final String rulesURI = rules.getLocation().toString();
 
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				// Retrieves the part stack in which the constraints editor will be opened.
+				// Retrieves the part stack in which the rules editor will be opened.
 				MPartStack stack = (MPartStack) modelService.find(activator.getEditorStackId(), application);
 
-				// Creates a new part for the constraints editor, sets its label and indicates the Constraints Editor as the
-				// part to use.
-				String editorURI = "bundleclass://" + activator.getBundleId() + '/' + ConstraintsFileEditorPart.PART_ID; //$NON-NLS-1$
+				// Creates a new part for the rules editor, sets its label and indicates the Rules Editor as the part to use.
+				String editorURI = "bundleclass://" + activator.getBundleId() + '/' + RulesFileEditorPart.PART_ID; //$NON-NLS-1$
 				MInputPart part = MBasicFactory.INSTANCE.createInputPart();
-				part.setLabel(constraintsName);
+				part.setLabel(rulesName);
 				part.setContributionURI(editorURI);
 				part.setCloseable(true);
 
-				// Sets the constraints file URI as the input for the editor.
-				part.setInputURI(constraintsURI.toString());
+				// Sets the rules file URI as the input for the editor.
+				part.setInputURI(rulesURI.toString());
 
 				// Embeds extra information in the transient data map, such as the IFile object that is being open.
-				part.getTransientData().put(IManageFilesService.FILE_KEY, constraints);
+				part.getTransientData().put(IManageFilesService.FILE_KEY, rules);
 
 				// Opens and activates the model editor.
 				stack.getChildren().add(part);

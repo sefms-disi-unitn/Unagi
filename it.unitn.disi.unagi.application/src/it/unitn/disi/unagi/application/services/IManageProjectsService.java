@@ -20,10 +20,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IManageProjectsService {
 	/** Name of the project sub-directory that will hold the project's models. */
 	String MODELS_PROJECT_SUBDIR = Messages.getString("fs.models.folderName"); //$NON-NLS-1$
-	
+
 	/** name of the project sub-directory that will hold the project's source code files. */
 	String SOURCES_PROJECT_SUBDIR = Messages.getString("fs.sources.folderName"); //$NON-NLS-1$
-	
+
 	/** Name of the project sub-directory that will hold the project's compiled classes. */
 	String CLASSES_PROJECT_SUBDIR = Messages.getString("fs.classes.folderName"); //$NON-NLS-1$
 

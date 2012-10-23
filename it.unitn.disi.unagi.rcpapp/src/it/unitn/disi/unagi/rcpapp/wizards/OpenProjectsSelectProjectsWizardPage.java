@@ -51,7 +51,8 @@ public class OpenProjectsSelectProjectsWizardPage extends WizardPage implements 
 	}
 
 	/**
-	 * Builds the map of projects from the list of closed projects in the workspace. This method is called automatically by Eclipse.
+	 * Builds the map of projects from the list of closed projects in the workspace. This method is called automatically
+	 * by Eclipse.
 	 */
 	@PostConstruct
 	public void buildProjectIndex() {

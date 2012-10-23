@@ -32,7 +32,7 @@ public class ProjectProjectTreeElement extends AbstractProjectTreeElement {
 		super(bundle);
 		this.project = project;
 		LogUtil.log.debug("Creating a tree element for project: {0}.", project.getName()); //$NON-NLS-1$
-		
+
 		// TODO: issue #15
 		// https://github.com/sefms-disi-unitn/Unagi/issues/15
 

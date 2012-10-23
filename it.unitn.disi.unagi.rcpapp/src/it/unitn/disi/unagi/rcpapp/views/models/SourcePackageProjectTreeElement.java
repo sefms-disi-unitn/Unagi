@@ -28,7 +28,7 @@ public class SourcePackageProjectTreeElement extends AbstractProjectTreeElement 
 
 	/** Project under which this element appears. */
 	private IProject project;
-	
+
 	/** Name of the package. */
 	private String name;
 

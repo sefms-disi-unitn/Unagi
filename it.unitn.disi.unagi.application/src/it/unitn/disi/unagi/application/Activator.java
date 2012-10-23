@@ -9,19 +9,19 @@ import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * The Application bundle's activator. An instance of this class is loaded when the bundle is activated and contains global
- * bundle information.
- *
+ * The Application bundle's activator. An instance of this class is loaded when the bundle is activated and contains
+ * global bundle information.
+ * 
  * @author Vitor E. Silva Souza (vitorsouza@gmail.com)
  * @version 1.0
  */
 public class Activator implements BundleActivator {
 	/** The bundle's context. */
 	private static BundleContext context;
-	
+
 	/** The bundle itself. */
 	private static Bundle bundle;
-	
+
 	/** The bundle's ID. */
 	private static String bundleId;
 
