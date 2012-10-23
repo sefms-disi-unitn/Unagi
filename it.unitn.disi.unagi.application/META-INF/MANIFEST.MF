@@ -20,5 +20,8 @@ Export-Package: it.unitn.disi.unagi.application.exceptions,
  it.unitn.disi.unagi.application.services
 Service-Component: OSGI-INF/manage-models-service.xml,OSGI-INF/manage-projects-service.xml,OSGI-INF/manage-sources-service.xml
 Bundle-Activator: it.unitn.disi.unagi.application.Activator
-Bundle-ClassPath: META-INF/org.eeat.ocl_1.0.0.201210231431.jar,
- .
+Bundle-ClassPath: .,
+ META-INF/antlr-2.7.7.jar,
+ META-INF/org.eeat.ocl_1.0.0.201210231731.jar,
+ META-INF/stringtemplate.jar,
+ META-INF/zanshin-model.jar

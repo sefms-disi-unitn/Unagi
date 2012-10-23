@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.codegen.ecore.generator.Generator;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModelFactory;
@@ -389,8 +390,12 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 			OCLParser parser = new OCLParser(requirementsModels);
 			parser.parse(constraintsFile.getLocationURI().toURL());
 
+			// Loads the compiler's template file from the plug-in.
+			IPath templatePath = new Path(Activator.getProperty(Activator.PROPERTY_COMPILER_TEMPLATE_FILE));
+			URL templateURL = FileLocator.find(Activator.getBundle(), templatePath, Collections.EMPTY_MAP);
+
 			// Compiles the constraints file that was parsed.
-			OCLCompiler compiler = new OCLCompiler(parser);
+			OCLCompiler compiler = new OCLCompiler(parser, templateURL);
 			String result = compiler.compile();
 
 			// Creates a new file in the same folder as the constraints file, but with rules file extension.

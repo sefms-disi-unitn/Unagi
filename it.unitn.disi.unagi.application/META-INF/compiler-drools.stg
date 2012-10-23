@@ -1,0 +1,697 @@
+group drools;
+
+/************************************************************
+ * OCL temporal templates
+ ************************************************************/
+
+eventually(class,constraint,name,scope,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+<beginRuleDef(patternName="EVENTUALLY")>
+	<lhs()>
+	<lhsOCLconstraints()>
+  then
+	<assertPropertySatisfaction(proplist=proplist,deflist=deflist,value="PropertyEvent.TRUE"); separator="\n">
+end
+
+
+>>
+
+always(class,constraint,name,scope,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+<beginRuleDef(patternName="ALWAYS")>
+	$scopeEvent : PropertyEvent(closeEvent != null)  
+	$p : PropertyEvent(property == "<propName(name)>", satisfied == PropertyEvent.NONFALSE, scopeEvent == $scopeEvent)
+	eval($scopeEvent.getCloseEvent().getTimestamp() > $p.getTimestamp())
+  then
+	$p.setSatisfied(PropertyEvent.TRUE);
+end
+
+rule "<propName(name)>:partialEvaluation"
+  when
+	<lhs()>
+	<lhsOCLconstraints()>
+ then
+   <assertPropertySatisfaction(proplist=proplist,deflist=deflist,value="PropertyEvent.NONFALSE"); separator="\n">
+end
+
+>>
+
+
+after(class,constraint,name,scope,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+<beginRuleDef(patternName="AFTER")>
+	<scopePropertyReference(p=first(rest(proplist)),satisfied="PropertyEvent.TRUE")>
+<scopeLHS(scopeProp=first(rest(proplist)))>
+
+<defScope(property=first(proplist))>
+
+<if(first(explist))>
+<defTimeout(prop1=first(proplist),prop2=first(rest(proplist)),timeout=first(explist))>
+<endif>
+
+>>
+
+beforeProperties(satisfied) ::= <<
+<propertyReference(p=first(proplist))><propertyRefsReverse(properties=rest(proplist),satisfied=satisfied,scope={true}); separator="\n">
+>>
+
+before(class,constraint,name,scope,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+<beginRuleDef(patternName="BEFORE")>
+	<scopePropertyReference(p=first(rest(proplist)),satisfied="PropertyEvent.TRUE")>
+<scopeLHS(scopeProp=first(rest(proplist)))>
+
+// <name(name)> scope pattern for OCL context <fullName(class)>.<constraint.name>.<name>
+rule "<name(name)>"
+  <defcontext()>
+  no-loop
+  when
+  (not
+	<propertyRefs(properties=[first(proplist)],satisfied="PropertyEvent.TRUE")>)
+ then
+	<assertScopeSatisfaction(before={true})>
+end
+
+rule "<name(name)>:closing"
+  when
+	$scopeEvent : PropertyEvent(property == "<name(name)>", $sts : timestamp, closeEvent == null)
+	<propertyRefsReverse(properties=first(proplist),satisfied="PropertyEvent.TRUE")>
+	eval($sts \<= $<first(proplist)>.getTimestamp())
+  then
+	$scopeEvent.setCloseEvent($<first(proplist)>);
+end
+
+
+>>
+
+between(class,constraint,name,scope,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+<beginRuleDef(patternName="BETWEEN")>
+	// Between scope is closed after the property is true...
+	$scopeEvent : PropertyEvent(closeEvent != null)
+	<propertyRefs(properties=[first(rest(rest(proplist)))],satisfied="PropertyEvent.TRUE",scope={true})>
+	eval($scopeEvent.getCloseEvent().getTimestamp() > $<first(rest(rest(proplist)))>.getTimestamp())
+<scopeLHS(first(rest(rest(proplist))))>
+
+// <name(name)> scope pattern for OCL context <fullName(class)>.<constraint.name>.<name>
+rule "<name(name)>"
+  <defcontext()>
+  no-loop
+  when
+	<propertyRefs(properties=[first(proplist)],satisfied="PropertyEvent.TRUE")>
+  then
+	<assertScopeSatisfaction()>
+end
+
+rule "<name(name)>:closing"
+  when
+	<propertyRefs(properties=[first(proplist)],satisfied="PropertyEvent.TRUE")>
+	<propertyRefs(properties=[first(rest(proplist))],satisfied="PropertyEvent.TRUE")>
+	eval($<(first(proplist))>.getTimestamp() \< $<(first(rest(proplist)))>.getTimestamp())
+	<scopeRef(name=scope,compareTime="$"+ first(proplist) +".getTimestamp()")>
+  then
+	$scopeEvent.setCloseEvent($<first(rest(proplist))>);
+end
+
+
+>>
+
+never(class,constraint,name,scope,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+<beginRuleDef(patternName="NEVER")>
+	$scopeEvent : PropertyEvent(closeEvent != null)  
+	$p : PropertyEvent(property == "<propName(name)>", satisfied == PropertyEvent.NONFALSE, scopeEvent == $scopeEvent)
+	eval($scopeEvent.getCloseEvent().getTimestamp() > $p.getTimestamp())
+  then
+	$p.setSatisfied(PropertyEvent.TRUE);
+end
+
+// If a NEVER references becomes true, then it is false
+rule "<propName(name)>:violation"
+  when
+	<lhs()>
+	<lhsOCLconstraints()>
+ then
+	<assertPropertySatisfaction(proplist=proplist,deflist=deflist,value="PropertyEvent.FALSE"); separator="\n">
+end
+
+// If a NEVER property is not false, then assume non-false until proved false and timeout makes it true.
+rule "<propName(name)>:negation-assumption"
+  no-loop
+  salience -200 // let property rules run
+  when
+<if(proplist)>
+    <scopeRef(name=scope,compareTime="$"+ first(proplist) +".getTimestamp()")>
+<else>
+    <scopeRef(name=scope,compareTime="$"+ first(deflist) +".getTimestamp()")>
+<endif>
+
+   (not
+	<propertyRefs(properties=[name],satisfied="PropertyEvent.FALSE")>)
+ then
+   <assertPropertySatisfaction(value="PropertyEvent.NONFALSE",reason="NegationAssumption",timestamp="(new Date)"); separator="\n">
+end
+
+>>
+
+timeout(class,constraint,name,scope,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+<explist; separator=", ">
+>>
+
+contextInit(class,name,type,paramType,expType,exp,noInit) ::= <<
+(ContextVariable (name "<fullName(class)>") (variable "<name>") (value (new <type> <if(exp)><exp><else>TODO_FIXME<endif>)) (type "<type>"))
+>>
+
+receivedMessage(class,constraint,name,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+<if(rest(explist))>
+methodName  matches <last(explist)>
+<else>
+methodName  matches <explist>
+<endif>
+>>
+
+receivedMessages(class,constraint,name,proplist,explist,deflist,lhsExt,lhsObjectExt,scopeFinal) ::= <<
+methodName  matches <explist>
+>>
+
+defContextVariable(class,name,type,paramType,expType,exp,lhsExt,lhsObjectExt,forAll,one,any) ::= << 
+rule "<fullName(class)>.<name>_assert"
+  no-loop
+  when
+	$<name> :
+	  <type> ($className : className, $<name>_time : timestamp<if(lhsObjectExt)>, <lhsObjectExt; separator=" && "><endif>) from entry-point "Event stream"<if(exp)>
+	<maybeParentClass(exp)>
+<else>     
+	<maybeParentClass(class)>
+<endif>
+<if(lhsExt)>
+	<lhsExt; separator="\n">
+<endif>
+  then
+	// Update the def field of the context...
+	<setContextVariable(context=fullName(class),var=name,type=type,value=dVar(name))>
+end
+
+>>
+
+
+/************************************************************
+ * Helper functions
+ ************************************************************/
+
+defTimeout(prop1,prop2,timeout) ::= <<
+rule "<propName(name)>:timeout"
+  duration( <timeout> )
+  when
+	<scopePropertyReference(p=prop1,satisfied="PropertyEvent.TRUE")>
+	(not
+	  <propertyRefs(properties=[prop2],satisfied="PropertyEvent.TRUE",scope={true})>)
+  then
+	<assertPropertySatisfaction(value="PropertyEvent.FALSE",reason="Timeout")>
+end
+
+>>
+
+scopeLHS(scopeProp) ::= <<
+	// Not scope sharing: each scope can only have ONE PropertyEvent satisfaction within it...
+	(not PropertyEvent(property == "<propName(name)>", scopeEvent == $scopeEvent))
+  then
+	<assertPropertySatisfaction(proplist=[scopeProp],value="PropertyEvent.TRUE"); separator="\n">
+end
+
+<defScopeClosingRules(first(rest(proplist)))>
+>>
+
+
+
+
+beginRuleDef(patternName,negativePattern,declares) ::= <<
+// <patternName> property pattern for OCL context <fullName(class)>.<constraint.name>.<name>
+rule "<propName(name)>"
+  <defcontext()>
+<if(declares)>
+  <declares>
+
+<endif>
+  no-loop
+  when
+>>
+
+
+lhsOCLconstraints() ::= <<
+// OCL constraint expression
+<if(explist)>
+eval(<explist; separator="\n">)
+<endif>
+>>
+
+lhs() ::= <<
+<if(proplist)>
+<scopeRef(name=scope,compareTime="$"+ first(proplist) +".getTimestamp()")>
+<else>
+<scopeRef(name=scope,compareTime="$"+ first(deflist) +".getTimestamp()")>
+<endif>
+
+<if(deflist)>
+<definitionRefs(deflist)>
+
+<endif>
+<if(proplist)>
+// Props...
+<propertyRefs(properties=proplist,satisfied="PropertyEvent.TRUE")>
+
+<endif>
+<if(lhsExt)>
+<lhsExt; separator="\n">
+
+<endif>
+// Not already false (via timeout or other rule)
+(not PropertyEvent(property == "<propName(name)>", satisfied == PropertyEvent.FALSE, scopeEvent == $scopeEvent))
+>>
+
+propName(name) ::= <<
+p:<pname(name)>
+>>
+
+name(name) ::= <<
+s:<pname(name)>
+>>
+
+pname(name) ::= <<
+<fullName(class)>:<constraint.name>_<name>
+>>
+
+contextVariableName(name) ::= <<
+<if(constraint)>
+<constraint.name>_<name>
+<else>
+<name>
+<endif>
+>>
+
+propertyRefs(properties,satisfied,scope) ::= <<
+// Properties referenced...
+<properties:{p | <propertyReference(p=p,scope=scope)>}; separator="\n">
+>>
+
+propertyRefsReverse(properties,satisfied,scope) ::= <<
+<if(!rest(properties))>
+<propertyReference(p=first(properties),scope=scope); separator="\n">
+<else>
+<propertyRefsReverse(properties=rest(properties),satisfied=satisfied)>
+<propertyReference(p=first(properties),scope=scope); separator="\n">
+<endif>
+>>
+
+propertyReference(p,scope,time) ::= <<
+$<p> : 
+  PropertyEvent(property == "p:<pname(p)>"<if(satisfied)>, satisfied == <satisfied><endif><if(scope)>, scopeEvent == $scopeEvent<endif>)
+>>
+
+scopePropertyReference(p,satisfied) ::= <<
+$<p> : 
+  PropertyEvent(property == "p:<pname(p)>"<if(satisfied)>, satisfied == <satisfied><endif>, $scopeEvent : scopeEvent)
+>>
+
+propertiesOrderedByDate(properties,compare) ::= <<
+// Properties ordered by date: <properties; separator=", ">
+eval(<propertyDateTest(prop1=first(properties),restProps=rest(properties))>)
+>>
+
+propertyDateTest(prop1,restProps) ::= <<
+<if(restProps)>
+ (<compare> ($<prop1>_time compareTo $<first(restProps)>_time) 0)<propertyDateTest(prop1=first(restProps),restProps=rest(restProps))>
+<endif>
+>>
+
+definitionRefs(deflist) ::= <<
+// OCL definitions referenced by this property...
+<deflist:{d | <defReference(d)>}; separator="\n">
+>>
+
+defReference(d) ::= <<
+$<d>_context :
+  ContextVariable(name == "<fullName(class)>", variable == "<d>", $<d> : object)
+>>
+
+paramType(type) ::= <<
+<if(type)>
+<type>
+<endif>
+>>
+
+defVarRules(class,name,type) ::= <<
+// ContextClass Property
+rule "p:<class>_def_<name>"
+end
+>>
+
+defCollectionVariableQueryForAll(class,name,type,paramType,expType,exp,lhsExt,lhsObjectExt) ::= <<
+<defCollectionVariableQuery(class=class,name=name,type=type,exp=exp,lhsExt=lhsExt,lhsObjectExt=lhsObjectExt,forAll={true})>
+>>
+
+defCollectionVariableQueryOne(class,name,type,paramType,expType,exp,lhsExt,lhsObjectExt) ::= <<
+<defCollectionVariableQuery(class=class,name=name,type=type,exp=exp,lhsExt=lhsExt,lhsObjectExt=lhsObjectExt,one={true})>
+>>
+
+defCollectionVariableQueryAny(class,name,type,paramType,expType,exp,lhsExt,lhsObjectExt) ::= <<
+<defCollectionVariableQuery(class=class,name=name,type=type,exp=exp,lhsExt=lhsExt,lhsObjectExt=lhsObjectExt,any={true})>
+>>
+
+defCollectionVariableQuery(class,name,type,paramType,expType,exp,lhsExt,lhsObjectExt,forAll,one,any) ::= << 
+(defquery <fullName(class)>.<name>
+  "Query for def: <fullName(class)> <name> <type> collection."
+<if(forAll)>
+  (forall<endif>
+  <name>_object :
+    (<paramType> (className $classname) && (<name>_time : timestamp) <if(lhsObjectExt)><lhsObjectExt; separator=" "><endif>)
+  <maybeParentClass(class)>
+<if(lhsExt)>
+  <lhsExt; separator="\n">
+<endif>
+<if(exp)>
+  eval(<exp>)
+<endif>
+  <if(forAll)>)<endif>
+ )
+
+rule "<fullName(class)>.<name>_assert"
+  no-loop
+  when
+     // ContextVariable is backward-chaining: Jess's (do-backward-chaining ContextVariable)
+     (need-ContextVariable (name "<fullName(class)>") (variable "<name>") (value $))
+ then
+   (bind $list (new java.util.ArrayList))
+   (bind $r (run-query* <fullName(class)>.<name>))
+   (while ($r next)
+     ($list add ($r getObject <name>)))
+  <if(one)>
+   (bind $list (= ($list size) 1))
+  <else>
+  <if(any)>
+   (if (> ($list size) 0)
+   	  then (bind $list ($list get 0))
+   	  else (bind $list null))
+  <else>
+  // TODO convert this to compile-time simplification....  
+   (if (eq 0 (str-compare "<type>" "java.lang.Boolean")) then
+  	  (bind $list (> ($list size) 0)))
+  <endif>
+  <endif>
+   // TODO Consider obtaining source from the event, rather than make it _global...
+   (insert ContextVariable((name "<fullName(class)>") (variable "<name>") (type "<type>") (value $list) ))
+end
+
+rule "<fullName(class)>.<name>_setVar"
+ when
+   // TODO need to address monitoring multiple objects of the same class.
+   $object : <fullName(class)>()
+   ContextVariable(name == "<fullName(class)>", variable == "<name>", type == "<type>", $value : object)
+ then
+   // Update the def field on the object...
+  (call $object set<name;format="upperFirst"> $value)
+end
+
+rule "<fullName(class)>.<name>_update"
+  no-loop
+  when
+   $f1 : <fullName(class)>(<name>_time : timestamp)
+   // ContextVariable is backward-chaining: Jess's (do-backward-chaining ContextVariable)
+   $f2 \<- (explicit ContextVariable((OBJECT $<name>Event) && (name == "<fullName(class)>") && (variable == "<name>") && (type == "<type>") ))
+   eval((\< ($f2 getTime) ($f1 getTime)))
+ then
+  (retract $f2)
+end
+
+>>
+
+
+
+classRef(class,lhsObjectExt)::= <<
+$<name>_object : 
+  <fullName(class)>((<name>_time : timestamp) <if(lhsObjectExt)><lhsObjectExt; separator=" "><endif>)
+>>
+
+textClassRef(class,className,lhsObjectExt)::= <<
+$<name>_object : 
+  <className>((<name>_time : timestamp) <if(lhsObjectExt)><lhsObjectExt; separator=" "><endif>)
+>>
+
+fullName(class) ::= <<
+<class.ePackage.name>.<class.name>
+>>
+
+scopeSharing(sharing) ::= <<
+<if(sharing)>
+// Sharing: each scope can have MORE THAN ONE PropertyEvent satisfaction within it...
+<else>
+// Not scope sharing: each scope can only have ONE PropertyEvent satisfaction within it...
+(not PropertyEvent(property == "p:<name>", scopeEvent == $scopeEvent)))
+<endif>
+>>
+
+
+scopeRef(name,compareTime,withoutSource) ::= <<
+// Scope 
+<if(!name)>
+$scopeEvent : 
+  PropertyEvent(property == "Global", closeEvent == null, $sts : timestamp)
+<else>
+(and // Find the most recent scope...
+  $scopeEvent :
+    PropertyEvent(property == "<name(name)>", closeEvent == null, $sts : timestamp)
+    // Ensure the above is the closest ScopeActivation (even considering closed activations)...
+    (not PropertyEvent(property == "<name(name)>", closeEvent == null, timestamp \< $sts)))
+<endif>
+
+>>
+
+assertPropertySatisfaction(proplist,deflist,value,reason,timestamp) ::= <<
+// Assert property evaluation...
+<if(last(proplist))>
+PropertyEvent pe = new PropertyEventImpl("<propName(name)>", $<last(proplist)>, $scopeEvent, <value>,"<reason>");
+
+<else>
+<if(deflist)>
+PropertyEvent pe = new PropertyEventImpl("<propName(name)>", $<last(deflist)>, $scopeEvent, <value>,"<reason>");
+
+<else>
+PropertyEvent pe = new PropertyEventImpl("<propName(name)>", null, $scopeEvent, <value>,"<reason>");
+
+<endif>
+<endif>
+// Associate property evaluation with its supporting events...
+<if(proplist)>
+<[proplist]:{p| pe.getSupport().add($<p>);}>
+
+<else>
+<[deflist]:{d| pe.getSupport().add($<d>);}>
+
+<endif>
+insert(pe);
+>>
+
+assertScopeSatisfaction(before) ::= <<
+// Assert scope activation
+<if(before)>
+PropertyEvent pe = new PropertyEventImpl("<name(name)>",new Date().getTime());
+
+<else>
+PropertyEvent pe = new PropertyEventImpl("<name(name)>",$<first(proplist)>,null,PropertyEvent.TRUE,"");
+
+<endif>
+insert(pe);
+>>
+
+
+initiateTimeout(name,type,timeout) ::= <<
+<if(timeout)>
+// Timeout becomes active
+(bind $event-time ($<(first(proplist))> getTimestamp()))
+(bind $timer-end-time (<timeout> getEndDate $event-time))
+(bind $timeout-name (str-cat "<fullName(class)>.<constraint.name>.<name>" "-" (gensym*)))
+(assert (TimerActive (timeout "<fullName(class)>.<constraint.name>.<name>") (timer-name $timeout-name) (Monitor "<fullName(class)>.<constraint.name>.<name>") (event $peval-object1) (end-time $timer-end-time) (scopeObject $scopeEvent)))
+(if (neq (get-config-property org.eeat.repository.jess.ltl run-timers) "false") then
+    (timer-start $timeout-name (str-cat "+" (call <timeout> getSpec)) "" "" 0 Property "<fullName(class)>.<constraint.name>.<name>" $timeout-name <type> $scopeEvent $peval-object1))
+<endif>
+>>
+
+defTimeoutScopeClosed(negativePattern) ::= <<
+<if(scope)>
+// Raise a violation if there has been no successes within a Scope.
+rule "<propName(name)>:assert-timeout-scope-violation"
+  no-loop
+  salience -200 // let property rules run
+  when
+	$scopeEvent : PropertyEvent(property "<name(scope)>", closeEvent != null)
+	(not PropertyEvent(property == "<propName(name)>", $scopeEvent : scopeEvent))
+  then
+	// The kernel rules update when the scope (not global or after) closes; non-false becomes true/false.
+<if(negativePattern)>
+	<assertPropertySatisfaction(proplist=proplist,deflist=deflist,value="PropertyEvent.TRUE",reason="ScopeTimeout",timestamp="$scopeEvent.getTimestamp()")>; separator="\n")
+<else>
+	<assertPropertySatisfaction(proplist=proplist,deflist=deflist,value="PropertyEvent.FALSE",reason="ScopeTimeout",timestamp="$scopeEvent.getTimestamp()"); separator="\n">
+end
+<endif>
+
+// Raise a violation if there has been no successes within a Scope.
+rule "<propName(name)>:update-timeout-scope-violation"
+  no-loop
+  salience -200 // let property rules run
+  when
+  scopeEvent : PropertyEvent(property "<name(scope)>", closeEvent != null)
+  // Not FAILED for any reason
+  (not PropertyEvent(property == "<propName(name)>", satisfied == PropertyEvent.FALSE, scopeEvent : scopeEvent ))
+  $f \<- PropertyEvent(property == "<propName(name)>", satisfied == PropertyEvent.NONFALSE, scopeEvent : scopeEvent)
+  =\>
+  // The kernel rules update when the scope (not global or after) closes; non-false becomes true/false.
+<if(negativePattern)>
+  modify( $f) {(satisfied PropertyEvent.TRUE) (reason ScopeTimeout) (timeStamp $closeTimestamp))}
+<else>
+  modify( $f) {(satisfied PropertyEvent.FALSE) (reason ScopeTimeout) (timeStamp $closeTimestamp) }
+end
+<endif>
+<endif>
+>>
+
+defScope(property,negativePattern) ::= <<
+// <name(name)> scope pattern for OCL context <fullName(class)>.<constraint.name>.<name>
+rule "<name(name)>"
+  <defcontext()>
+  no-loop
+  when
+	<propertyRefs(properties=[property],satisfied="PropertyEvent.TRUE")>
+<if(deflist)>
+	<definitionRefs(deflist)>
+
+<endif>
+  then
+	<assertScopeSatisfaction()>
+end
+
+>>
+
+defScopeClosingRules(property) ::= <<
+// Raise a violation if there has been no successes within a Scope.
+rule "<propName(name)>:assert-scope-violation"
+  no-loop
+  salience -200 // let property rules run
+  when
+	$scopeEvent : PropertyEvent(property == "<name(name)>", closeEvent != null)
+	(not
+	  <propertyRefs(properties=[name],satisfied="PropertyEvent.FALSE")>)
+	(not
+	  <propertyRefs(properties=[property],satisfied="PropertyEvent.TRUE",scope={true})>)
+  then
+	<assertPropertySatisfaction(value="PropertyEvent.FALSE",reason="ScopeClosed",timestamp="$scopeEvent.getTimestamp()"); separator="\n">
+end
+>>
+
+/* It may be that non-false becomes true (e.g., never)
+// Raise a violation if there has been no successes within a Scope.
+rule "<propName(name)>:update-scope-violation"
+  no-loop
+  salience -200 // let property rules run
+  when
+  scopeEvent : PropertyEvent(property "<name(name)>", closeEvent != null)
+  $f \<- <propertyRefs(properties=[property],satisfied="PropertyEvent.NONFALSE",scope={true})>
+  =\>
+  modify( $f) {(satisfaction PropertyEvent.FALSE) (reason ScopeClosed) (timeStamp $closeTimestamp) }
+end
+*/
+
+
+/*
+ * Package:	<class.ePackage.name>
+ * Class:	<class.name>
+ * Constraint:	<constraint.name>
+ * Name:	<name>
+ * Spec:	<constraint.specification.bodyExpression>
+*/
+defcontext() ::= <<
+@package(<class.ePackage.name>)
+@class(<class.name>)
+@constraint(<constraint.name>)
+@name(<name>)
+@spec(<constraint.specification.bodyExpression>)
+>>
+
+
+setContextVariable(context,var,value,type,source) ::= <<
+insert((ContextVariable)new ContextVariableImpl("<context>","<var>",<value>,<value>.getTimestamp()));
+>>
+
+dVar(name) ::= <<
+$<name>
+>>
+
+// (or eval($className == "<fullName(child)>")
+//    IsA(child == $classname, parent == "<fullName(child)>"))
+maybeParentClass(child) ::= <<
+>>
+
+
+/************************************************************
+ * Java defs
+ ************************************************************/
+javaOCLDef(class,name,type,paramType,object,args,noInit) ::= <<
+// OCL def <class>.<name>
+private <type><paramType(paramType)> <name><if(object)>
+<if(noInit)><else><if(args)> = new <type><paramType(paramType)>(<args>)<endif><endif>;
+<else>
+;
+<endif>
+
+public <type><paramType(paramType)> get<name;format="upperFirst">() {
+  return <name>;
+}
+
+public void set<name;format="upperFirst">(<type><paramType(paramType)> value) {
+  Object oldValue = this.<name>;
+  this.<name> = value;
+  propertyChangeSupport.firePropertyChange("<name>", oldValue, value);
+  updated();
+}
+
+>>
+
+javaOclClassDef(package,class,constraint,name,defs,inits) ::= <<
+package <package>;
+
+import org.eeat.model.events.*;
+import org.eeat.model.events.ltl.*;
+import org.eeat.model.events.impl.*;
+import org.eeat.model.impl.*;
+import org.eeat.model.*;
+import java.beans.*;
+import java.util.*;
+
+/*
+ Generated from OCL.
+*/
+public class <class> extends OclContext {
+
+  <defs; separator="\n">
+
+  public <class>() {
+	super();	
+	<inits; separator="\n">
+  }
+}
+
+>>
+
+javaClassDef(package,class,constraint,name,defs,inits) ::= <<
+package <package>;
+
+import org.eeat.model.events.*;
+import org.eeat.model.events.ltl.*;
+import org.eeat.model.events.impl.*;
+import java.beans.*;
+import java.util.*;
+
+/*
+ Generated from OCL.
+*/
+public class <class> extends OclMessage {
+
+  public <class>() {
+	super();	
+  }
+}
+
+>>
