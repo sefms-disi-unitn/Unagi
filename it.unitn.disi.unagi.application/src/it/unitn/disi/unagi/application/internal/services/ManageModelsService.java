@@ -402,12 +402,13 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 			String rulesFileName = constraintsFile.getFullPath().removeFileExtension().lastSegment() + '.' + RULES_FILE_EXTENSION;
 			IFolder modelsFolder = (IFolder) constraintsFile.getParent();
 			IFile rulesFile = modelsFolder.getFile(rulesFileName);
+			createNewFile(progressMonitor, rulesFile);
 
 			// Writes the result of the compilation to the rules file and returns it.
 			FileIOUtil.saveFile(rulesFile.getLocation().toString(), result);
 			return rulesFile;
 		}
-		catch (CoreException | IOException | OCLParserException | OCLCompilerException e) {
+		catch (CouldNotCreateFileException | CoreException | IOException | OCLParserException | OCLCompilerException e) {
 			LogUtil.log.error("Could not compile constraints file: {0}.", e, constraintsFile.getFullPath()); //$NON-NLS-1$
 			throw new CouldNotCompileConstraintsFileException(constraintsFile);
 		}
