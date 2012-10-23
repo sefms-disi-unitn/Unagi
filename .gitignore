@@ -1,1 +1,3 @@
 bin/
+!it.unitn.disi.unagi.application/META-INF/*.jar
+

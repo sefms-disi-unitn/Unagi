@@ -1,5 +1,6 @@
 package it.unitn.disi.unagi.application.services;
 
+import it.unitn.disi.unagi.application.exceptions.CouldNotCompileConstraintsFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsClassesException;
@@ -29,8 +30,17 @@ public interface IManageModelsService extends IManageFilesService {
 	/** File extension for constraint files. */
 	String CONSTRAINTS_FILE_EXTENSION = "ocl"; //$NON-NLS-1$
 
+	/** File extension for rule files. */
+	String RULES_FILE_EXTENSION = "drl"; //$NON-NLS-1$
+
 	/** Path for the file that defines base classes for goal model elements. */
 	IPath GORE_EMF_FILE_PATH = new Path("META-INF/gore.ecore"); //$NON-NLS-1$
+
+	/** Path for the file that defines base classes for goal model elements. */
+	IPath ECA_EMF_FILE_PATH = new Path("META-INF/eca.ecore"); //$NON-NLS-1$
+
+	/** Path for the file that defines base classes for goal model elements. */
+	IPath LTL_EMF_FILE_PATH = new Path("META-INF/ltl.ecore"); //$NON-NLS-1$
 
 	/** Path for the generator file for the base packages eca, goalmodel and LTL. */
 	IPath BASE_GENMODEL_FILE_PATH = new Path("META-INF/zanshin.genmodel"); //$NON-NLS-1$
@@ -112,4 +122,18 @@ public interface IManageModelsService extends IManageFilesService {
 	 *           If there are any problems in the deletion of the file.
 	 */
 	void deleteConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotDeleteFileException;
+
+	/**
+	 * Compiles the constraints contained in the given file based on existing project models, generating a rules file that
+	 * represent the constraints. The rules file has the same base name as the constraints, with a different extension.
+	 * 
+	 * @param progressMonitor
+	 *          The workbench's progress monitor, in case the operation takes a long time.
+	 * @param constraintsFile
+	 *          The file containing the constraints.
+	 * @return The newly created file which holds the rules compiled from the constraints.
+	 * @throws CouldNotCompileConstraintsFileException
+	 *           If there are any problems in the compilation of the constraints.
+	 */
+	IFile compileConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotCompileConstraintsFileException;
 }

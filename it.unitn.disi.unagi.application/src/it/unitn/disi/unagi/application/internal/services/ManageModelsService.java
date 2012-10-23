@@ -1,6 +1,7 @@
 package it.unitn.disi.unagi.application.internal.services;
 
 import it.unitn.disi.unagi.application.Activator;
+import it.unitn.disi.unagi.application.exceptions.CouldNotCompileConstraintsFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotCreateFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotDeleteFileException;
 import it.unitn.disi.unagi.application.exceptions.CouldNotGenerateRequirementsClassesException;
@@ -13,14 +14,18 @@ import it.unitn.disi.util.logging.LogUtil;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
@@ -43,6 +48,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eeat.ocl.compiler.OCLCompiler;
+import org.eeat.ocl.compiler.OCLCompilerException;
+import org.eeat.ocl.compiler.OCLParser;
+import org.eeat.ocl.compiler.OCLParserException;
 
 /**
  * Implementation of the service class for model management.
@@ -318,7 +327,7 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 			createConstraintsContents(progressMonitor, constraintsFile, name);
 		}
 		catch (IOException | CoreException e) {
-			LogUtil.log.error("Could not create initial contents for requirements model {0}.", e, constraintsFile.getFullPath()); //$NON-NLS-1$
+			LogUtil.log.error("Could not create initial contents for constraints file: {0}.", e, constraintsFile.getFullPath()); //$NON-NLS-1$
 			throw new CouldNotCreateFileException(constraintsFile);
 		}
 
@@ -362,5 +371,67 @@ public class ManageModelsService extends ManageFilesService implements IManageMo
 	public void deleteConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotDeleteFileException {
 		// Deletes the file from the workspace.
 		deleteFile(progressMonitor, constraintsFile);
+	}
+
+	/**
+	 * @see it.unitn.disi.unagi.application.services.IManageModelsService#compileConstraintsFile(org.eclipse.core.runtime.IProgressMonitor,
+	 *      org.eclipse.core.resources.IFile)
+	 */
+	@Override
+	public IFile compileConstraintsFile(IProgressMonitor progressMonitor, IFile constraintsFile) throws CouldNotCompileConstraintsFileException {
+		IProject project = constraintsFile.getProject();
+
+		try {
+			// Obtains a list with all existing requirements models in the project (including the base models).
+			List<URL> requirementsModels = listRequirementsModels(project);
+
+			// Parses the constraints file.
+			OCLParser parser = new OCLParser(requirementsModels);
+			parser.parse(constraintsFile.getLocationURI().toURL());
+
+			// Compiles the constraints file that was parsed.
+			OCLCompiler compiler = new OCLCompiler(parser);
+			String result = compiler.compile();
+
+			// Creates a new file in the same folder as the constraints file, but with rules file extension.
+			String rulesFileName = constraintsFile.getFullPath().removeFileExtension().lastSegment() + '.' + RULES_FILE_EXTENSION;
+			IFolder modelsFolder = (IFolder) constraintsFile.getParent();
+			IFile rulesFile = modelsFolder.getFile(rulesFileName);
+
+			// Writes the result of the compilation to the rules file and returns it.
+			FileIOUtil.saveFile(rulesFile.getLocation().toString(), result);
+			return rulesFile;
+		}
+		catch (CoreException | IOException | OCLParserException | OCLCompilerException e) {
+			LogUtil.log.error("Could not compile constraints file: {0}.", e, constraintsFile.getFullPath()); //$NON-NLS-1$
+			throw new CouldNotCompileConstraintsFileException(constraintsFile);
+		}
+	}
+
+	/**
+	 * Scans the models folder and produces a list with the URLs of all requirements model files.
+	 * 
+	 * @param project
+	 *          The project whose model folder should be scanned.
+	 * @return A list of URL objects, pointing to the location of the project's requirements files.
+	 * @throws CoreException
+	 *           If an Eclipse error occur while scanning the project.
+	 * @throws MalformedURLException
+	 *           If the URI returned from the elements of the Eclipse project are malformed.
+	 */
+	private List<URL> listRequirementsModels(IProject project) throws CoreException, MalformedURLException {
+		List<URL> models = new ArrayList<>();
+
+		// Retrieves the model folder from the project.
+		IFolder modelsFolder = project.getFolder(IManageProjectsService.MODELS_PROJECT_SUBDIR);
+
+		// Checks its members, those who have the extension indicating they are requirements files.
+		for (IResource resource : modelsFolder.members())
+			if (resource.getType() == IResource.FILE)
+				if (REQUIREMENTS_MODEL_EXTENSION.equals(resource.getFileExtension()))
+					models.add(resource.getLocationURI().toURL());
+
+		// Returns the list of requirements models.
+		return models;
 	}
 }

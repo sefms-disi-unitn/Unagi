@@ -178,8 +178,8 @@ public abstract class AbstractTextEditorPart implements MDirtyable, ModifyListen
 		try {
 			LogUtil.log.info("Reading the contents of file {0} for editor: {1}", path, part.getLabel()); //$NON-NLS-1$
 			IManageFilesService manageFilesService = getManageFilesService();
-			StringBuffer buffer = manageFilesService.readFile(file);
-			return buffer.toString();
+			String contents = manageFilesService.readFile(file);
+			return contents;
 		}
 
 		// In case of application errors, shows an error dialog.

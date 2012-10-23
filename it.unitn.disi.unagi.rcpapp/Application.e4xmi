@@ -64,7 +64,7 @@
     </trimBars>
   </children>
   <handlers xmi:id="_6m0HQAGtEeKh0tPBlU9cJg" elementId="it.unitn.disi.unagi.rcpapp.handler.closeProjects" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.CloseProjectsHandler" command="_9jMY0AGtEeKh0tPBlU9cJg"/>
-  <handlers xmi:id="_wuwLMBiREeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.handler.compileConstraintsFiles" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.CompileConstraintFilesHandler" command="_qN4fMBiREeKdH-6dqpYAAQ"/>
+  <handlers xmi:id="_wuwLMBiREeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.handler.compileConstraintsFiles" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.CompileConstraintsFilesHandler" command="_qN4fMBiREeKdH-6dqpYAAQ"/>
   <handlers xmi:id="_tmGDEBiPEeKdH-6dqpYAAQ" elementId="it.unitn.disi.unagi.rcpapp.handler.deleteConstraintsFiles" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.DeleteConstraintsFilesHandler" command="_pPFmkBiPEeKdH-6dqpYAAQ"/>
   <handlers xmi:id="_DWbMgAM_EeKQ9a4abaQ5zg" elementId="it.unitn.disi.unagi.rcpapp.handler.deleteRequirementsModels" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.DeleteRequirementsModelsHandler" command="_L88WYAM_EeKQ9a4abaQ5zg"/>
   <handlers xmi:id="_uy5lsMzmEeGBSNGUoatfLQ" elementId="org.eclipse.ui.file.exit.handler" contributionURI="bundleclass://it.unitn.disi.unagi.rcpapp/it.unitn.disi.unagi.rcpapp.handlers.QuitHandler" command="_oaNlUMzmEeGBSNGUoatfLQ"/>

@@ -14,8 +14,11 @@ Require-Bundle: it.unitn.disi.unagi.domain;bundle-version="1.0.0",
  org.eclipse.emf.ecore;bundle-version="2.8.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.8.0",
  org.eclipse.emf.codegen;bundle-version="2.8.0",
- org.eclipse.emf.codegen.ecore;bundle-version="2.8.0"
+ org.eclipse.emf.codegen.ecore;bundle-version="2.8.0",
+ org.eclipse.ocl.ecore;bundle-version="3.2.0"
 Export-Package: it.unitn.disi.unagi.application.exceptions,
  it.unitn.disi.unagi.application.services
 Service-Component: OSGI-INF/manage-models-service.xml,OSGI-INF/manage-projects-service.xml,OSGI-INF/manage-sources-service.xml
 Bundle-Activator: it.unitn.disi.unagi.application.Activator
+Bundle-ClassPath: META-INF/org.eeat.ocl_1.0.0.201210231431.jar,
+ .
