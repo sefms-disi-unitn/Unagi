@@ -124,11 +124,12 @@ public class FileIOUtil {
 	 *           If there are any I/O problems reading the contents of the template file.
 	 */
 	public static String processTemplate(URL url, Map<String, Object> map) throws IOException {
-		// Reads the file into a buffer.
-		StringBuilder builder = readFile(url);
+		// Reads the file into a builder. User a different builder for output.
+		StringBuilder inBuilder = readFile(url);
+		StringBuilder outBuilder = new StringBuilder();
 
 		// Reads the buffer line by line.
-		try (Scanner scanner = new Scanner(builder.toString())) {
+		try (Scanner scanner = new Scanner(inBuilder.toString())) {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 	
@@ -145,12 +146,12 @@ public class FileIOUtil {
 					}
 				}
 	
-				// Adds the line to the builder.
-				builder.append(line).append('\n');
+				// Adds the line to the output builder.
+				outBuilder.append(line).append('\n');
 			}
 	
 			// Returns the built string.
-			return builder.toString();
+			return outBuilder.toString();
 		}
 	}
 }
