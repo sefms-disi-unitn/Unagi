@@ -7,7 +7,7 @@ Bundle-Vendor: it.unitn.disi
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Require-Bundle: it.unitn.disi.unagi.domain;bundle-version="1.0.0",
- it.unitn.disi.util;bundle-version="1.0.0",
+ it.unitn.disi.unagi.util;bundle-version="1.0.0",
  javax.inject;bundle-version="1.0.0",
  org.eclipse.core.resources;bundle-version="3.8.0",
  org.eclipse.core.runtime;bundle-version="3.8.0",
