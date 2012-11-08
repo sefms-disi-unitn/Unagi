@@ -46,6 +46,8 @@ public abstract class ManageFilesService implements IManageFilesService {
 
 		// Creates the new file in the project.
 		try {
+			if (file.exists())
+			{ file.delete(true,true, progressMonitor);}
 			file.create(null, true, progressMonitor);
 		}
 		catch (CoreException e) {
