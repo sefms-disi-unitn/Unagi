@@ -117,7 +117,7 @@ public class UnagiProjectExplorerView implements IResourceChangeListener, ISelec
 	 */
 	@Focus
 	private void setFocus() {
-		projectsTree.getControl().setFocus();
+		//projectsTree.getControl().setFocus();
 	}
 
 	/**

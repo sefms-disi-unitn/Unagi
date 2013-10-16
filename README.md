@@ -1,37 +1,46 @@
 Unagi CASE Tool for Zanshin
 ===========================
 
-This is an RCP application I'm slowly developing in the context of my research on the design of adaptive systems, which started when I was a PhD Student at the [University of Trento, Italy](http://ict.unitn.it/). It's supposed to be a CASE (Computer-aided Software Engineering) Tool for the _Zanshin_ approach. I've also developed the _Zanshin_ Framework to experiment with the approach ([see its repository here on github](https://github.com/sefms-disi-unitn/Zanshin)).
+This is an RCP application I started developing in the context of [my research on the design of adaptive systems](http://www.inf.ufes.br/~vitorsouza/academia/phd-thesis/), which started when I was a PhD Student at the [University of Trento, Italy](http://ict.unitn.it/). It's supposed to be a CASE (Computer-aided Software Engineering) Tool for the _Zanshin_ approach. I've also developed the _Zanshin_ Framework to experiment with the approach ([see its repository here on github](https://github.com/sefms-disi-unitn/Zanshin)).
 
 _Zanshin_ refers to a "term used in the Japanese martial arts. It refers to a state of awareness" ([Wikipedia](http://en.wikipedia.org/wiki/Zanshin)), which relates to the first part of the _Zanshin_ approach (the elicitation of _Awareness Requirements_, for more information on the _Zanshin_ approach, see some of my [publications](http://disi.unitn.it/~vitorsouza/academia/)). In episode 17 of the 6th season of the American television series [Friends](http://en.wikipedia.org/wiki/Friends), Ross uses "Unagi" instead of "Zanshin" to refer to this concept, hence the name of the CASE Tool.
 
+The development of a CASE Tool for _Zanshin_ has been halted at its early stages, but some of _Unagi's_ code can be used by developers building Eclipse RCP applications as example code in order to get started in their project. This is why this repository is still here.
 
 
-Pre-requisites for running Unagi
---------------------------------
 
-This is an Eclipse RCP application. Each folder in the root of the repository is a different Eclipse project. If you want to contribute or just run it, you should install Eclipse Juno for RCP developers and use its Git support (EGit) to clone the repository.
+How to run _Unagi_ in Eclipse Kepler
+------------------------------------
 
-Unagi is being developed using E4 (the new set of technologies for plug-in development introduced in Eclipse 4). After you install Eclipse Juno you should, therefore, follow the instructions for Eclipse E4 development from [Lars Vogel's tutorial](http://www.vogella.com/articles/EclipseRCP/article.html):
+Follow [Lars Vogel's instructions on tool installation for e4 development](http://www.vogella.com/articles/EclipseRCP/article.html#tutorial_installation):
 
-1. Add the following Update Site to the list of Eclipse repositories: `http://download.eclipse.org/e4/updates/0.12`;
+1. Visit [The Eclipse Project Downloads page](http://download.eclipse.org/eclipse/downloads/), download version 4.3.1 under _Latest Releases_ for your operating system, unzip it and run Eclipse;
 
-2. Install two items from this repository: _E4 CSS Spy_ and _Eclipse e4 Tools_.
+2. Click _Help_ > _Install New Software_, add http://download.vogella.com/kepler/e4tools into the _Work with_ field, press Enter and wait for the packages to load. Select _CSS spy for Eclipse 4_ and _Eclipse 4 core tools_ and install them;
 
-
-Finally, you will also need the following plug-in from the Eclipse Juno repository (if not already installed):
-
-- EMF - Eclipse Modeling Framework SDK
+3. After restarting Eclipse, again under _Help_ > _Install New Software_, select _Kepler_ from the _Work with_ combo box, wait for the packages to load and install _Eclipse Git Team Provider_ (under _Collaboration_), _EMF - Eclipse Modeling Framework SDK_ and _OCL End User SDK_ (under _Modeling_);
 
 
-Running the Tool
-----------------
+Then obtain _Unagi_:
 
-To run Unagi, follow the steps below:
+1. Click on _File_ > _Import..._, select _Projects from Git_ (under _Git_) and click _Next_;
 
-1. Open the `unagi.product` file under project `it.unitn.disi.unagi.rcpapp`, go to its "Overview" tab and click the "Launch and Eclipse application" link;
+2. Select _Clone URI_ as a repository source, click _Next_;
 
-2. The first time you run, you will probably get an error: `java.lang.RuntimeException: No application id has been found.` This is due to Eclipse not adding the required bundles to the run configuration. Let's fix that next;
+3. Fill in the _URI_ field with one of the clone URIs that can be found at this page and click _Next_. If one of them doesn't work, try another one;
+
+4. Select the branches you want to clone (you can leave both _master_ and _develop_ selected). Click _Next_;
+
+5. Select the directory where you'd like to clone the repository (I usually put it under my Eclipse workspace) and click _Next_;
+
+6. Select the option _Import existing projects_ and click _Next_;
+
+7. Finally, click _Finish_.
+
+
+Finally, run _Unagi_:
+
+1. Open the `unagi.product` file under project `it.unitn.disi.unagi.rcpapp`, go to its "Overview" tab and click the "Launch and Eclipse application" link. The first time you run, you will probably get an error: `java.lang.RuntimeException: No application id has been found.` This is due to Eclipse not adding the required bundles to the run configuration. Let's fix that next;
 
 3. Click on the menu "Run" > "Run Configurations..." and locate the "unagi.product" configuration under the category "Eclipse Application" at the left-hand side of the Run Configurations screen. Click on it to open;
 
@@ -41,14 +50,7 @@ To run Unagi, follow the steps below:
 
 
 
-Note for Ubuntu (and Unity) users
----------------------------------
-
-I'm not sure if this is still applicable (I haven't developed this project in Ubuntu for a while now), but if you use Ubuntu 11.04 with Unity, set environment variable UBUNTU_MENUPROXY=0 before running Eclipse, otherwise the application menu will now show (might also happen with other distros that use Unity. If you changed to gnome-shell/Gnome 3 or classic/Gnome 2, you're probably safe).
-
-
-
 Contact
 -------
 
-Questions, comments, contributions, please contact me.
+Questions, comments, contributions, please contact [me](http://www.inf.ufes.br/~vitorsouza/).
